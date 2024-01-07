@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <Title>Clean Domain Entity</Title>
+    <Authors>Gerson Sánchez</Authors>
+    <Company>GBSO Dev</Company>
+    <Description>Domain entity abstraction with entity validations</Description>
   </PropertyGroup>
 
   <ItemGroup>
