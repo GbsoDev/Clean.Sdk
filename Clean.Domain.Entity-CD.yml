@@ -1,0 +1,121 @@
+trigger:
+  branches:
+    include:
+    - release
+  paths:
+    include:
+    - Clean.Domain.Entity/*
+pr:
+  branches:
+    include:
+    - release
+  paths:
+    include:
+    - Clean.Domain.Entity/*
+
+pool:
+  name: self-hosted
+
+variables:
+  project: 'Clean.Domain.Entity/Clean.Domain.Entity.csproj'
+  connectionToExternalNuGetRepo: GbsoDev@NuGet.org
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  major: '1'
+  minor: '0'
+  revision: $[counter(variables['minor'], 1)]
+  nugetVersion: '$(major).$(minor).$(revision)'
+  outputPack: $(Build.ArtifactStagingDirectory) 
+
+stages:
+- stage: RestoreNuGets
+  displayName: 'Restore NuGets'
+  jobs:
+  - job: RestoreNuGetsJob
+    displayName: 'Restore NuGest Job'
+    steps:
+    - checkout: self
+    - task: NuGetToolInstaller@1
+      displayName: 'Install NuGet Tool'
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGet Packages'
+      inputs:
+        restoreSolution: '$(project)'
+
+- stage: BuildAndPack
+  displayName: 'Build and Pack'
+  jobs:
+  - job: BuildAndPackJob
+    displayName: 'Build and Pack Job'
+    steps:
+    - checkout: none
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
+      inputs:
+        command: 'build'
+        projects: '$(project)'
+        arguments: '--configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Pack'
+      inputs:
+        command: 'pack'
+        packagesToPack: '$(project)'
+        configuration: $(buildConfiguration)
+        nobuild: true
+        versionEnvVar: 'nugetVersion'
+        versioningScheme: byEnvVar
+        packDirectory: "$(outputPack)"
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish to Artifacts'
+      inputs:
+        PathtoPublish: '$(outputPack)'
+
+- stage: PushToArtifactsNuGets
+  dependsOn: BuildAndPack
+  displayName: 'Push to Artifacts NuGets'
+  
+  jobs:
+  - job:
+    displayName: 'Push to Artifacts NuGets Job'
+    steps:
+    - checkout: none
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: '*/*.nupkg'
+        downloadPath: '$(outputPack)'
+    - task: NuGetAuthenticate@0
+      displayName: 'NuGet Authenticate'
+    - task: NuGetCommand@2
+      displayName: 'NuGet push to artifacts'
+      inputs:
+        command: push
+        feedsToUse: 'select'
+        packagesToPush: '"$(outputPack)/*/*.nupkg"'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'Gbso.Clean/NuGets'
+        versioningScheme: 'off'
+        allowPackageConflicts: true
+
+- stage: PushToNuGetOrg
+  dependsOn: BuildAndPack
+  displayName: 'Push to NoGet.org'
+  jobs:
+  - job:
+    displayName: 'Push to NoGet.org Job'
+    steps:
+    - checkout: none
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: '*/*.nupkg'
+        downloadPath: '$(outputPack)'
+    - task: NuGetCommand@2
+      displayName: 'NuGet push'
+      inputs:
+        command: push
+        packagesToPush: '"$(outputPack)/*/*.nupkg"'
+        nuGetFeedType: external
+        publishFeedCredentials: $(connectionToExternalNuGetRepo)
