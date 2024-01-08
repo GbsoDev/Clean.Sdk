@@ -9,6 +9,7 @@ pr:
     - dev
   paths:
     include:
+    - Clean.Domain.Entity-CI.yml
     - Clean.Domain.Entity/*
     - Clean.Domain.Entity.Test/*
 trigger:
@@ -17,6 +18,7 @@ trigger:
     - dev
   paths:
     include:
+    - Clean.Domain.Entity-CI.yml
     - Clean.Domain.Entity/*
     - Clean.Domain.Entity.Test/*
 pool:
