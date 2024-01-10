@@ -7,6 +7,7 @@
     <Authors>Gerson Sánchez</Authors>
     <Company>GBSO Dev</Company>
     <Description>Domain entity abstraction with entity validations</Description>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

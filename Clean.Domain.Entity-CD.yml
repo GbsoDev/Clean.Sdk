@@ -1,32 +1,17 @@
-trigger:
-  branches:
-    include:
-    - release
-  paths:
-    include:
-    - Clean.Domain.Entity/*
-pr:
-  branches:
-    include:
-    - release
-  paths:
-    include:
-    - Clean.Domain.Entity/*
-
 pool:
   name: self-hosted
-
 variables:
-  project: 'Clean.Domain.Entity/Clean.Domain.Entity.csproj'
+  projectPath: 'Clean.Domain.Entity/Clean.Domain.Entity.csproj'
   connectionToExternalNuGetRepo: GbsoDev@NuGet.org
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  major: '1'
-  minor: '0'
-  revision: $[counter(variables['minor'], 1)]
-  nugetVersion: '$(major).$(minor).$(revision)'
-  outputPack: $(Build.ArtifactStagingDirectory) 
-
+  major: 1
+  minor: 0
+  outputPack: $(Build.ArtifactStagingDirectory)
+  ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}: 
+    versionSuffix: ''
+  ${{ else }}: 
+    versionSuffix: '-$(Build.SourceBranchName)'
 stages:
 - stage: RestoreNuGets
   displayName: 'Restore NuGets'
@@ -40,26 +25,46 @@ stages:
     - task: NuGetCommand@2
       displayName: 'Restore NuGet Packages'
       inputs:
-        restoreSolution: '$(project)'
-
+        restoreSolution: '$(projectPath)'
+- stage:
+  displayName: 'Get Patch Version'
+  jobs:
+  - job: BuildAndPackJob
+    displayName: 'Get Patch Version Job'
+    steps:
+    - checkout: none
+    - task: PowerShell@2
+      displayName: 'PowerShell Script'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $xml = [Xml] (Get-Content .\$(projectPath))
+          $version = $xml.Project.PropertyGroup.Version
+          echo $version
+          $majorVersion, $minorVersion, $patchVersion = $version -split '\.'
+          echo "##vso[task.setvariable variable=major]$majorVersion"
+          echo "##vso[task.setvariable variable=minor]$minorVersion"
 - stage: BuildAndPack
   displayName: 'Build and Pack'
   jobs:
   - job: BuildAndPackJob
     displayName: 'Build and Pack Job'
+    variables:
+      patch: $[counter(format('{0}',variables['minor']),1)]
+      nugetVersion: '$(major).$(minor).$(patch)$(versionSuffix)'
     steps:
     - checkout: none
     - task: DotNetCoreCLI@2
       displayName: 'Build'
       inputs:
         command: 'build'
-        projects: '$(project)'
-        arguments: '--configuration $(buildConfiguration)'
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) /p:VersionSuffix=$(versionSuffix)'
     - task: DotNetCoreCLI@2
       displayName: 'Pack'
       inputs:
         command: 'pack'
-        packagesToPack: '$(project)'
+        packagesToPack: '$(projectPath)'
         configuration: $(buildConfiguration)
         nobuild: true
         versionEnvVar: 'nugetVersion'
@@ -69,11 +74,9 @@ stages:
       displayName: 'Publish to Artifacts'
       inputs:
         PathtoPublish: '$(outputPack)'
-
 - stage: PushToArtifactsNuGets
   dependsOn: BuildAndPack
   displayName: 'Push to Artifacts NuGets'
-  
   jobs:
   - job:
     displayName: 'Push to Artifacts NuGets Job'
@@ -97,7 +100,6 @@ stages:
         publishVstsFeed: 'Gbso.Clean/NuGets'
         versioningScheme: 'off'
         allowPackageConflicts: true
-
 - stage: PushToNuGetOrg
   dependsOn: BuildAndPack
   displayName: 'Push to NoGet.org'
