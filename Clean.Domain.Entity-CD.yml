@@ -13,26 +13,13 @@ variables:
   ${{ else }}: 
     versionSuffix: '-$(Build.SourceBranchName)'
 stages:
-- stage: RestoreNuGets
-  displayName: 'Restore NuGets'
+- stage:
+  displayName: 'Get Version'
   jobs:
-  - job: RestoreNuGetsJob
-    displayName: 'Restore NuGest Job'
+  - job:
+    displayName: 'Get Version Job'
     steps:
     - checkout: self
-    - task: NuGetToolInstaller@1
-      displayName: 'Install NuGet Tool'
-    - task: NuGetCommand@2
-      displayName: 'Restore NuGet Packages'
-      inputs:
-        restoreSolution: '$(projectPath)'
-- stage:
-  displayName: 'Get Patch Version'
-  jobs:
-  - job: BuildAndPackJob
-    displayName: 'Get Patch Version Job'
-    steps:
-    - checkout: none
     - task: PowerShell@2
       displayName: 'PowerShell Script'
       inputs:
@@ -47,21 +34,26 @@ stages:
 - stage: BuildAndPack
   displayName: 'Build and Pack'
   jobs:
-  - job: BuildAndPackJob
+  - job:
     displayName: 'Build and Pack Job'
     variables:
       patch: $[counter(format('{0}',variables['minor']),1)]
       nugetVersion: '$(major).$(minor).$(patch)$(versionSuffix)'
     steps:
-    - checkout: none
+    - task: NuGetToolInstaller@1
+      displayName: 'Install NuGet Tool'
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGet Packages'
+      inputs:
+        restoreSolution: '$(projectPath)'
     - task: DotNetCoreCLI@2
-      displayName: 'Build'
+      displayName: 'Build Project'
       inputs:
         command: 'build'
         projects: '$(projectPath)'
         arguments: '--configuration $(buildConfiguration) /p:VersionSuffix=$(versionSuffix)'
     - task: DotNetCoreCLI@2
-      displayName: 'Pack'
+      displayName: 'Pack NuGet'
       inputs:
         command: 'pack'
         packagesToPack: '$(projectPath)'
@@ -74,15 +66,15 @@ stages:
       displayName: 'Publish to Artifacts'
       inputs:
         PathtoPublish: '$(outputPack)'
-- stage: PushToArtifactsNuGets
+- stage:
   dependsOn: BuildAndPack
-  displayName: 'Push to Artifacts NuGets'
+  displayName: 'Publish to Azure DevOps'
   jobs:
   - job:
-    displayName: 'Push to Artifacts NuGets Job'
+    displayName: 'Publish to Azure DevOps Job'
     steps:
-    - checkout: none
     - task: DownloadBuildArtifacts@0
+      displayName: 'Download Artifacts'
       inputs:
         buildType: 'current'
         downloadType: 'specific'
@@ -91,7 +83,7 @@ stages:
     - task: NuGetAuthenticate@0
       displayName: 'NuGet Authenticate'
     - task: NuGetCommand@2
-      displayName: 'NuGet push to artifacts'
+      displayName: 'Push to Azure DevOps'
       inputs:
         command: push
         feedsToUse: 'select'
@@ -107,7 +99,6 @@ stages:
   - job:
     displayName: 'Push to NoGet.org Job'
     steps:
-    - checkout: none
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: 'current'
