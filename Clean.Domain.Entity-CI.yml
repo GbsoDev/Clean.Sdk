@@ -1,0 +1,59 @@
+pool:
+  name: self-hosted
+variables:
+  mainProject: 'Clean.Domain.Entity/Clean.Domain.Entity.csproj'
+  testProject: 'Clean.Domain.Entity.Test/Clean.Domain.Entity.Test.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+stages:
+- stage: Dependencies
+  displayName: Dependencies
+  jobs:
+    - job: 
+      displayName: 'Reestore nuggets'
+      steps:
+      - task: NuGetToolInstaller@1
+        displayName: 'Install the nugget tools'
+      - task: NuGetCommand@2
+        displayName: 'Reestore nuggets for main project'
+        inputs:
+          restoreSolution: '$(mainProject)'
+      - task: NuGetCommand@2
+        displayName: 'Reestore nuggets for test project'
+        inputs:
+          restoreSolution: '$(testProject)'
+- stage: BuildProjects
+  displayName: Build Projects
+  dependsOn: Dependencies
+  jobs:
+  - job:
+    displayName: 'Build Main'
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: $(mainProject)
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+- stage: BuildTestProjects
+  displayName: Build test Projects
+  dependsOn: BuildProjects
+  jobs:
+  - job:
+    displayName: 'Build Test'
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: $(testProject)
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+- stage: RunTest
+  displayName: Run test projects
+  dependsOn: BuildTestProjects
+  jobs:
+  - job:
+    displayName: Run test
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'test'
+        testRunTitle: 'Run test project'

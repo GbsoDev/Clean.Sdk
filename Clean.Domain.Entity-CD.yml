@@ -1,0 +1,123 @@
+pool:
+  name: self-hosted
+variables:
+  projectPath: 'Clean.Domain.Entity/Clean.Domain.Entity.csproj'
+  connectionToExternalNuGetRepo: GbsoDev@NuGet.org
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  major: 1
+  minor: 0
+  outputPack: $(Build.ArtifactStagingDirectory)
+  ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}: 
+    versionSuffix: ''
+  ${{ else }}: 
+    versionSuffix: '-$(Build.SourceBranchName)'
+stages:
+- stage: RestoreNuGets
+  displayName: 'Restore NuGets'
+  jobs:
+  - job: RestoreNuGetsJob
+    displayName: 'Restore NuGest Job'
+    steps:
+    - checkout: self
+    - task: NuGetToolInstaller@1
+      displayName: 'Install NuGet Tool'
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGet Packages'
+      inputs:
+        restoreSolution: '$(projectPath)'
+- stage:
+  displayName: 'Get Patch Version'
+  jobs:
+  - job: BuildAndPackJob
+    displayName: 'Get Patch Version Job'
+    steps:
+    - checkout: none
+    - task: PowerShell@2
+      displayName: 'PowerShell Script'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $xml = [Xml] (Get-Content .\$(projectPath))
+          $version = $xml.Project.PropertyGroup.Version
+          echo $version
+          $majorVersion, $minorVersion, $patchVersion = $version -split '\.'
+          echo "##vso[task.setvariable variable=major]$majorVersion"
+          echo "##vso[task.setvariable variable=minor]$minorVersion"
+- stage: BuildAndPack
+  displayName: 'Build and Pack'
+  jobs:
+  - job: BuildAndPackJob
+    displayName: 'Build and Pack Job'
+    variables:
+      patch: $[counter(format('{0}',variables['minor']),1)]
+      nugetVersion: '$(major).$(minor).$(patch)$(versionSuffix)'
+    steps:
+    - checkout: none
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
+      inputs:
+        command: 'build'
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) /p:VersionSuffix=$(versionSuffix)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Pack'
+      inputs:
+        command: 'pack'
+        packagesToPack: '$(projectPath)'
+        configuration: $(buildConfiguration)
+        nobuild: true
+        versionEnvVar: 'nugetVersion'
+        versioningScheme: byEnvVar
+        packDirectory: "$(outputPack)"
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish to Artifacts'
+      inputs:
+        PathtoPublish: '$(outputPack)'
+- stage: PushToArtifactsNuGets
+  dependsOn: BuildAndPack
+  displayName: 'Push to Artifacts NuGets'
+  jobs:
+  - job:
+    displayName: 'Push to Artifacts NuGets Job'
+    steps:
+    - checkout: none
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: '*/*.nupkg'
+        downloadPath: '$(outputPack)'
+    - task: NuGetAuthenticate@0
+      displayName: 'NuGet Authenticate'
+    - task: NuGetCommand@2
+      displayName: 'NuGet push to artifacts'
+      inputs:
+        command: push
+        feedsToUse: 'select'
+        packagesToPush: '"$(outputPack)/*/*.nupkg"'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'Gbso.Clean/NuGets'
+        versioningScheme: 'off'
+        allowPackageConflicts: true
+- stage: PushToNuGetOrg
+  dependsOn: BuildAndPack
+  displayName: 'Push to NoGet.org'
+  jobs:
+  - job:
+    displayName: 'Push to NoGet.org Job'
+    steps:
+    - checkout: none
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: '*/*.nupkg'
+        downloadPath: '$(outputPack)'
+    - task: NuGetCommand@2
+      displayName: 'NuGet push'
+      inputs:
+        command: push
+        packagesToPush: '"$(outputPack)/*/*.nupkg"'
+        nuGetFeedType: external
+        publishFeedCredentials: $(connectionToExternalNuGetRepo)
