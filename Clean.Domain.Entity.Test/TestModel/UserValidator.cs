@@ -40,5 +40,13 @@ namespace Maios.CRM.Domain.Models.Validators
 			}
 			return ValidationResult;
 		}
+
+		public void ValidateToAlternativeThrow(User entity)
+		{
+			if (!ValidationResult.IsValid)
+			{
+				throw new EntityValidationException(ValidationResult, string.Format(EntityValidationMessages.ValidateError, nameof(User)));
+			}
+		}
 	}
 }

@@ -1,26 +1,3 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
-pr:
-  branches:
-    include:
-    - dev
-  paths:
-    include:
-    - Clean.Domain.Entity-CI.yml
-    - Clean.Domain.Entity/*
-    - Clean.Domain.Entity.Test/*
-trigger:
-  branches:
-    include:
-    - dev
-  paths:
-    include:
-    - Clean.Domain.Entity-CI.yml
-    - Clean.Domain.Entity/*
-    - Clean.Domain.Entity.Test/*
 pool:
   name: self-hosted
 variables:
