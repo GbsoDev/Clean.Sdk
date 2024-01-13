@@ -7,6 +7,7 @@ variables:
   buildConfiguration: 'Release'
   major: 1
   minor: 0
+  patch: 0
   outputPack: $(Build.ArtifactStagingDirectory)
   ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}: 
     versionSuffix: ''
@@ -21,7 +22,7 @@ stages:
     steps:
     - checkout: self
     - task: PowerShell@2
-      displayName: 'PowerShell Script'
+      displayName: 'Get Project Version Script'
       inputs:
         targetType: 'inline'
         script: |
@@ -31,13 +32,14 @@ stages:
           $majorVersion, $minorVersion, $patchVersion = $version -split '\.'
           echo "##vso[task.setvariable variable=major]$majorVersion"
           echo "##vso[task.setvariable variable=minor]$minorVersion"
+          echo "##vso[task.setvariable variable=patch]$patchVersion"
 - stage: BuildAndPack
   displayName: 'Build and Pack'
   jobs:
   - job:
     displayName: 'Build and Pack Job'
     variables:
-      patch: $[counter(format('{0}',variables['minor']),1)]
+      # patch: $[counter(format('{0}.{1}', variables['major'], variables['minor']),1)]
       nugetVersion: '$(major).$(minor).$(patch)$(versionSuffix)'
     steps:
     - task: NuGetToolInstaller@1
