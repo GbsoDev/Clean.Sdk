@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Application", "Clean.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Infrastructure", "Clean.Infrastructure\Clean.Infrastructure.csproj", "{0D520D7B-AEA0-4534-B660-1F14B91C0154}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Data.EfCore", "Clean.Data.EfCore\Clean.Data.EfCore.csproj", "{DDABFDA6-F20F-403D-9D0D-E1D23FF4431B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{0D520D7B-AEA0-4534-B660-1F14B91C0154}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D520D7B-AEA0-4534-B660-1F14B91C0154}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D520D7B-AEA0-4534-B660-1F14B91C0154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDABFDA6-F20F-403D-9D0D-E1D23FF4431B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDABFDA6-F20F-403D-9D0D-E1D23FF4431B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDABFDA6-F20F-403D-9D0D-E1D23FF4431B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDABFDA6-F20F-403D-9D0D-E1D23FF4431B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
