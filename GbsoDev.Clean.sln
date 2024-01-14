@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Domain", "Clean.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Domain.Ports", "Clean.Domain.Ports\Clean.Domain.Ports.csproj", "{29FFC8C9-002D-445F-BABA-29508753C390}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Domain.Services", "Clean.Domain.Services\Clean.Domain.Services.csproj", "{51F8E674-9202-4AE6-BF82-60F607CAADA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{29FFC8C9-002D-445F-BABA-29508753C390}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29FFC8C9-002D-445F-BABA-29508753C390}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29FFC8C9-002D-445F-BABA-29508753C390}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51F8E674-9202-4AE6-BF82-60F607CAADA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51F8E674-9202-4AE6-BF82-60F607CAADA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51F8E674-9202-4AE6-BF82-60F607CAADA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51F8E674-9202-4AE6-BF82-60F607CAADA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
