@@ -2,9 +2,9 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Clean.Domain.Utilities
+namespace Clean.Domain.Helpers
 {
-	public static class Hasher
+	public static class HasherHelper
 	{
 		public static string ToSHA256(string input)
 		{
