@@ -1,10 +1,8 @@
-﻿using Clean.Domain.Entity.Validations;
-using Maios.CRM.Domain.Entity;
-using Maios.CRM.Domain.Models.Validators;
+﻿using Maios.CRM.Domain.Models.Validators;
 
 namespace Clean.Domain.Entity.Test.TestModel
 {
-    public class User : DomainEntity<Guid, UserValidator>
+	public class User : DomainEntity<Guid, UserValidator>
 	{
 		public string Name { get; protected set; }
 		public string Email { get; protected set; }
