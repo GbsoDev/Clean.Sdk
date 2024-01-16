@@ -1,5 +1,5 @@
 ﻿using Clean.Domain.Entity.Test.TestModel;
-using Clean.Domain.Entity.Validations;
+using Clean.Domain.Validations;
 
 namespace Maios.CRM.Domain.Models.Validators
 {

@@ -1,6 +1,6 @@
 ﻿using Clean.Domain.Entity.Test.TestModel;
-using Clean.Domain.Entity.Validations;
 using Clean.Domain.Tests.Builders;
+using Clean.Domain.Validations;
 
 namespace Clean.Domain.Entity.Test
 {
