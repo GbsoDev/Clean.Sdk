@@ -1,4 +1,4 @@
-﻿namespace Clean.Domain.Entity.Validations
+﻿namespace Clean.Domain.Validations
 {
 	public class EntityValidationError
 	{

@@ -1,6 +1,8 @@
-﻿namespace Clean.Domain.Entity.Validations
+﻿using Clean.Domain.Entity;
+
+namespace Clean.Domain.Validations
 {
-    public abstract class EntityValidator<TEntity>
+	public abstract class EntityValidator<TEntity>
 		where TEntity : class, IDomainEntity
 	{
 		protected EntityValidationResult ValidationResult { get; }

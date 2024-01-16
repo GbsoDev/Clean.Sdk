@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Clean.Domain.Entity.Validations {
+namespace Clean.Domain.Validations {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Clean.Domain.Entity.Validations {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Clean.Domain.Entity.Validations.EntityValidationMessages", typeof(EntityValidationMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Clean.Domain.Validations.EntityValidationMessages", typeof(EntityValidationMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
