@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Clean.Application.Validations;
 using Clean.Domain.Entity;
-using Clean.Domain.Entity.Validations;
 using Clean.Domain.Services;
+using Clean.Domain.Validations;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Maios.CRM.Application.Abstractions
 {
-    public abstract class RegistrationHandler<TRequest, TDto, TEntity, TServie> : CommandHandler<TServie>
+	public abstract class RegistrationHandler<TRequest, TDto, TEntity, TServie> : CommandHandler<TServie>
 		where TEntity : class, IDomainEntity
 		where TServie : IRegisterService<TEntity>
 	{
