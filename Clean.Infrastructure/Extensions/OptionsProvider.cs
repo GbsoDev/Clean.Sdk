@@ -12,7 +12,7 @@ namespace Clean.Infrastructure.Extensions
 		public static string ConfigurationFilePath { get; set; } = "appsettings.json";
 		public static string ConfigurationDevelopmentFilePath { get => $"{Path.GetFileNameWithoutExtension(ConfigurationFilePath)}.{DEVELOPMENT_SUFIX}.{Path.GetExtension(ConfigurationFilePath)}"; }
 
-		public static IServiceCollection AddWebApiSettings<T>(this IServiceCollection services, ref IConfiguration configuration, out T appSettings)
+		public static IServiceCollection AddAppSettings<T>(this IServiceCollection services, ref IConfiguration configuration, out T appSettings)
 			where T : AppSettings, new()
 		{
 			appSettings = new T();
@@ -29,7 +29,7 @@ namespace Clean.Infrastructure.Extensions
 			return services;
 		}
 
-		public static IServiceCollection AddOptions(IServiceCollection services, IConfiguration configuration, Assembly assembly)
+		public static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
 		{
 			var types = AssemblyHelper.GeyTypesByAttribute(assembly, typeof(OptionAttribute));
 			foreach (var type in types)
