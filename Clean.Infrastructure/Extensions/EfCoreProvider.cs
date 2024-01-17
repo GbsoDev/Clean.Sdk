@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Clean.Infrastructure.Extensions
 {
-	internal static class EfCoreProvider
+	public static class EfCoreProvider
 	{
 		public static IServiceProvider MigrateDataBase(this IServiceProvider service, AppSettings appSettings)
 		{
