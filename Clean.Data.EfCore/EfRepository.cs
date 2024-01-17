@@ -38,7 +38,7 @@ namespace Clean.Data.EfCore
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			var entityResult = await ConsultByIdAsync(entity.Id, cancellationToken);
-			if (entityResult == null) throw new ApplicationException("Está intentando actualizar un registro que no existe");
+			if (entityResult == null) throw new ApplicationException("You are trying to update a record that does not exist");
 			Context.Entry(entityResult).CurrentValues.SetValues(entity);
 			return entityResult;
 		}
@@ -48,7 +48,7 @@ namespace Clean.Data.EfCore
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			if (@object == null) throw new ArgumentNullException(nameof(@object));
 			var entityResult = await ConsultByIdAsync(entity.Id, cancellationToken);
-			if (entityResult == null) throw new ApplicationException("Está intentando actualizar un registro que no existe");
+			if (entityResult == null) throw new ApplicationException("You are trying to update a record that does not exist");
 			var objectResult = @object?.Compile()?.Invoke(entity);
 			if (entityResult != null && objectResult != null)
 				Context.Entry(entity).CurrentValues.SetValues(objectResult);
@@ -65,7 +65,7 @@ namespace Clean.Data.EfCore
 		{
 			if (id == null) throw new ArgumentNullException(nameof(id));
 			var entity = await ConsultByIdAsync(id, cancellationToken);
-			if (entity == null) throw new ApplicationException("Está intentando eliminar un registro que no existe");
+			if (entity == null) throw new ApplicationException("You are trying to delete a record that does not exist");
 			await DeleteAsync(entity!, cancellationToken);
 		}
 
