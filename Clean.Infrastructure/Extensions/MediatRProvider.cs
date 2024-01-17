@@ -8,7 +8,7 @@ namespace Clean.Infrastructure.Extensions
 	{
 		public static IServiceCollection AddMediatR(this IServiceCollection services, Assembly assembly)
 		{
-			services.AddMediatR(x => x.RegisterServicesFromAssembly(assembly));
+			services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
 			return services;
 		}
 	}
