@@ -1,7 +1,6 @@
-﻿using Clean.Domain.Utilities;
+﻿using Clean.Domain.Helpers;
 using Maios.CRM.Application.Mappers;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 using System.Reflection;
 
 namespace Clean.Infrastructure.Extensions
@@ -10,7 +9,7 @@ namespace Clean.Infrastructure.Extensions
 	{
 		public static IServiceCollection AddAutoMapperProfiles(this IServiceCollection services, Assembly assembly)
 		{
-			var types = AssemblyExtractor.GeyTypesOfAssemblyByAttribute(assembly, typeof(AutoMapperProfileAttribute));
+			var types = AssemblyHelper.GeyTypesByAttribute(assembly, typeof(AutoMapperProfileAttribute));
 			services.AddAutoMapper(types.ToArray());
 			return services;
 		}
