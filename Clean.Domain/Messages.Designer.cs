@@ -61,6 +61,15 @@ namespace Clean.Domain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection &quot;{0}&quot; not found.
+        /// </summary>
+        public static string DbConnectionNotFound {
+            get {
+                return ResourceManager.GetString("DbConnectionNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input text cannot be empty.
         /// </summary>
         public static string InputEmptyTextError {

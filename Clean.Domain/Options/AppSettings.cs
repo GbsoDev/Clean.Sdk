@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Clean.Domain.Exceptions;
+using System.Collections.Generic;
 
 namespace Clean.Domain.Options
 {
 	public class AppSettings
 	{
-		public DbType dbType { get; set; }
-		public Dictionary<string, string> ConnectionStrings { get; set; }
+		public Dictionary<string, DbConnection> DbConnections { get; set; }
 		public AuthOptions AuthOptions { get; set; }
 		public CorsOptions[] AllowCors { get; set; }
 
@@ -13,12 +13,19 @@ namespace Clean.Domain.Options
 		{
 			AuthOptions = new AuthOptions();
 			AllowCors = new CorsOptions[0];
-			ConnectionStrings = new Dictionary<string, string>();
+			DbConnections = new Dictionary<string, DbConnection>();
 		}
 
-		public string? GetConnectionString(string connection)
+		public DbConnection GetConnection(string name)
 		{
-			return ConnectionStrings[connection];
+			try
+			{
+				return DbConnections[name];
+			}
+			catch (KeyNotFoundException)
+			{
+				throw new AppExeption(string.Format(Messages.DbConnectionNotFound, name));
+			}
 		}
 	}
 }
