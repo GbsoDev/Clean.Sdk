@@ -11,7 +11,6 @@ namespace Clean.Infrastructure.Extensions
 	{
 		public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
 		{
-			services.AddTransient(typeof(Lazy<>), typeof(LazyServiceProvider<>));
 			foreach (var type in AssemblyHelper.GeyTypesByAttribute(assembly, typeof(RepositoryAttribute)))
 			{
 				var @interface = type.GetInterface(type.BuildInterfaceName());
