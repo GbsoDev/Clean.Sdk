@@ -13,8 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Clean.Application" Version="1.0.6-release" />
-    <PackageReference Include="Clean.Data.EfCore" Version="1.0.6-release" />
+    <PackageReference Include="Clean.Application" Version="1.0.7-release" />
+    <PackageReference Include="Clean.Data.EfCore" Version="1.0.7-release" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
