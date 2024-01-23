@@ -1,19 +1,19 @@
 ﻿using Clean.Domain.Entity;
 using Clean.Domain.Ports;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 
 namespace Clean.Data.EfCore
 {
-	public class EfRepository<TEntity> : IRepository<TEntity>
+	public class EfRepository<TEntity, TContext> : IRepository<TEntity>
 		where TEntity : class, IDomainEntity
+		where TContext : IEfDbContext
 	{
-		protected IEfDbContext Context { get; }
+		protected TContext Context { get; }
 
-		public EfRepository(IServiceProvider serviceProvider)
+		public EfRepository(TContext context)
 		{
-			Context = ActivatorUtilities.GetServiceOrCreateInstance<IEfDbContext>(serviceProvider);
+			Context = context;
 		}
 
 		public virtual async Task<TEntity> StoreAsync(TEntity entity, CancellationToken cancellationToken = default)
