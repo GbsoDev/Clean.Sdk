@@ -1,7 +1,5 @@
 ﻿using Clean.Data.EfCore;
-using Clean.Domain;
 using Clean.Domain.Exceptions;
-using Clean.Domain.Helpers;
 using Clean.Domain.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,38 +37,29 @@ namespace Clean.Infrastructure.Extensions
 			return service;
 		}
 
-		public static IServiceCollection AddEfCoreContext<TContext>(this IServiceCollection services, DbConnection dbConecction)
-			where TContext : EfDbContext<TContext>
+		public static IServiceCollection AddEfCoreContext<TContext, TImplementarion>(this IServiceCollection services, DbConnection dbConecction)
+			where TContext : class
+			where TImplementarion : EfDbContext<TImplementarion>, TContext
 		{
-			var type = typeof(TContext);
-			var @interface = type.GetInterface(type.BuildInterfaceName());
 			switch (dbConecction.DbType)
 			{
 				case DbType.MSSQL:
-					services.AddDbContext<TContext>(options => options.UseSqlServer(dbConecction.ConnectionString));
+					services.AddDbContext<TImplementarion>(options => options.UseSqlServer(dbConecction.ConnectionString));
 					break;
 				case DbType.MySql:
-					services.AddDbContext<TContext>(options => options.UseMySQL(dbConecction.ConnectionString));
+					services.AddDbContext<TImplementarion>(options => options.UseMySQL(dbConecction.ConnectionString));
 					break;
 				case DbType.PostgreSql:
-					services.AddDbContext<TContext>(options => options.UseNpgsql(dbConecction.ConnectionString));
+					services.AddDbContext<TImplementarion>(options => options.UseNpgsql(dbConecction.ConnectionString));
 					break;
 				case DbType.InMemory:
-					services.AddDbContext<TContext>(options => options.UseInMemoryDatabase(dbConecction.ConnectionString));
+					services.AddDbContext<TImplementarion>(options => options.UseInMemoryDatabase(dbConecction.ConnectionString));
 					break;
 				default:
 					break;
 			}
 
-			if (@interface != null)
-			{
-				services.AddScoped(@interface, type);
-			}
-			else
-			{
-				throw new AppExeption(string.Format(Messages.ServiceHasNoInterface, type.Name));
-			}
-			return services;
+			return services.AddScoped<TContext, TImplementarion>();
 		}
 	}
 }
