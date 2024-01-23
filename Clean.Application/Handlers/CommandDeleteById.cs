@@ -1,4 +1,4 @@
-﻿namespace Maios.CRM.Application.Interfaces
+﻿namespace Clean.Application.Handlers
 {
 	public abstract class CommandDeleteById<TId> : ICommandDeleteById
 		where TId : struct

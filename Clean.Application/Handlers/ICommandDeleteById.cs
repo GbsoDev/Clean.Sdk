@@ -1,4 +1,4 @@
-﻿namespace Maios.CRM.Application.Interfaces
+﻿namespace Clean.Application.Handlers
 {
 	public interface ICommandDeleteById
 	{

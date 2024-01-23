@@ -1,6 +1,4 @@
-﻿using Clean.Application.Handlers;
-
-namespace Maios.CRM.Application.Abstractions
+﻿namespace Clean.Application.Handlers
 {
 	public abstract class QueryById<TId> : IQueryById
 		where TId : struct

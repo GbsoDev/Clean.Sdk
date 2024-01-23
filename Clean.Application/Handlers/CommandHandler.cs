@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Maios.CRM.Application.Abstractions
+namespace Clean.Application.Handlers
 
 {
 	public abstract class CommandHandler<TService> : Handler
