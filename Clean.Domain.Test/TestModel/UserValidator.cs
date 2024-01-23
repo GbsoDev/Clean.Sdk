@@ -1,7 +1,6 @@
-﻿using Clean.Domain.Entity.Test.TestModel;
-using Clean.Domain.Validations;
+﻿using Clean.Domain.Validations;
 
-namespace Maios.CRM.Domain.Models.Validators
+namespace Clean.Domain.Entity.Test.TestModel
 {
 	public class UserValidator : EntityValidator<User>
 	{
