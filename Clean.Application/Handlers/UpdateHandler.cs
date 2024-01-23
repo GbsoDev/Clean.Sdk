@@ -33,7 +33,7 @@ namespace Clean.Application.Handlers
 
 		private void Validate(TRequest request)
 		{
-			var validation = ValidationRules.Validate(request, options => options.IncludeRuleSets(ValidationsSet.CREATION));
+			var validation = ValidationRules.Validate(request, options => options.IncludeRuleSets(ValidationsSet.UPDATE));
 			if (!validation.IsValid)
 			{
 				throw new ValidationException(string.Format(EntityValidationMessages.InvalidEntityToUpdate, typeof(TEntity).Name), validation.Errors);

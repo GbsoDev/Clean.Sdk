@@ -1,6 +1,8 @@
-﻿namespace Clean.Application.Handlers
+﻿using MediatR;
+
+namespace Clean.Application.Handlers
 {
-	public interface ICommandDeleteById
+	public interface ICommandDeleteById : IRequest
 	{
 		public object Id { get; }
 	}
