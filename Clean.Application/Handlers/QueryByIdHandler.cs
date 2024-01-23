@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
-using Clean.Application;
-using Clean.Application.Handlers;
 using Clean.Domain.Entity;
 using Clean.Domain.Exceptions;
 using Clean.Domain.Ports;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Maios.CRM.Application.Abstractions
+namespace Clean.Application.Handlers
 {
-	public abstract class QueryByIdHandler<TRequest, TDto, TModel, TRepository> : QueryHandler<TRepository>
-		where TRequest : class, IQueryById
+	public abstract class QueryByIdHandler<TRequest, TResponse, TModel, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
+		where TRequest : class, IQueryById, IRequest<TResponse>
 		where TModel : class, IDomainEntity
 		where TRepository : class, IRepository<TModel>
 	{
@@ -20,12 +19,12 @@ namespace Maios.CRM.Application.Abstractions
 		{
 		}
 
-		public virtual async Task<TDto> Handle(TRequest request, CancellationToken cancellationToken)
+		public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
 		{
 			var id = request.Id;
 			var entityResult = await Repository.ConsultByIdAsync(id, cancellationToken);
 			if (entityResult == null) throw new NotFoundException(string.Format(Messages.NotFoundByIdException, typeof(TModel).Name, id));
-			return Mapper.Map<TModel, TDto>(entityResult);
+			return Mapper.Map<TModel, TResponse>(entityResult);
 		}
 	}
 }

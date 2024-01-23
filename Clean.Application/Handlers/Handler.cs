@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 
-namespace Maios.CRM.Application.Abstractions
+namespace Clean.Application.Handlers
 {
 	public abstract class Handler
 	{

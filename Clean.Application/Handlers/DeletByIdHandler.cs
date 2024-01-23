@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using Clean.Domain.Entity;
 using Clean.Domain.Services;
-using Maios.CRM.Application.Interfaces;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Maios.CRM.Application.Abstractions
+namespace Clean.Application.Handlers
 {
-	public class DeletByIdHandler<TRequest, TEntity, TServie> : CommandHandler<TServie>
-		where TRequest : ICommandDeleteById
+	public class DeletByIdHandler<TRequest, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest>
+		where TRequest : ICommandDeleteById, IRequest
 		where TEntity : class, IDomainEntity
 		where TServie : IDeleteService<TEntity>
 	{

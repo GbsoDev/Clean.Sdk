@@ -3,7 +3,7 @@ using Clean.Domain.Ports;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Maios.CRM.Application.Abstractions
+namespace Clean.Application.Handlers
 {
 	public class QueryHandler<TRepository> : Handler
 		where TRepository : class, IRepository

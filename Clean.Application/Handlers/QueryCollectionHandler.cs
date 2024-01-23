@@ -1,16 +1,18 @@
 ﻿using AutoMapper;
 using Clean.Domain.Entity;
 using Clean.Domain.Ports;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Maios.CRM.Application.Abstractions
+namespace Clean.Application.Handlers
 {
-	public class QueryCollectionHandler<TRequest, TDto, TEntity, TRepository> : QueryHandler<TRepository>
-		where TDto : ICollection
+	public class QueryCollectionHandler<TRequest, TResponse, TEntity, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
+		where TRequest : IRequest<TResponse>
+		where TResponse : ICollection
 		where TEntity : class, IDomainEntity
 		where TRepository : class, IRepository<TEntity>
 	{
@@ -18,10 +20,10 @@ namespace Maios.CRM.Application.Abstractions
 		{
 		}
 
-		public virtual async Task<TDto> Handle(TRequest request, CancellationToken cancellationToken)
+		public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
 		{
 			var entityResult = await Repository.ConsultAllAsync(cancellationToken);
-			return Mapper.Map<TEntity[], TDto>(entityResult);
+			return Mapper.Map<TEntity[], TResponse>(entityResult);
 		}
 	}
 }
