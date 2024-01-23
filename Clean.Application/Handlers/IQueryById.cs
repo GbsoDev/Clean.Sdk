@@ -1,6 +1,8 @@
-﻿namespace Clean.Application.Handlers
+﻿using MediatR;
+
+namespace Clean.Application.Handlers
 {
-	public interface IQueryById
+	public interface IQueryById : IRequest
 	{
 		object Id { get; }
 	}
