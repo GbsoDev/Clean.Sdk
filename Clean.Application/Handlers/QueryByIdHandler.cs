@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Clean.Application.Handlers
 {
 	public abstract class QueryByIdHandler<TRequest, TResponse, TModel, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
-		where TRequest : class, IQueryById, IRequest<TResponse>
+		where TRequest : class, IQueryById<TResponse>, IRequest<TResponse>
 		where TModel : class, IDomainEntity
 		where TRepository : class, IRepository<TModel>
 	{
