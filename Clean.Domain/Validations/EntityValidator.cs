@@ -17,7 +17,7 @@ namespace Clean.Domain.Validations
 		public virtual void ValidateToCreateThrow(TEntity entity)
 		{
 			ValidateToCreate(entity);
-			if (ValidationResult.IsValid)
+			if (!ValidationResult.IsValid)
 				throw new EntityValidationException(ValidationResult, string.Format(EntityValidationMessages.InvalidEntityToCreate, entity.GetType().Name));
 		}
 
@@ -26,7 +26,7 @@ namespace Clean.Domain.Validations
 		public virtual void ValidateToUpdateThrow(TEntity entity)
 		{
 			ValidateToUpdate(entity);
-			if (ValidationResult.IsValid)
+			if (!ValidationResult.IsValid)
 				throw new EntityValidationException(ValidationResult, string.Format(EntityValidationMessages.InvalidEntityToUpdate, entity.GetType().Name));
 		}
 	}

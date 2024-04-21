@@ -5,7 +5,7 @@ namespace Clean.Domain.Validations
 {
 	public class EntityValidationResult
 	{
-		public bool IsValid => Errors.Any();
+		public bool IsValid => !Errors.Any();
 		public List<EntityValidationError> Errors { get; }
 
 		public EntityValidationResult()
