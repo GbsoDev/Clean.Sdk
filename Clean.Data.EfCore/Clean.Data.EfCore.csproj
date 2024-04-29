@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clean.Domain" Version="1.0.10-release" />
+    <PackageReference Include="Clean.Domain" Version="1.0.11-release" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.11" />
   </ItemGroup>
