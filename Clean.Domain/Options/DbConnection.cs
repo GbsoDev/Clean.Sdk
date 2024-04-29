@@ -2,19 +2,13 @@
 {
 	public class DbConnection
 	{
-		public DbType DbType { get; set; }
-		public string ConnectionString { get; set; }
+		public virtual DbType DbType { get; private set; }
+		public virtual string ConnectionString { get; private set; }
 
 		public DbConnection()
 		{
 			DbType = 0;
 			ConnectionString = string.Empty;
-		}
-
-		public DbConnection(DbType dbType, string connectionString)
-		{
-			DbType = dbType;
-			ConnectionString = connectionString;
 		}
 	}
 }
