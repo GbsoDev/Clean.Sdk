@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 namespace Clean.Domain.Options
 {
+	[Option()]
 	public class AppSettings
 	{
-		public Dictionary<string, DbConnection> DbConnections { get; set; }
-		public AuthOptions AuthOptions { get; set; }
-		public CorsOptions[] AllowCors { get; set; }
+		public Dictionary<string, DbConnection> DbConnections { get; private set; }
+		public AuthOptions AuthOptions { get; private set; }
+		public CorsOptions[] AllowCors { get; private set; }
 
 		public AppSettings()
 		{

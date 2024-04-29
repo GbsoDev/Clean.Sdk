@@ -2,6 +2,7 @@
 
 namespace Clean.Domain.Options
 {
+	[Option(nameof(AuthOptions))]
 	public class AuthOptions
 	{
 		public string Issuer { get; private set; }

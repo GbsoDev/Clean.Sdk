@@ -2,9 +2,9 @@
 {
 	public class CorsOptions
 	{
-		public string Name { get; set; }
-		public string Origin { get; set; }
-		public string[] Methods { get; set; }
+		public string Name { get; private set; }
+		public string Origin { get; private set; }
+		public string[] Methods { get; private set; }
 
 		public CorsOptions()
 		{

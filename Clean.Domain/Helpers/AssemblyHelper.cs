@@ -7,6 +7,8 @@ namespace Clean.Domain.Helpers
 {
 	public static class AssemblyHelper
 	{
+		public static Assembly GetCleanDomainAssembly => Assembly.GetExecutingAssembly();
+
 		public static IEnumerable<Type> GeyTypesByAttribute(Assembly assembly, Type TipoAtributo)
 		{
 			var types = assembly.GetTypes()
