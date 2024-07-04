@@ -7,11 +7,4 @@
 
 		object IDomainEntity.Id => Id;
 	}
-
-	public abstract class DomainEntity<TId, TValidator> : DomainEntity<TId>
-		where TId : struct
-		where TValidator : new()
-	{
-		protected static TValidator Validator => new TValidator();
-	}
 }

@@ -1,10 +1,10 @@
 ﻿namespace Clean.Domain.Validations
 {
-	public class EntityValidationError
+	public class ValidationError
 	{
 		public string Message { get; }
 
-		public EntityValidationError(string message)
+		public ValidationError(string message)
 		{
 			Message = message;
 		}
