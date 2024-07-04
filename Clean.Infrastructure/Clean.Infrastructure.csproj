@@ -13,9 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Clean.Application" Version="1.0.10-release" />
-    <PackageReference Include="Clean.Data.EfCore" Version="1.0.10-release" />
-    <PackageReference Include="Clean.Domain" Version="1.0.11-release" />
+    <PackageReference Include="Clean.Application" Version="1.0.12-release" />
+    <PackageReference Include="Clean.Data.EfCore" Version="1.0.12-release" />
+    <PackageReference Include="Clean.Domain" Version="1.0.12-release" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
