@@ -1,4 +1,5 @@
-﻿using Clean.Domain.Entity.Test.TestModel;
+﻿using Clean.Domain.Test.TestModel;
+using Clean.Domain.Test.TestModel.Clientes;
 using Clean.Domain.Tests.Builders;
 using Clean.Domain.Validations;
 
@@ -6,105 +7,153 @@ namespace Clean.Domain.Entity.Test
 {
 	public class DomainEntityTest
 	{
+		private const string validNombre = "gerson";
+		private const string validSegundoNombre = "brain";
+		private const string validApellido = "sanchez";
+		private const string validSegundoApellido = "ospina";
+		private const short validEdad = 50;
+
+		private const string textWith60Charters = "Lorem ipsum dolor sit amet, consectetur adipiscing elit est.";
+
+		private static readonly string  expectedCreateValidationExceptionMessage = string.Format(ValidationErrorMessages.InvalidEntityToCreate, nameof(Cliente));
+		private static readonly string  expectedUpdateValidationExceptionMessage = string.Format(ValidationErrorMessages.InvalidEntityToUpdate, nameof(Cliente));
+		
+		private static readonly string  expectedIdValidationErrorMessage = string.Format(ValidationErrorMessages.ElRequerdo, nameof(Cliente.Id));
+		private static readonly string  expectedNombreValidationErrorMessage = string.Format(ValidationErrorMessages.ElRequerdo, nameof(Cliente.Nombre));
+		private static readonly string  expectedNombreRangoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRango, nameof(Cliente.Nombre), ClienteParametros.NombreMinLength, ClienteParametros.NombreMaxLength);
+		private static readonly string	expectedSegundoNombreRangoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRango, nameof(Cliente.SegundoNombre), ClienteParametros.NombreMinLength, ClienteParametros.NombreMaxLength);
+		private static readonly string  expectedApellidoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRequerdo, nameof(Cliente.Apellido));
+		private static readonly string  expectedApellidoRangoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRango, nameof(Cliente.Apellido), ClienteParametros.ApellidoMinLength, ClienteParametros.ApellidoMaxLength);
+		private static readonly string	expectedSegundoApellidoRangoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRango, nameof(Cliente.SegundoApellido), ClienteParametros.ApellidoMinLength, ClienteParametros.ApellidoMaxLength);
+		private static readonly string  expectedEdadlValidationErrorMessage = string.Format(ValidationErrorMessages.EdadMenor, ClienteParametros.EdadMin);
+
+
 		[Fact]
 		public void ValidateCreateEntity_Ok()
 		{
 			// Arrange
-			var newName = "New Name";
-			var newEmail = "New@Email.com";
-			var userBuilder = new UserBuilder()
-				.WithId(Guid.Empty)
-				.WithName(newName)
-				.WithEmail(newEmail);
+			var expectedNombre = validNombre;
+			string? expectedSegundoNombre = null;
+			var expectedApellido = validApellido;
+			string? expectedSegundoApellido = null;
+			var expectedEdad = validEdad;
+
+			var clienteBuilder = new ClienteBuilder()
+				.WithNombre(expectedNombre)
+				.WithSegundoNombre(expectedSegundoNombre)
+				.WithApellido(expectedApellido)
+				.WithSegundoApellido(expectedSegundoApellido)
+				.WithEdad(expectedEdad);
 
 			// Act
-			var newUser = userBuilder.Build(false);
+			var newCLiente = clienteBuilder.BuildToCreate();
 
 			// Assert
-			Assert.Equal(newName, newUser.Name);
-			Assert.Equal(newEmail, newUser.Email);
+			Assert.Equal(expectedNombre, newCLiente.Nombre);
+			Assert.Equal(expectedSegundoNombre, newCLiente.SegundoNombre);
+			Assert.Equal(expectedApellido, newCLiente.Apellido);
+			Assert.Equal(expectedSegundoApellido, newCLiente.SegundoApellido);
+			Assert.Equal(expectedEdad, newCLiente.Edad);
 		}
 
 		[Fact]
 		public void ValidateCreateEntity_Error()
 		{
 			// Arrange
-			var expectedValidationExceptionMessage = string.Format(EntityValidationMessages.InvalidEntityToCreate, nameof(User));
-			var expectedNameValidationErrorMessage = string.Format(EntityValidationMessages.RequiredValidationError, nameof(User.Name));
-			var expectedEmailValidationErrorMessage = string.Format(EntityValidationMessages.RequiredValidationError, nameof(User.Email));
-			const int expectedNumValidationErrors = 2;
+			const int expectedNumValidationErrors = 7;
 
-			var userBuilder = new UserBuilder()
-				.WithId(Guid.Empty)
-				.WithName(string.Empty)
-				.WithEmail(" ");
+			var clienteBuilder = new ClienteBuilder()
+				.WithNombre(string.Empty)
+				.WithSegundoNombre(textWith60Charters)
+				.WithApellido(string.Empty)
+				.WithSegundoApellido(textWith60Charters)
+				.WithEdad(5);
 
 			// Act
-			var exception = Assert.Throws<EntityValidationException>(() =>
+			var exception = Assert.Throws<ValidationException>(() =>
 			{
-				userBuilder.Build(false);
+				clienteBuilder.BuildToCreate();
 			});
 
 			// Assert
-			Assert.Equal(expectedValidationExceptionMessage, exception.Message);
-			Assert.Contains(exception.Errors, validationError => expectedNameValidationErrorMessage.Equals(validationError.Message));
-			Assert.Contains(exception.Errors, validationError => expectedEmailValidationErrorMessage.Equals(validationError.Message));
+			Assert.Equal(expectedCreateValidationExceptionMessage, exception.Message);
 			Assert.True(exception.Errors.Length == expectedNumValidationErrors);
+			Assert.Collection(exception.Errors,
+				error => Assert.Equal(expectedNombreValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedNombreRangoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedSegundoNombreRangoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedApellidoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedApellidoRangoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedSegundoApellidoRangoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedEdadlValidationErrorMessage, error.Message)
+			);
 		}
 
 		[Fact]
 		public void ValidateUpdateEntity_Ok()
 		{
 			// Arrange
-			var id = Guid.NewGuid();
-			var newName = "New Name";
-			var newEmail = "New@Email.com";
+			var expectedId = Guid.NewGuid();
+			var expectedNombre = validNombre;
+			string? expectedSegundoNombre = validSegundoNombre;
+			var expectedApellido = validApellido;
+			var expectedSegundoApellido = validSegundoApellido;
+			var expectedEdad = validEdad;
 
-			var userBuilder = new UserBuilder()
-				.WithId(id)
-				.WithName(newName)
-				.WithEmail(newEmail);
+			var clienteBuilder = new ClienteBuilder()
+				.WithId(expectedId)
+				.WithNombre(expectedNombre)
+				.WithSegundoNombre(expectedSegundoNombre)
+				.WithApellido(expectedApellido)
+				.WithSegundoApellido(expectedSegundoApellido)
+				.WithEdad(expectedEdad);
 
 			// Act
-			var user = userBuilder.Build(true);
+			var cliente = clienteBuilder.BuildToUpdate();
 
 			// Assert
-			Assert.Equal(id, user.Id);
-			Assert.Equal(newName, user.Name);
-			Assert.Equal(newEmail, user.Email);
+			Assert.Equal(expectedId, cliente.Id);
+			Assert.Equal(expectedNombre, cliente.Nombre);
+			Assert.Equal(expectedSegundoNombre, cliente.SegundoNombre);
+			Assert.Equal(expectedApellido, cliente.Apellido);
+			Assert.Equal(expectedSegundoApellido, cliente.SegundoApellido);
+			Assert.Equal(expectedEdad, cliente.Edad);
+
 		}
 
 		[Fact]
 		public void ValidateUpdateEntity_Error()
 		{
 			// Arrange
-			var id = Guid.Empty;
-			var newName = string.Empty;
-			var newEmail = "  ";
+			const int expectedNumValidationErrors = 8;
 
-			var expectedValidationExceptionMessage = string.Format(EntityValidationMessages.InvalidEntityToUpdate, nameof(User));
-			var expectedIdValidationErrorMessage = string.Format(EntityValidationMessages.RequiredValidationError, nameof(User.Id));
-			var expectedNameValidationErrorMessage = string.Format(EntityValidationMessages.RequiredValidationError, nameof(User.Name));
-			var expectedEmailValidationErrorMessage = string.Format(EntityValidationMessages.RequiredValidationError, nameof(User.Email));
-			const int expectedNumValidationErrors = 3;
+			var clienteBuilder = new ClienteBuilder()
+				.WithId(Guid.Empty)
+				.WithNombre(string.Empty)
+				.WithSegundoNombre(textWith60Charters)
+				.WithApellido(string.Empty)
+				.WithSegundoApellido(textWith60Charters)
+				.WithEdad(5);
 
 			// Act
-			var userBuilder = new UserBuilder()
-				.WithId(id)
-				.WithName(newName)
-				.WithEmail(newEmail);
-
-			var exception = Assert.Throws<EntityValidationException>(() =>
+			var exception = Assert.Throws<ValidationException>(() =>
 			{
-				userBuilder.Build(true);
+				clienteBuilder.BuildToUpdate();
 			});
 
 			// Assert
-			Assert.Equal(expectedValidationExceptionMessage, exception.Message);
-			Assert.Contains(exception.Errors, validationError => expectedIdValidationErrorMessage.Equals(validationError.Message));
-			Assert.Contains(exception.Errors, validationError => expectedNameValidationErrorMessage.Equals(validationError.Message));
-			Assert.Contains(exception.Errors, validationError => expectedEmailValidationErrorMessage.Equals(validationError.Message));
+			Assert.Equal(expectedUpdateValidationExceptionMessage, exception.Message);
 			Assert.True(exception.Errors.Length == expectedNumValidationErrors);
+			Assert.Collection(exception.Errors,
+				error => Assert.Equal(expectedNombreValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedNombreRangoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedSegundoNombreRangoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedApellidoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedApellidoRangoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedSegundoApellidoRangoValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedEdadlValidationErrorMessage, error.Message),
+				error => Assert.Equal(expectedIdValidationErrorMessage, error.Message)
+			);
 		}
 	}
 }
