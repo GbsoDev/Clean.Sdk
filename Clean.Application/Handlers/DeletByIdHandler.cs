@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Clean.Application.Handlers
 {
-	public class DeletByIdHandler<TRequest, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest>
+	public abstract class DeletByIdHandler<TRequest, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest>
 		where TRequest : ICommandDeleteById, IRequest
 		where TEntity : class, IDomainEntity
 		where TServie : IDeleteService<TEntity>

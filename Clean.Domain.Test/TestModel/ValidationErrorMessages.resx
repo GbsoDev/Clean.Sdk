@@ -117,16 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EdadMenor" xml:space="preserve">
+    <value>No se adminte el registro de menores de {0} años</value>
+  </data>
+  <data name="ElInvalido" xml:space="preserve">
+    <value>El {0} es inválido</value>
+  </data>
+  <data name="ElRango" xml:space="preserve">
+    <value>El {0} debe tener de {1} a {2} caracteres</value>
+  </data>
+  <data name="ElRequerdo" xml:space="preserve">
+    <value>El {0} es requerido</value>
+  </data>
   <data name="InvalidEntityToCreate" xml:space="preserve">
-    <value>The {0} entity is not valid to create</value>
+    <value>Error al crear una nueva entidad</value>
   </data>
   <data name="InvalidEntityToUpdate" xml:space="preserve">
-    <value>The {0} entity is not valid to update</value>
+    <value>Error al actualizar una entidad</value>
   </data>
-  <data name="RequiredValidationError" xml:space="preserve">
-    <value>The {0} is required.</value>
+  <data name="LaInvalida" xml:space="preserve">
+    <value>La {0} es inválida</value>
   </data>
-  <data name="ValidateError" xml:space="preserve">
-    <value>The {0} is invalid.</value>
+  <data name="LaRango" xml:space="preserve">
+    <value>El {0} debe tener de {1} a {2} caracteres</value>
+  </data>
+  <data name="LaRequerida" xml:space="preserve">
+    <value>La {0} es requerida</value>
   </data>
 </root>

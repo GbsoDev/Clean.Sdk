@@ -2,15 +2,15 @@
 
 namespace Clean.Domain.Exceptions
 {
-	public class NullObjectException
+	public class NullException
 		: ValidationException
 	{
-		public NullObjectException(string? message)
+		public NullException(string? message)
 			: base(message)
 		{
 		}
 
-		public NullObjectException(string? message, Exception? innerException)
+		public NullException(string? message, Exception? innerException)
 			: base(message, innerException)
 		{
 		}

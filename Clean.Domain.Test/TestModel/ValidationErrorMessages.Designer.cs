@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Clean.Domain.Validations {
+namespace Clean.Domain.Test.TestModel {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace Clean.Domain.Validations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class EntityValidationMessages {
+    internal class ValidationErrorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal EntityValidationMessages() {
+        internal ValidationErrorMessages() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Clean.Domain.Validations.EntityValidationMessages", typeof(EntityValidationMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Clean.Domain.Test.TestModel.ValidationErrorMessages", typeof(ValidationErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Clean.Domain.Validations {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,38 +61,83 @@ namespace Clean.Domain.Validations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} entity is not valid to create.
+        ///   Looks up a localized string similar to No se adminte el registro de menores de {0} años.
         /// </summary>
-        public static string InvalidEntityToCreate {
+        internal static string EdadMenor {
+            get {
+                return ResourceManager.GetString("EdadMenor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El {0} es inválido.
+        /// </summary>
+        internal static string ElInvalido {
+            get {
+                return ResourceManager.GetString("ElInvalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El {0} debe tener de {1} a {2} caracteres.
+        /// </summary>
+        internal static string ElRango {
+            get {
+                return ResourceManager.GetString("ElRango", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El {0} es requerido.
+        /// </summary>
+        internal static string ElRequerdo {
+            get {
+                return ResourceManager.GetString("ElRequerdo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error al crear una nueva entidad.
+        /// </summary>
+        internal static string InvalidEntityToCreate {
             get {
                 return ResourceManager.GetString("InvalidEntityToCreate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} entity is not valid to update.
+        ///   Looks up a localized string similar to Error al actualizar una entidad.
         /// </summary>
-        public static string InvalidEntityToUpdate {
+        internal static string InvalidEntityToUpdate {
             get {
                 return ResourceManager.GetString("InvalidEntityToUpdate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} is required..
+        ///   Looks up a localized string similar to La {0} es inválida.
         /// </summary>
-        public static string RequiredValidationError {
+        internal static string LaInvalida {
             get {
-                return ResourceManager.GetString("RequiredValidationError", resourceCulture);
+                return ResourceManager.GetString("LaInvalida", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} is invalid..
+        ///   Looks up a localized string similar to El {0} debe tener de {1} a {2} caracteres.
         /// </summary>
-        public static string ValidateError {
+        internal static string LaRango {
             get {
-                return ResourceManager.GetString("ValidateError", resourceCulture);
+                return ResourceManager.GetString("LaRango", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La {0} es requerida.
+        /// </summary>
+        internal static string LaRequerida {
+            get {
+                return ResourceManager.GetString("LaRequerida", resourceCulture);
             }
         }
     }
