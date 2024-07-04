@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Clean.Application.Handlers
 {
-	public class QueryCollectionHandler<TRequest, TResponse, TEntity, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
+	public abstract class QueryCollectionHandler<TRequest, TResponse, TEntity, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
 		where TRequest : IRequest<TResponse>
 		where TResponse : ICollection
 		where TEntity : class, IDomainEntity

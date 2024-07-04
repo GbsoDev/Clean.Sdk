@@ -5,7 +5,7 @@ using System;
 
 namespace Clean.Application.Handlers
 {
-	public class QueryHandler<TRepository> : Handler
+	public abstract class QueryHandler<TRepository> : Handler
 		where TRepository : class, IRepository
 	{
 		protected TRepository Repository => _repository.Value;
