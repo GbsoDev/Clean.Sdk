@@ -2,7 +2,6 @@
 using Clean.Application.Validations;
 using Clean.Domain.Entity;
 using Clean.Domain.Services;
-using Clean.Domain.Validations;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -31,13 +30,9 @@ namespace Clean.Application.Handlers
 			return Mapper.Map<TEntity, TResponse>(updated);
 		}
 
-		private void Validate(TRequest request)
+		protected virtual void Validate(TRequest request)
 		{
-			var validation = ValidationRules.Validate(request, options => options.IncludeRuleSets(ValidationsSet.UPDATE));
-			if (!validation.IsValid)
-			{
-				throw new ValidationException(string.Format(EntityValidationMessages.InvalidEntityToUpdate, typeof(TEntity).Name), validation.Errors);
-			}
+			var validation = ValidationRules.Validate(request, options => { options.IncludeRuleSets(ValidationsSet.UPDATE); options.ThrowOnFailures(); });
 		}
 	}
 }
