@@ -28,10 +28,10 @@ namespace Clean.Data.EfCore
 			return Context.Set<TEntity>().ToArrayAsync(cancellationToken);
 		}
 
-		public virtual async Task<TEntity?> ConsultByIdAsync(object id, CancellationToken cancellationToken = default)
+		public virtual Task<TEntity?> ConsultByIdAsync(object id, CancellationToken cancellationToken = default)
 		{
 			var keyValues = new object[] { id };
-			return await Context.FindAsync<TEntity>(keyValues, cancellationToken);
+			return Context.FindAsync<TEntity>(keyValues, cancellationToken).AsTask();
 		}
 
 		public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -58,7 +58,7 @@ namespace Clean.Data.EfCore
 		public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			await Task.FromResult(Context.Remove(entity));
+			await Task.FromResult(Context.Remove(entity)).ConfigureAwait(false);
 		}
 
 		public virtual async Task DeleteByIdAsync(object id, CancellationToken cancellationToken = default)
@@ -66,7 +66,7 @@ namespace Clean.Data.EfCore
 			if (id == null) throw new ArgumentNullException(nameof(id));
 			var entity = await ConsultByIdAsync(id, cancellationToken);
 			if (entity == null) throw new ApplicationException("You are trying to delete a record that does not exist");
-			await DeleteAsync(entity!, cancellationToken);
+			await DeleteAsync(entity!, cancellationToken).ConfigureAwait(false);
 		}
 
 		public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
