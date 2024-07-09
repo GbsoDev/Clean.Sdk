@@ -1,9 +1,9 @@
-﻿using Clean.Application.Mapper;
-using Clean.Domain.Helpers;
+﻿using Clean.Sdk.Application.Mapper;
+using Clean.Sdk.Domain.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Clean.Infrastructure.Extensions
+namespace Clean.Sdk.Infrastructure.Extensions
 {
 	public static class AutoMapperProvider
 	{

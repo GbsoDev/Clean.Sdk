@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Clean.Application.Validations;
-using Clean.Domain.Entity;
-using Clean.Domain.Services;
+using Clean.Sdk.Application.Validations;
+using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Clean.Application.Handlers
+namespace Clean.Sdk.Application.Handlers
 {
 	public abstract class RegistrationHandler<TRequest, TResponse, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest, TResponse>
 		where TRequest : IRequest<TResponse>

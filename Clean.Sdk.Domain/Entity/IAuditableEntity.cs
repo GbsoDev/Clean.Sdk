@@ -1,4 +1,4 @@
-﻿namespace Clean.Domain.Entity
+﻿namespace Clean.Sdk.Domain.Entity
 {
 	public interface IAuditableEntity
 	{

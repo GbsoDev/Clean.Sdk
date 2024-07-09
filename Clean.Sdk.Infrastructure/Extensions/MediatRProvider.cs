@@ -1,8 +1,8 @@
-﻿using Clean.Infrastructure.Extensions;
+﻿using Clean.Sdk.Infrastructure.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Clean.Infrastructure.Extensions
+namespace Clean.Sdk.Infrastructure.Extensions
 {
 	public static class MediatRProvider
 	{

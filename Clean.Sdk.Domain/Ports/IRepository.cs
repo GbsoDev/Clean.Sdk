@@ -1,8 +1,8 @@
-﻿using Clean.Domain.Entity;
+﻿using Clean.Sdk.Domain.Entity;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Clean.Domain.Ports
+namespace Clean.Sdk.Domain.Ports
 {
 	public interface IRepository
 	{

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Clean.Application.Handlers
+namespace Clean.Sdk.Application.Handlers
 
 {
 	public abstract class CommandHandler<TService> : Handler

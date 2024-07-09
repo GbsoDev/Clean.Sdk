@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Clean.Domain.Options
+namespace Clean.Sdk.Domain.Options
 {
 	[AttributeUsage(AttributeTargets.Class)]
 	public class OptionAttribute : Attribute

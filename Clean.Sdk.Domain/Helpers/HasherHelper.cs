@@ -1,8 +1,8 @@
-﻿using Clean.Domain.Exceptions;
+﻿using Clean.Sdk.Domain.Exceptions;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Clean.Domain.Helpers
+namespace Clean.Sdk.Domain.Helpers
 {
 	public static class HasherHelper
 	{

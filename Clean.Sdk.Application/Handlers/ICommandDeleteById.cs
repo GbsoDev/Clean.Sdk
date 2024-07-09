@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Clean.Application.Handlers
+namespace Clean.Sdk.Application.Handlers
 {
 	public interface ICommandDeleteById : IRequest
 	{

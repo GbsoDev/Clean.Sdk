@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Clean.Domain.Entity;
-using Clean.Domain.Ports;
+using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +8,7 @@ using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Clean.Application.Handlers
+namespace Clean.Sdk.Application.Handlers
 {
 	public abstract class QueryCollectionHandler<TRequest, TResponse, TEntity, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
 		where TRequest : IRequest<TResponse>

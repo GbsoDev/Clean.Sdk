@@ -1,8 +1,8 @@
-﻿using Clean.Domain.Entity;
+﻿using Clean.Sdk.Domain.Entity;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Clean.Domain.Services
+namespace Clean.Sdk.Domain.Services
 {
 	internal interface ICrudService<TEntity>
 		where TEntity : class, IDomainEntity

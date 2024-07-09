@@ -1,4 +1,4 @@
-﻿namespace Clean.Domain.Entity
+﻿namespace Clean.Sdk.Domain.Entity
 {
 	public abstract class DomainEntity<TId> : IDomainEntity
 		where TId : struct

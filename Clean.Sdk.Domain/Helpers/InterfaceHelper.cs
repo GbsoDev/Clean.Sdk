@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Clean.Domain.Helpers
+namespace Clean.Sdk.Domain.Helpers
 {
 	public static class InterfaceHelper
 	{

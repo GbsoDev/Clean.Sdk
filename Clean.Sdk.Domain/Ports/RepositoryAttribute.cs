@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Clean.Domain.Ports
+namespace Clean.Sdk.Domain.Ports
 {
 	[AttributeUsage(AttributeTargets.Class)]
 	public class RepositoryAttribute : Attribute

@@ -1,9 +1,9 @@
-﻿using Clean.Domain.Test.TestModel;
-using Clean.Domain.Test.TestModel.Clientes;
-using Clean.Domain.Tests.Builders;
-using Clean.Domain.Validations;
+﻿using Clean.Sdk.Domain.Test.TestModel;
+using Clean.Sdk.Domain.Test.TestModel.Clientes;
+using Clean.Sdk.Domain.Tests.Builders;
+using Clean.Sdk.Domain.Validations;
 
-namespace Clean.Domain.Entity.Test
+namespace Clean.Sdk.Domain.Entity.Test
 {
 	public class DomainEntityTest
 	{

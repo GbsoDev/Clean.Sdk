@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Clean.Data.EfCore
+namespace Clean.Sdk.Data.EfCore
 {
 	public interface IEfDbContext
 	{

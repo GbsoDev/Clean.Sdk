@@ -1,4 +1,4 @@
-﻿namespace Clean.Application.Handlers
+﻿namespace Clean.Sdk.Application.Handlers
 {
 	public abstract class QueryById<TId, TResponse> : IQueryById<TResponse>
 		where TId : struct

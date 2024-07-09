@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Clean.Infrastructure.Extensions
+namespace Clean.Sdk.Infrastructure.Extensions
 {
 	public static class LazyProvider
 	{

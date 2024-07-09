@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Clean.Domain.Options
+namespace Clean.Sdk.Domain.Options
 {
 	[Option(nameof(AuthOptions))]
 	public class AuthOptions

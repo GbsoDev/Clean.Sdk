@@ -1,4 +1,4 @@
-﻿namespace Clean.Domain.Exceptions
+﻿namespace Clean.Sdk.Domain.Exceptions
 {
 	internal class InvalidArgumentException
 		: AppExeption

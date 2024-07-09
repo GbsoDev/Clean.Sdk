@@ -1,6 +1,6 @@
-﻿using Clean.Domain.Test.TestModel.Clientes;
+﻿using Clean.Sdk.Domain.Test.TestModel.Clientes;
 
-namespace Clean.Domain.Tests.Builders
+namespace Clean.Sdk.Domain.Tests.Builders
 {
 	public sealed class ClienteBuilder
 	{

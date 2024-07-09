@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using Clean.Domain.Entity;
-using Clean.Domain.Exceptions;
-using Clean.Domain.Ports;
+using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Exceptions;
+using Clean.Sdk.Domain.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Clean.Application.Handlers
+namespace Clean.Sdk.Application.Handlers
 {
 	public abstract class QueryByIdHandler<TRequest, TResponse, TModel, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
 		where TRequest : class, IQueryById<TResponse>, IRequest<TResponse>

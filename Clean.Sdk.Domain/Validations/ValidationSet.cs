@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Clean.Domain.Validations
+namespace Clean.Sdk.Domain.Validations
 {
 	public class ValidationSet
 	{

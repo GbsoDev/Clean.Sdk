@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Clean.Domain.Validations
+namespace Clean.Sdk.Domain.Validations
 {
 	public static class ArgumentValidationExtensions
 	{

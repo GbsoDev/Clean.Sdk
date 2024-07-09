@@ -1,6 +1,6 @@
-﻿using Clean.Domain.Validations;
+﻿using Clean.Sdk.Domain.Validations;
 
-namespace Clean.Domain.Test.TestModel.Clientes
+namespace Clean.Sdk.Domain.Test.TestModel.Clientes
 {
 
 	public static class ClienteValidator

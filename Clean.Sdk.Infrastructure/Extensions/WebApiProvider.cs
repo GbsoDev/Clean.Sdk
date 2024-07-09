@@ -1,11 +1,11 @@
-﻿using Clean.Domain.Options;
+﻿using Clean.Sdk.Domain.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Clean.Infrastructure.Extensions
+namespace Clean.Sdk.Infrastructure.Extensions
 {
 	public static class WebApiProvider
 	{

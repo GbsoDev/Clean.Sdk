@@ -1,11 +1,11 @@
-﻿using Clean.Domain.Entity;
-using Clean.Domain.Ports;
+﻿using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Ports;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Clean.Domain.Services
+namespace Clean.Sdk.Domain.Services
 {
 	public abstract class DeleteService<TEntity, TRepository> : ActionService<TEntity, TRepository>, IDeleteService<TEntity>
 		where TEntity : class, IDomainEntity

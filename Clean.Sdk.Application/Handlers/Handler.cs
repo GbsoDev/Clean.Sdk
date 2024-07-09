@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 
-namespace Clean.Application.Handlers
+namespace Clean.Sdk.Application.Handlers
 {
 	public abstract class Handler
 	{

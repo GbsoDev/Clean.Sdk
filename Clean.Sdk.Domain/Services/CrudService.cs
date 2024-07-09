@@ -1,11 +1,11 @@
-﻿using Clean.Domain.Entity;
-using Clean.Domain.Ports;
+﻿using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Ports;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Clean.Domain.Services
+namespace Clean.Sdk.Domain.Services
 {
 	public abstract class CrudService<TEntity, TRepository> : ActionService<TEntity, TRepository>, ICrudService<TEntity>
 		where TEntity : class, IDomainEntity

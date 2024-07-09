@@ -1,4 +1,4 @@
-namespace Clean.Domain.Options
+namespace Clean.Sdk.Domain.Options
 {
 	public enum DbType : short
 	{

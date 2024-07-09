@@ -1,7 +1,7 @@
-﻿using Clean.Domain.Entity;
+﻿using Clean.Sdk.Domain.Entity;
 using System;
 
-namespace Clean.Domain.Helpers
+namespace Clean.Sdk.Domain.Helpers
 {
 	public class EntityHelper
 	{

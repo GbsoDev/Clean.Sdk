@@ -1,7 +1,7 @@
-﻿using Clean.Domain.Exceptions;
+﻿using Clean.Sdk.Domain.Exceptions;
 using System.Collections.Generic;
 
-namespace Clean.Domain.Options
+namespace Clean.Sdk.Domain.Options
 {
 	[Option()]
 	public class AppSettings

@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Clean.Domain.Entity;
-using Clean.Domain.Services;
+using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Clean.Application.Handlers
+namespace Clean.Sdk.Application.Handlers
 {
 	public abstract class DeletByIdHandler<TRequest, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest>
 		where TRequest : ICommandDeleteById, IRequest

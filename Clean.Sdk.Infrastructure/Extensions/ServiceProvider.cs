@@ -1,11 +1,11 @@
-using Clean.Domain;
-using Clean.Domain.Exceptions;
-using Clean.Domain.Helpers;
-using Clean.Domain.Services;
+using Clean.Sdk.Domain;
+using Clean.Sdk.Domain.Exceptions;
+using Clean.Sdk.Domain.Helpers;
+using Clean.Sdk.Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Clean.Infrastructure.Extensions
+namespace Clean.Sdk.Infrastructure.Extensions
 {
 	public static class ServiceProvider
 	{

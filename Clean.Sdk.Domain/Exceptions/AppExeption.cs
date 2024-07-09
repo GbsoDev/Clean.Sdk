@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Clean.Domain.Exceptions
+namespace Clean.Sdk.Domain.Exceptions
 {
 	public class AppExeption : ApplicationException
 	{

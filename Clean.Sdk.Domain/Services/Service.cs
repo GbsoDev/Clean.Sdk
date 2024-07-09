@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Clean.Domain.Services
+namespace Clean.Sdk.Domain.Services
 {
 	public abstract class Service
 	{

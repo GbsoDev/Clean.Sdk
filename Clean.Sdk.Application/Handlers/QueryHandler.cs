@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Clean.Domain.Ports;
+using Clean.Sdk.Domain.Ports;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Clean.Application.Handlers
+namespace Clean.Sdk.Application.Handlers
 {
 	public abstract class QueryHandler<TRepository> : Handler
 		where TRepository : class, IRepository

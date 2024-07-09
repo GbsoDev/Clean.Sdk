@@ -1,9 +1,9 @@
-﻿using Clean.Domain.Entity;
-using Clean.Domain.Ports;
+﻿using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Ports;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Clean.Data.EfCore
+namespace Clean.Sdk.Data.EfCore
 {
 	public class EfRepository<TEntity, TContext> : IRepository<TEntity>
 		where TEntity : class, IDomainEntity

@@ -1,16 +1,16 @@
-using Clean.Domain.Helpers;
-using Clean.Domain.Options;
+using Clean.Sdk.Domain.Helpers;
+using Clean.Sdk.Domain.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Reflection;
 
-namespace Clean.Infrastructure.Extensions
+namespace Clean.Sdk.Infrastructure.Extensions
 {
 	public static class OptionsProvider
 	{
 		/// <summary>
-		/// Ruta de archivos de configuración: appsettings.json
+		/// Ruta de archivos de configuraciÃ³n: appsettings.json
 		/// </summary>
 		public static string? ConfigurationFilePath { get; set; }
 		private const string DEVELOPMENT_SUFIX = "Development";
@@ -116,7 +116,7 @@ namespace Clean.Infrastructure.Extensions
 			}
 			else
 			{
-				throw new Clean.Domain.Exceptions.AppExeption($"Error: Method {classType.FullName}.{methodName} not found");
+				throw new Clean.Sdk.Domain.Exceptions.AppExeption($"Error: Method {classType.FullName}.{methodName} not found");
 			}
 		}
 
@@ -141,7 +141,7 @@ namespace Clean.Infrastructure.Extensions
 			}
 			else
 			{
-				throw new Clean.Domain.Exceptions.AppExeption($"Error: Method {classType.FullName}.{methodName} not found");
+				throw new Clean.Sdk.Domain.Exceptions.AppExeption($"Error: Method {classType.FullName}.{methodName} not found");
 			}
 		}
 

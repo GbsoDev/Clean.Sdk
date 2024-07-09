@@ -1,4 +1,4 @@
-﻿namespace Clean.Application.Handlers
+﻿namespace Clean.Sdk.Application.Handlers
 {
 	public abstract class CommandDeleteById<TId> : ICommandDeleteById
 		where TId : struct

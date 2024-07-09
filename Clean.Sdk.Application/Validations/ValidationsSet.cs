@@ -1,4 +1,4 @@
-﻿namespace Clean.Application.Validations
+﻿namespace Clean.Sdk.Application.Validations
 {
 	public class ValidationsSet
 	{

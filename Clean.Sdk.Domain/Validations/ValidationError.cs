@@ -1,4 +1,4 @@
-﻿namespace Clean.Domain.Validations
+﻿namespace Clean.Sdk.Domain.Validations
 {
 	public class ValidationError
 	{

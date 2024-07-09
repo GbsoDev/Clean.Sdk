@@ -1,7 +1,7 @@
-﻿using Clean.Domain.Helpers;
+﻿using Clean.Sdk.Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 
-namespace Clean.Data.EfCore
+namespace Clean.Sdk.Data.EfCore
 {
 	public abstract class EfDbContext<TContext> : DbContext, IEfDbContext
 		where TContext : DbContext

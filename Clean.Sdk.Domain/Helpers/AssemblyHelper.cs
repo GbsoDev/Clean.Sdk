@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Clean.Domain.Helpers
+namespace Clean.Sdk.Domain.Helpers
 {
 	public static class AssemblyHelper
 	{

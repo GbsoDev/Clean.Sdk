@@ -1,11 +1,11 @@
-﻿using Clean.Data.EfCore;
-using Clean.Domain.Exceptions;
-using Clean.Domain.Options;
+﻿using Clean.Sdk.Data.EfCore;
+using Clean.Sdk.Domain.Exceptions;
+using Clean.Sdk.Domain.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 
-namespace Clean.Infrastructure.Extensions
+namespace Clean.Sdk.Infrastructure.Extensions
 {
 	public static class EfCoreProvider
 	{
