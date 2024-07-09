@@ -27,22 +27,22 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <ProjectReference Include="..\Clean.Domain\Clean.Domain.csproj" />
-    <ProjectReference Include="..\Clean.Application\Clean.Application.csproj" />
-    <ProjectReference Include="..\Clean.Data.EfCore\Clean.Data.EfCore.csproj" />
-    <ProjectReference Include="..\Clean.Domain\Clean.Domain.csproj" />
+    <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
+    <ProjectReference Include="..\Clean.Sdk.Application\Clean.Sdk.Application.csproj" />
+    <ProjectReference Include="..\Clean.Sdk.Data.EfCore\Clean.Sdk.Data.EfCore.csproj" />
+    <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Prerelease'">
-    <PackageReference Include="Clean.Application" Version="*-*" />
-    <PackageReference Include="Clean.Data.EfCore" Version="*-*" />
-    <PackageReference Include="Clean.Domain" Version="*-*" />
+    <PackageReference Include="Clean.Sdk.Application" Version="*-*" />
+    <PackageReference Include="Clean.Sdk.Data.EfCore" Version="*-*" />
+    <PackageReference Include="Clean.Sdk.Domain" Version="*-*" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageReference Include="Clean.Application" Version="*" />
-    <PackageReference Include="Clean.Data.EfCore" Version="*" />
-    <PackageReference Include="Clean.Domain" Version="*" />
+    <PackageReference Include="Clean.Sdk.Application" Version="*" />
+    <PackageReference Include="Clean.Sdk.Data.EfCore" Version="*" />
+    <PackageReference Include="Clean.Sdk.Domain" Version="*" />
   </ItemGroup>
 
 </Project>

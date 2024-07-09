@@ -13,15 +13,15 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <ProjectReference Include="..\Clean.Domain\Clean.Domain.csproj" />
+    <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Prerelease'">
-    <PackageReference Include="Clean.Domain" Version="*-*" />
+    <PackageReference Include="Clean.Sdk.Domain" Version="*-*" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageReference Include="Clean.Domain" Version="*" />
+    <PackageReference Include="Clean.Sdk.Domain" Version="*" />
   </ItemGroup>
 
   <ItemGroup>

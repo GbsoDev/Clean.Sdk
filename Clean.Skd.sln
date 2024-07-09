@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Domain", "Clean.Domain\Clean.Domain.csproj", "{7F7515B2-62D2-41EC-9867-E6159B22670D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Domain", "Clean.Sdk.Domain\Clean.Sdk.Domain.csproj", "{7F7515B2-62D2-41EC-9867-E6159B22670D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Application", "Clean.Application\Clean.Application.csproj", "{5D3FE87E-F9D7-4798-9618-31CD572C93CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Application", "Clean.Sdk.Application\Clean.Sdk.Application.csproj", "{5D3FE87E-F9D7-4798-9618-31CD572C93CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Data.EfCore", "Clean.Data.EfCore\Clean.Data.EfCore.csproj", "{DDABFDA6-F20F-403D-9D0D-E1D23FF4431B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Data.EfCore", "Clean.Sdk.Data.EfCore\Clean.Sdk.Data.EfCore.csproj", "{DDABFDA6-F20F-403D-9D0D-E1D23FF4431B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Domain.Test", "Clean.Domain.Test\Clean.Domain.Test.csproj", "{B37E26AE-2A60-4794-B1EE-090F3AE5B091}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Domain.Test", "Clean.Sdk.Domain.Test\Clean.Sdk.Domain.Test.csproj", "{B37E26AE-2A60-4794-B1EE-090F3AE5B091}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Infrastructure", "Clean.Infrastructure\Clean.Infrastructure.csproj", "{536B243D-8BA0-4662-90FF-E4C411935CB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Infrastructure", "Clean.Sdk.Infrastructure\Clean.Sdk.Infrastructure.csproj", "{536B243D-8BA0-4662-90FF-E4C411935CB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
