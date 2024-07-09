@@ -5,13 +5,13 @@ trigger:
       - release
   paths:
     include:
-      - 'Clean.Infrastructure/*'
+      - 'Clean.Sdk.Application/*'
 pr: none
 
 pool:
   name: self-hosted
 variables:
-  projectPath: 'Clean.Infrastructure/Clean.Infrastructure.csproj'
+  projectPath: 'Clean.Sdk.Application/Clean.Sdk.Application.csproj'
   connectionToExternalNuGetRepo: GbsoDev@NuGet.org
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
@@ -101,7 +101,7 @@ stages:
         feedsToUse: 'select'
         packagesToPush: '"$(outputPack)/*/*.nupkg"'
         nuGetFeedType: 'internal'
-        publishVstsFeed: 'Gbso.Clean/NuGets'
+        publishVstsFeed: 'Gbso.Clean.Sdk/NuGets'
         versioningScheme: 'off'
         allowPackageConflicts: true
 - stage: PushToNuGetOrg

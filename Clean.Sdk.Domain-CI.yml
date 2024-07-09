@@ -7,14 +7,14 @@ pr:
       - dev
   paths:
     include:
-    - 'Clean.Domain/*'
-    - 'Clean.Domain.Test/*'
+    - 'Clean.Sdk.Domain/*'
+    - 'Clean.Sdk.Domain.Test/*'
 
 pool:
   name: self-hosted
 variables:
-  mainProject: 'Clean.Domain/Clean.Domain.csproj'
-  testProject: 'Clean.Domain.Test/Clean.Domain.Test.csproj'
+  mainProject: 'Clean.Sdk.Domain/Clean.Sdk.Domain.csproj'
+  testProject: 'Clean.Sdk.Domain.Test/Clean.Sdk.Domain.Test.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 stages:
