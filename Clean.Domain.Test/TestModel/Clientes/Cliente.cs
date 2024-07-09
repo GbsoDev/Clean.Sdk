@@ -29,7 +29,7 @@ namespace Clean.Domain.Test.TestModel.Clientes
 			Apellido = apellido.Trim();
 			SegundoApellido = segundoApellido?.Trim();
 			Edad = edad;
-			validateAction.Invoke(this).ValidateThrow();
+			validateAction.Invoke(this).ValidateAndThrow();
 		}
 	}
 }

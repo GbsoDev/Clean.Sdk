@@ -25,7 +25,7 @@ namespace Clean.Domain.Validations
 			Errors.Add(new ValidationError(message));
 		}
 
-		public void ValidateThrow()
+		public void ValidateAndThrow()
 		{
 			if (!IsValid)
 			{
