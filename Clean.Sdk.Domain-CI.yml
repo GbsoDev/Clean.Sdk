@@ -1,4 +1,13 @@
-trigger: none
+trigger: 
+  branches:
+    include:
+      - main
+      - release
+      - dev
+  paths:
+    include:
+    - 'Clean.Sdk.Domain/*'
+    - 'Clean.Sdk.Domain.Test/*'
 pr:
   branches:
     include:

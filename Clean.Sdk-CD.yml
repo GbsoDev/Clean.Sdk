@@ -1,91 +1,51 @@
+trigger:
+  branches:
+    include:
+      - main
+      - release
+  paths:
+    include:
+      - 'Clean.Sdk.Domain/*'
+      - 'Clean.Sdk.Data.EfCore/*'
+      - 'Clean.Sdk.Application/*'
+      - 'Clean.Sdk.Infrastructure/*'
+pr: none
+
 pool:
   name: self-hosted
 variables:
-  projectPath: $(projectPath)
-  connectionToExternalNuGetRepo: $(connectionToExternalNuGetRepo)
-  buildPlatform: $(buildPlatform)
-  buildConfiguration: $(buildConfiguration)
-  version: $(version)
-  outputPack: $(Build.ArtifactStagingDirectory)
-  versionSuffix: $(versionSuffix)
+  majorVersion: $(majorVersion)
+  minorVersion: $(minorVersion)
+  packVersion: ''
+  ${{ if endsWith( variables['Build.SourceBranchName'], 'main' ) }}: 
+    packVersionSuffix: ''
+    buildConfiguration: 'Release'
+  ${{ else }}: 
+    packVersionSuffix: '-$(Build.SourceBranchName)'
+    buildConfiguration: 'Prerelease'
 stages:
-- stage: BuildAndPack
-  displayName: 'Build and Pack'
+- stage: GetReleaseVersionValues
+  displayName: 'Get Release Version Values'
   jobs:
-  - job: BuildAndPackJob
-    displayName: 'Build and Pack Job'
+  - job:
+    displayName: 'Get Release Version Values Job'
     variables:
-      nugetVersion: '$(version)-$(versionSuffix)'
+      patchVersion: $[counter(format('{0}.{1}', variables['majorVersion'], variables['minorVersion']), 1)]
     steps:
-    - task: NuGetToolInstaller@1
-      displayName: 'Install NuGet Tool'
-    - task: NuGetCommand@2
-      displayName: 'Restore NuGet Packages'
+    - checkout: self
+    - task: PowerShell@2
+      displayName: 'Get Main Project Version Script'
       inputs:
-        restoreSolution: '$(projectPath)'
-    - task: DotNetCoreCLI@2
-      displayName: 'Build Project'
-      inputs:
-        command: 'build'
-        projects: '$(projectPath)'
-        arguments: '--configuration $(buildConfiguration) /p:VersionSuffix=$(versionSuffix)'
-    - task: DotNetCoreCLI@2
-      displayName: 'Pack NuGet'
-      inputs:
-        command: 'pack'
-        packagesToPack: '$(projectPath)'
-        configuration: $(buildConfiguration)
-        nobuild: true
-        versionEnvVar: 'nugetVersion'
-        versioningScheme: byEnvVar
-        packDirectory: "$(outputPack)"
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish to Artifacts'
-      inputs:
-        PathtoPublish: '$(outputPack)'
-- stage:
-  dependsOn: BuildAndPack
-  displayName: 'Publish to Azure DevOps'
-  jobs:
-  - job:
-    displayName: 'Publish to Azure DevOps Job'
-    steps:
-    - task: DownloadBuildArtifacts@0
-      displayName: 'Download Artifacts'
-      inputs:
-        buildType: 'current'
-        downloadType: 'specific'
-        itemPattern: '*/*.nupkg'
-        downloadPath: '$(outputPack)'
-    - task: NuGetAuthenticate@0
-      displayName: 'NuGet Authenticate'
-    - task: NuGetCommand@2
-      displayName: 'Push to Azure DevOps'
-      inputs:
-        command: push
-        feedsToUse: 'select'
-        packagesToPush: '"$(outputPack)/*/*.nupkg"'
-        nuGetFeedType: 'internal'
-        publishVstsFeed: 'Gbso.Clean.Sdk/NuGets'
-        versioningScheme: 'off'
-        allowPackageConflicts: true
-- stage: PushToNuGetOrg
-  dependsOn: BuildAndPack
-  displayName: 'Push to NoGet.org'
-  jobs:
-  - job:
-    displayName: 'Push to NoGet.org Job'
-    steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'specific'
-        itemPattern: '*/*.nupkg'
-        downloadPath: '$(outputPack)'
-    - task: NuGetCommand@2
-      displayName: 'NuGet push'
-      inputs:
-        command: push
-        packagesToPush: '"$(outputPack)/*/*.nupkg"'
-        nuGetFeedType: external
-        publishFeedCredentials: $(connectionToExternalNuGetRepo)
+        targetType: 'inline'
+        script: |
+          $majorVersion = $env:majorVersion
+          $minorVersion = $env:minorVersion
+          $patchVersion = $env:patchVersion
+          $packVersion = $env:packVersion
+          $packVersionSuffix = $env:packVersionSuffix
+          $buildConfiguration = $env:buildConfiguration
+          
+          Write-Host "##vso[task.setvariable variable=patchVersion]$patchVersion"
+          Write-Host "##vso[task.setvariable variable=packVersion]$majorVersion.$minorVersion.$patchVersion"
+          Write-Host "##vso[task.setvariable variable=packVersionSuffix]$packVersionSuffix"
+          Write-Host "##vso[task.setvariable variable=buildConfiguration]$buildConfiguration"
