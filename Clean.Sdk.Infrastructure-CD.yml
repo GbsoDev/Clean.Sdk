@@ -1,11 +1,12 @@
-trigger:
-  branches:
-    include:
-      - main
-      - release
-  paths:
-    include:
-      - 'Clean.Sdk.Infrastructure/*'
+#trigger:
+#  branches:
+#    include:
+#      - main
+#      - release
+#  paths:
+#    include:
+#      - 'Clean.Sdk.Infrastructure/*'
+trigger: none
 pr: none
 
 pool:
