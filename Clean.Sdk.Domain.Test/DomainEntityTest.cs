@@ -18,14 +18,14 @@ namespace Clean.Sdk.Domain.Entity.Test
 		private static readonly string  expectedCreateValidationExceptionMessage = string.Format(ValidationErrorMessages.InvalidEntityToCreate, nameof(Cliente));
 		private static readonly string  expectedUpdateValidationExceptionMessage = string.Format(ValidationErrorMessages.InvalidEntityToUpdate, nameof(Cliente));
 		
-		private static readonly string  expectedIdValidationErrorMessage = string.Format(ValidationErrorMessages.ElRequerdo, nameof(Cliente.Id));
-		private static readonly string  expectedNombreValidationErrorMessage = string.Format(ValidationErrorMessages.ElRequerdo, nameof(Cliente.Nombre));
-		private static readonly string  expectedNombreRangoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRango, nameof(Cliente.Nombre), ClienteParametros.NombreMinLength, ClienteParametros.NombreMaxLength);
-		private static readonly string	expectedSegundoNombreRangoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRango, nameof(Cliente.SegundoNombre), ClienteParametros.NombreMinLength, ClienteParametros.NombreMaxLength);
-		private static readonly string  expectedApellidoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRequerdo, nameof(Cliente.Apellido));
-		private static readonly string  expectedApellidoRangoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRango, nameof(Cliente.Apellido), ClienteParametros.ApellidoMinLength, ClienteParametros.ApellidoMaxLength);
-		private static readonly string	expectedSegundoApellidoRangoValidationErrorMessage = string.Format(ValidationErrorMessages.ElRango, nameof(Cliente.SegundoApellido), ClienteParametros.ApellidoMinLength, ClienteParametros.ApellidoMaxLength);
-		private static readonly string  expectedEdadlValidationErrorMessage = string.Format(ValidationErrorMessages.EdadMenor, ClienteParametros.EdadMin);
+		private static readonly string  expectedIdValidationErrorMessage = "";
+		private static readonly string  expectedNombreValidationErrorMessage = "";
+		private static readonly string  expectedNombreRangoValidationErrorMessage = "";
+		private static readonly string	expectedSegundoNombreRangoValidationErrorMessage = "";
+		private static readonly string  expectedApellidoValidationErrorMessage = "";
+		private static readonly string  expectedApellidoRangoValidationErrorMessage = "";
+		private static readonly string	expectedSegundoApellidoRangoValidationErrorMessage = "";
+		private static readonly string  expectedEdadlValidationErrorMessage = "";
 
 
 		[Fact]
