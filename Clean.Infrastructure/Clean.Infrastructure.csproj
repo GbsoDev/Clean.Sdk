@@ -9,13 +9,11 @@
     <Company>GBSO Dev</Company>
     <Description>Infrastructur abstraction</Description>
     <Version>1.0.0</Version>
+    <Configurations>Debug;Prerelease;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Clean.Application" Version="1.0.12-release" />
-    <PackageReference Include="Clean.Data.EfCore" Version="1.0.12-release" />
-    <PackageReference Include="Clean.Domain" Version="1.0.12-release" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
@@ -26,6 +24,25 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\Clean.Domain\Clean.Domain.csproj" />
+    <ProjectReference Include="..\Clean.Application\Clean.Application.csproj" />
+    <ProjectReference Include="..\Clean.Data.EfCore\Clean.Data.EfCore.csproj" />
+    <ProjectReference Include="..\Clean.Domain\Clean.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Prerelease'">
+    <PackageReference Include="Clean.Application" Version="*-*" />
+    <PackageReference Include="Clean.Data.EfCore" Version="*-*" />
+    <PackageReference Include="Clean.Domain" Version="*-*" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Include="Clean.Application" Version="*" />
+    <PackageReference Include="Clean.Data.EfCore" Version="*" />
+    <PackageReference Include="Clean.Domain" Version="*" />
   </ItemGroup>
 
 </Project>
