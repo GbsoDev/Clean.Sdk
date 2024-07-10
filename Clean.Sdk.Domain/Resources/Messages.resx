@@ -120,6 +120,12 @@
   <data name="DbConnectionNotFound" xml:space="preserve">
     <value>Connection "{0}" not found</value>
   </data>
+  <data name="ErrorNotFoundEnumValue" xml:space="preserve">
+    <value>The value '{0}' is not a defined value for the enum type '{1}'.</value>
+  </data>
+  <data name="ErrorParseEnum" xml:space="preserve">
+    <value>The value '{0}' is not valid for the enum type '{1}'.</value>
+  </data>
   <data name="InputEmptyTextError" xml:space="preserve">
     <value>Input text cannot be empty</value>
   </data>

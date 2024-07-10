@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Clean.Sdk.Domain {
+namespace Clean.Sdk.Domain.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Clean.Sdk.Domain {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Clean.Sdk.Domain.Messages", typeof(Messages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Clean.Sdk.Domain.Resources.Messages", typeof(Messages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,6 +66,24 @@ namespace Clean.Sdk.Domain {
         public static string DbConnectionNotFound {
             get {
                 return ResourceManager.GetString("DbConnectionNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value &apos;{0}&apos; is not a defined value for the enum type &apos;{1}&apos;..
+        /// </summary>
+        public static string ErrorNotFoundEnumValue {
+            get {
+                return ResourceManager.GetString("ErrorNotFoundEnumValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value &apos;{0}&apos; is not valid for the enum type &apos;{1}&apos;..
+        /// </summary>
+        public static string ErrorParseEnum {
+            get {
+                return ResourceManager.GetString("ErrorParseEnum", resourceCulture);
             }
         }
         

@@ -1,4 +1,5 @@
 ﻿using Clean.Sdk.Domain.Exceptions;
+using Clean.Sdk.Domain.Resources;
 using System.Security.Cryptography;
 using System.Text;
 
