@@ -1,0 +1,60 @@
+trigger: 
+  branches:
+    include:
+      - main
+      - release
+      - dev
+  paths:
+    include:
+    - 'Clean.Sdk.*/*' 
+pr:
+  branches:
+    include:
+      - main
+      - release
+      - dev
+  paths:
+    include:
+    - 'Clean.Sdk.*/*'
+
+pool:
+  name: self-hosted
+variables:
+  prefixProject: 'Clean.Sdk'
+  ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+    buildConfiguration: 'Release'
+  ${{ if eq(variables['Build.SourceBranchName'], 'release') }}:
+    buildConfiguration: 'Prerelease'
+  ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
+      buildConfiguration: 'Debug'
+
+stages:
+- stage:
+  displayName: 'Build and Test Projects'
+  jobs:
+  - template: Clean.Sdk-CI-Template.yml
+    parameters:
+      jobName: 'BuildAndTestDomain'
+      projectName: '${{ variables.prefixProject }}.Domain'
+      buildConfiguration: $(buildConfiguration)
+
+  - template: Clean.Sdk-CI-Template.yml
+    parameters:
+      jobName: 'BuildAndTestEfCore'
+      projectName: '${{ variables.prefixProject }}.Data.EfCore'
+      buildConfiguration: $(buildConfiguration)
+      dependsOn: 'BuildAndTestDomain'
+
+  - template: Clean.Sdk-CI-Template.yml
+    parameters:
+      jobName: 'BuildAndTestApplication'
+      projectName: '${{ variables.prefixProject }}.Application'
+      buildConfiguration: $(buildConfiguration)
+      dependsOn: 'BuildAndTestDomain'
+
+  - template: Clean.Sdk-CI-Template.yml
+    parameters:
+      jobName: 'BuildAndTestInfrastructure'
+      projectName: '${{ variables.prefixProject }}.Infrastructure'
+      buildConfiguration: $(buildConfiguration)
+      dependsOn: 'BuildAndTestApplication'
