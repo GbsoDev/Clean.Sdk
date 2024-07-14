@@ -1,4 +1,4 @@
-﻿using Clean.Sdk.Domain.Test.TestModel.Clientes;
+﻿using Clean.Sdk.Domain.Tests.TestModel.Clientes;
 
 namespace Clean.Sdk.Domain.Tests.Builders
 {

@@ -5,6 +5,20 @@ namespace Clean.Sdk.Domain.Validations
 	public static class ValidationExtensions
 	{
 		/// <summary>
+		/// Checks if the object is not the default value for its type and adds an error message if it is.
+		/// </summary>
+		/// <typeparam name="T">The type of the object being validated.</typeparam>
+		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
+		/// <param name="obj">The object to validate.</param>
+		/// <param name="messageResource">The resource string for the error message.</param>
+		/// <param name="messageParams">The parameters to format the message.</param>
+		/// <returns>The updated ValidationSet instance.</returns>
+		public static ValidationSet AddIsNotDefaultValidation<T>(this ValidationSet validationSet, T obj, string messageResource, params object[] messageParams)
+		{
+			return validationSet.AddValidation(obj.IsNotDefault(), messageResource, messageParams);
+		}
+
+		/// <summary>
 		/// Checks if the stringValue is greater than the specified start stringValue and adds an error message if it is not.
 		/// </summary>
 		/// <typeparam name="T">The type of the stringValue being validated, which must be a struct and implement IComparable.</typeparam>
