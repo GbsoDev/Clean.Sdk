@@ -1,0 +1,110 @@
+trigger: none
+pr: none
+resources:
+  pipelines:
+    - pipeline: ciPipeline
+      source: Clean.Sdk-CI
+      trigger:
+        branches:
+          include:
+            - main
+            - release
+
+pool:
+  name: self-hosted
+
+variables:
+  prefixProject: 'Clean.Sdk'
+  ${{ if eq(variables['Build.SourceBranchName'], 'main') }}: 
+    buildConfiguration: 'Release'
+    versionSuffix: ''
+  ${{ if eq(variables['Build.SourceBranchName'], 'release') }}: 
+    buildConfiguration: 'Prerelease'
+    versionSuffix: '-release'
+
+stages:
+- stage: GetReleaseVersionValues
+  displayName: 'Build Release Version'
+  jobs:
+
+  - job: GetReleaseVersionFromMainProject
+    displayName: 'Get Release Version from Main Project'
+    variables:
+      mainProjectPath : "$(prefixProject).Domain/$(prefixProject).Domain.csproj"
+    steps:
+    - checkout: self
+    - task: PowerShell@2
+      name: GetMainProjectVersionScript
+      displayName: 'Get Main Project Version Script'
+      inputs:
+        targetType: 'inline'    
+        script: |
+          $xml = [Xml] (Get-Content $(mainProjectPath))
+          $version = $xml.Project.PropertyGroup.Version
+
+          $majorVersion, $minorVersion, $patchVersion = $version -split '\.'
+
+          Write-Host "##vso[task.setvariable variable=majorVersion;isOutput=true]$majorVersion"
+          Write-Host "##vso[task.setvariable variable=minorVersion;isOutput=true]$minorVersion"
+
+  - job: BuildReleasePackVersion
+    displayName: 'Build Release Pack Version'
+    variables:
+      majorVersion: $[dependencies.GetReleaseVersionFromMainProject.outputs['GetMainProjectVersionScript.majorVersion']]
+      minorVersion: $[dependencies.GetReleaseVersionFromMainProject.outputs['GetMainProjectVersionScript.minorVersion']]
+      patchVersion: $[counter(format('{0}.{1}', variables['majorVersion'], variables['minorVersion']), 0)]
+    dependsOn: 'GetReleaseVersionFromMainProject'
+    steps:
+    - checkout: none
+    - task: PowerShell@2
+      name: GetReleasePackVersionScript
+      displayName: 'Get Release Pack Version Script'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $packVersion = "{0}.{1}.{2}" -f $(majorVersion), $(minorVersion), $(patchVersion)
+          Write-Host "##vso[task.setvariable variable=packVersion;isOutput=true]$packVersion"
+          Write-Host "NuGetVersion: $packVersion$(versionSuffix)"
+
+  - template: Clean.Sdk-CD-Template.yml
+    parameters:
+      jobName: 'BuildAndPackDomain'
+      projectName: '${{ variables.prefixProject }}.Domain'
+      buildConfiguration: $(buildConfiguration)
+      packVersion: $[dependencies.BuildReleasePackVersion.outputs['GetReleasePackVersionScript.packVersion']]
+      versionSuffix: $(versionSuffix)
+      dependsOn: 
+        - 'BuildReleasePackVersion'
+
+  - template: Clean.Sdk-CD-Template.yml
+    parameters:
+      jobName: 'BuildAndPackEfCore'
+      projectName: '${{ variables.prefixProject }}.Data.EfCore'
+      buildConfiguration: $(buildConfiguration)
+      packVersion: $[dependencies.BuildReleasePackVersion.outputs['GetReleasePackVersionScript.packVersion']]
+      versionSuffix: $(versionSuffix)
+      dependsOn: 
+        - 'BuildReleasePackVersion'
+        - 'BuildAndPackDomain'
+
+  - template: Clean.Sdk-CD-Template.yml
+    parameters:
+      jobName: 'BuildAndPackApplication'
+      projectName: '${{ variables.prefixProject }}.Application'
+      buildConfiguration: $(buildConfiguration)
+      packVersion: $[dependencies.BuildReleasePackVersion.outputs['GetReleasePackVersionScript.packVersion']]
+      versionSuffix: $(versionSuffix)
+      dependsOn: 
+        - 'BuildReleasePackVersion'
+        - 'BuildAndPackDomain'
+
+  - template: Clean.Sdk-CD-Template.yml
+    parameters:
+      jobName: 'BuildAndPackInfrastructure'
+      projectName: '${{ variables.prefixProject }}.Infrastructure'
+      buildConfiguration: $(buildConfiguration)
+      packVersion: $[dependencies.BuildReleasePackVersion.outputs['GetReleasePackVersionScript.packVersion']]
+      versionSuffix: $(versionSuffix)
+      dependsOn: 
+        - 'BuildReleasePackVersion'
+        - 'BuildAndPackApplication'

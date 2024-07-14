@@ -1,0 +1,85 @@
+parameters:
+  - name: jobName
+    type: string
+    default: 'BuildAndPack'
+  - name: dependsOn
+    type: object
+    default: []
+  - name: projectName
+    type: string
+    default: ''
+  - name: buildConfiguration
+    type: string
+    default: 'Release'
+  - name: packVersion
+    type: object
+    default: ''
+  - name: versionSuffix
+    type: string
+    default: ''
+
+jobs:
+- job: '${{ parameters.jobName }}'
+  displayName: 'Build and Pack ${{ parameters.projectName }}'
+  ${{ if ne(parameters['dependsOn'], '') }}:
+    dependsOn: ${{ parameters.dependsOn }}
+      
+  variables:
+    packVersion: ${{ parameters.packVersion }}
+    projectPath: '${{ parameters.projectName }}/${{ parameters.projectName }}.csproj'
+    outputPack: '$(Build.ArtifactStagingDirectory)/${{ parameters.projectName }}'
+    nugetVersion: '$(packVersion)${{ parameters.versionSuffix }}'
+  steps:
+  - checkout: self
+
+  - task: NuGetToolInstaller@1
+    displayName: 'Install NuGet Tool'
+
+  - task: NuGetCommand@2
+    displayName: 'Restore NuGet Packages for ${{ parameters.projectName }}'
+    inputs:
+      restoreSolution: '$(projectPath)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Project ${{ parameters.projectName }}'
+    inputs:
+      command: 'build'
+      projects: '$(projectPath)'
+      arguments: '--configuration ${{ parameters.buildConfiguration }} /p:VersionSuffix=${{ parameters.versionSuffix }}'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Pack NuGet for ${{ parameters.projectName }}'
+    inputs:
+      command: 'pack'
+      packagesToPack: '$(projectPath)'
+      configuration: ${{ parameters.buildConfiguration }}
+      nobuild: true
+      versioningScheme: byEnvVar
+      versionEnvVar: 'nugetVersion'
+      packDirectory: '$(outputPack)'
+
+  - task: PowerShell@2
+    displayName: 'List Packages'
+    inputs:
+      targetType: 'inline'
+      script: |
+        ls $(outputPack)
+
+  - task: NuGetAuthenticate@0
+    displayName: 'NuGet Authenticate'
+    
+  - task: NuGetCommand@2
+    displayName: 'Push to Azure DevOps for ${{ parameters.projectName }}'
+    inputs:
+      command: push
+      feedsToUse: 'select'
+      packagesToPush: '"$(outputPack)/*.nupkg"'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: 'Gbso.Clean.Sdk/NuGets'
+      versioningScheme: 'off'
+      allowPackageConflicts: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish to Artifacts'
+    inputs:
+      PathtoPublish: '$(outputPack)'
