@@ -31,6 +31,7 @@ jobs:
     nugetVersion: '$(packVersion)${{ parameters.versionSuffix }}'
   steps:
   - checkout: self
+
   - task: NuGetToolInstaller@1
     displayName: 'Install NuGet Tool'
 
@@ -57,6 +58,13 @@ jobs:
       versionEnvVar: 'nugetVersion'
       packDirectory: '$(outputPack)'
 
+  - task: PowerShell@2
+    displayName: 'List Packages'
+    inputs:
+      targetType: 'inline'
+      script: |
+        ls $(outputPack)
+
   - task: NuGetAuthenticate@0
     displayName: 'NuGet Authenticate'
     
@@ -65,7 +73,7 @@ jobs:
     inputs:
       command: push
       feedsToUse: 'select'
-      packagesToPush: '"$(outputPack)/*/*.nupkg"'
+      packagesToPush: '"$(outputPack)/*.nupkg"'
       nuGetFeedType: 'internal'
       publishVstsFeed: 'Gbso.Clean.Sdk/NuGets'
       versioningScheme: 'off'

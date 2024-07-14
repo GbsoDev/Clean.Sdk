@@ -20,7 +20,7 @@ variables:
     versionSuffix: ''
   ${{ if eq(variables['Build.SourceBranchName'], 'release') }}: 
     buildConfiguration: 'Prerelease'
-    versionSuffix: '-$(Build.SourceBranchName)'
+    versionSuffix: '-release'
 
 stages:
 - stage: GetReleaseVersionValues
@@ -64,6 +64,7 @@ stages:
         script: |
           $packVersion = "{0}.{1}.{2}" -f $(majorVersion), $(minorVersion), $(patchVersion)
           Write-Host "##vso[task.setvariable variable=packVersion;isOutput=true]$packVersion"
+          Write-Host "NuGetVersion: $packVersion$(versionSuffix)"
 
   - template: Clean.Sdk-CD-Template.yml
     parameters:
@@ -78,7 +79,7 @@ stages:
   - template: Clean.Sdk-CD-Template.yml
     parameters:
       jobName: 'BuildAndPackEfCore'
-      projectName: '${{ variables.prefixProject }}.EfCore'
+      projectName: '${{ variables.prefixProject }}.Data.EfCore'
       buildConfiguration: $(buildConfiguration)
       packVersion: $[dependencies.BuildReleasePackVersion.outputs['GetReleasePackVersionScript.packVersion']]
       versionSuffix: $(versionSuffix)
