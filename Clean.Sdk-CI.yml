@@ -21,12 +21,13 @@ pool:
   name: self-hosted
 variables:
   prefixProject: 'Clean.Sdk'
-  ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
-    buildConfiguration: 'Release'
-  ${{ if eq(variables['Build.SourceBranchName'], 'release') }}:
-    buildConfiguration: 'Prerelease'
-  ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
-      buildConfiguration: 'Debug'
+  # ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+  #   buildConfiguration: 'Release'
+  # ${{ if eq(variables['Build.SourceBranchName'], 'release') }}:
+  #   buildConfiguration: 'Prerelease'
+  # ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
+  #     buildConfiguration: 'Debug'
+  buildConfiguration: 'Debug'
 
 stages:
 - stage:
