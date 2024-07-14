@@ -5,7 +5,7 @@ namespace Clean.Sdk.Domain.Validations
 	public class ValidationException
 		: Exception
 	{
-		public readonly ValidationSet _validationSet;
+		private readonly ValidationSet _validationSet;
 
 		public ValidationError[] Errors => _validationSet.Errors.ToArray();
 
@@ -16,7 +16,7 @@ namespace Clean.Sdk.Domain.Validations
 		}
 
 		public ValidationException(ValidationSet validation)
-			: this(validation, null)
+			: this(validation, validation.ErrorMessage)
 		{
 			_validationSet = validation;
 		}

@@ -2,7 +2,7 @@
 {
 	public class ValidationsSet
 	{
-		public static string CREATION = "CREATION";
+		public static string SAVE = "SAVE";
 		public static string UPDATE = "UPDATE";
 	}
 }

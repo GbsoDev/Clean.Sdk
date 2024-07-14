@@ -17,9 +17,9 @@ jobs:
     dependsOn: '${{ parameters.dependsOn }}'
   variables:
     mainProjectName: '${{ parameters.projectName }}'
-    testProjectName: '${{ parameters.projectName }}.Test'
+    testProjectName: '${{ parameters.projectName }}.Tests'
     mainProjectPath: '${{ parameters.projectName }}/${{ parameters.projectName }}.csproj'
-    testProjectPath: '${{ parameters.projectName }}.Test/${{ parameters.projectName }}.Test.csproj'
+    testProjectPath: '${{ parameters.projectName }}.Tests/${{ parameters.projectName }}.Tests.csproj'
   steps:
   - task: NuGetToolInstaller@1
     displayName: 'Install the nugget tools'

@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Clean.Sdk.Domain.Validations
 {
 	public static class ArgumentValidationExtensions
 	{
+		/// <summary>
+		/// Checks if the object is not the default value for its type.
+		/// </summary>
+		public static bool IsNotDefault<T>(this T obj)
+		{
+			return !EqualityComparer<T>.Default.Equals(obj, default);
+		}
+
 		/// <summary>
 		/// Checks if the value is between the specified limits (inclusive).
 		/// </summary>

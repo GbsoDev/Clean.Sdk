@@ -97,6 +97,24 @@ namespace Clean.Sdk.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resource {0} with ID {1} was not found.
+        /// </summary>
+        public static string NotFoundByIdException {
+            get {
+                return ResourceManager.GetString("NotFoundByIdException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are trying to update a {0} record that does not exist.
+        /// </summary>
+        public static string NotFoundExcepton {
+            get {
+                return ResourceManager.GetString("NotFoundExcepton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Service {0} has no interface.
         /// </summary>
         public static string ServiceHasNoInterface {

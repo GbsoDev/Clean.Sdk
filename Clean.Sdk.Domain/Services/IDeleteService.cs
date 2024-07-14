@@ -7,7 +7,7 @@ namespace Clean.Sdk.Domain.Services
 	public interface IDeleteService<TEntity>
 		where TEntity : class, IDomainEntity
 	{
-		Task DeleteAsync(TEntity entity, CancellationToken cancellationToken);
-		Task DeleteByIdAsync(object id, CancellationToken cancellationToken);
+		Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken);
+		Task<bool> DeleteByIdAsync(object id, CancellationToken cancellationToken);
 	}
 }

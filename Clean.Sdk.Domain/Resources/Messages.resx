@@ -129,6 +129,12 @@
   <data name="InputEmptyTextError" xml:space="preserve">
     <value>Input text cannot be empty</value>
   </data>
+  <data name="NotFoundByIdException" xml:space="preserve">
+    <value>Resource {0} with ID {1} was not found</value>
+  </data>
+  <data name="NotFoundExcepton" xml:space="preserve">
+    <value>You are trying to update a {0} record that does not exist</value>
+  </data>
   <data name="ServiceHasNoInterface" xml:space="preserve">
     <value>Service {0} has no interface</value>
   </data>

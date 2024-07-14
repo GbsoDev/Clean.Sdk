@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Clean.Sdk.Domain.Services
 {
+	[Obsolete("in construction", true)]
 	public abstract class CrudService<TEntity, TRepository> : ActionService<TEntity, TRepository>, ICrudService<TEntity>
 		where TEntity : class, IDomainEntity
 		where TRepository : IRepository<TEntity>
@@ -15,23 +16,23 @@ namespace Clean.Sdk.Domain.Services
 		{
 		}
 
-		public virtual async Task<TEntity> RegisterAsync(TEntity entity, CancellationToken cancellationToken = default)
+		public virtual async Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken = default)
 		{
 			if (entity is null) throw new ArgumentNullException(nameof(entity));
-			var modeloResgistrado = await Repository.StoreAsync(entity, cancellationToken);
+			var modeloResgistrado = await Repository.SaveAsync(entity, cancellationToken);
 			await Repository.SaveChangesAsync(cancellationToken);
 			return modeloResgistrado;
 		}
 
 		public virtual async Task<TEntity[]> LisAsync(CancellationToken cancellationToken = default)
 		{
-			var resultadoEntidades = await Repository.ConsultAllAsync(cancellationToken);
+			var resultadoEntidades = await Repository.GetAllAsync(cancellationToken);
 			return resultadoEntidades;
 		}
 
 		public virtual async Task<TEntity?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
 		{
-			var resultadoEntidad = await Repository.ConsultByIdAsync(id, cancellationToken);
+			var resultadoEntidad = await Repository.GetByIdAsync(id, cancellationToken);
 			return resultadoEntidad;
 		}
 
