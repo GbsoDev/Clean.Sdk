@@ -1,0 +1,110 @@
+parameters:
+  - name: projectPath
+    type: string
+    default: ''
+  - name: connectionToExternalNuGetRepo
+    type: string
+    default: ''
+  - name: buildPlatform
+    type: string
+    default: 'Any CPU'
+  - name: buildConfiguration
+    type: string
+    default: 'Release'
+  - name: packVersion
+    type: string
+    default: '1.0.0'
+  - name: packVersionSuffix
+    type: string
+    default: ''
+  - name: outputPack
+    type: string
+    default: '$(Build.ArtifactStagingDirectory)'
+
+pool:
+  name: self-hosted
+
+stages:
+- stage: BuildAndPack
+  displayName: 'Build and Pack'
+  jobs:
+  - job: BuildAndPackJob
+    displayName: 'Build and Pack Job'
+    variables:
+      nugetVersion: '${{ parameters.packVersion }}${{ parameters.packVersionSuffix }}'
+    steps:
+    - task: NuGetToolInstaller@1
+      displayName: 'Install NuGet Tool'
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGet Packages'
+      inputs:
+        restoreSolution: '${{ parameters.projectPath }}'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build Project'
+      inputs:
+        command: 'build'
+        projects: '${{ parameters.projectPath }}'
+        arguments: '--configuration ${{ parameters.buildConfiguration }} /p:VersionSuffix=${{ parameters.packVersionSuffix }}'
+    - task: DotNetCoreCLI@2
+      displayName: 'Pack NuGet'
+      inputs:
+        command: 'pack'
+        packagesToPack: '${{ parameters.projectPath }}'
+        configuration: ${{ parameters.buildConfiguration }}
+        nobuild: true
+        versionEnvVar: 'nugetVersion'
+        versioningScheme: byEnvVar
+        packDirectory: '${{ parameters.outputPack }}'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish to Artifacts'
+      inputs:
+        PathtoPublish: '${{ parameters.outputPack }}'
+
+- stage: PublishToAzureDevOps
+  dependsOn: BuildAndPack
+  displayName: 'Publish to Azure DevOps'
+  jobs:
+  - job: PublishToAzureDevOpsJob
+    displayName: 'Publish to Azure DevOps Job'
+    steps:
+    - task: DownloadBuildArtifacts@0
+      displayName: 'Download Artifacts'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: '*/*.nupkg'
+        downloadPath: '${{ parameters.outputPack }}'
+    - task: NuGetAuthenticate@0
+      displayName: 'NuGet Authenticate'
+    - task: NuGetCommand@2
+      displayName: 'Push to Azure DevOps'
+      inputs:
+        command: push
+        feedsToUse: 'select'
+        packagesToPush: '${{ parameters.outputPack }}/*/*.nupkg'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'Gbso.Clean.Sdk/NuGets'
+        versioningScheme: 'off'
+        allowPackageConflicts: true
+
+- stage: PushToNuGetOrg
+  dependsOn: BuildAndPack
+  displayName: 'Push to NuGet.org'
+  condition: eq(variables['parameters.buildConfiguration'], 'Release')
+  jobs:
+  - job: PushToNuGetOrgJob
+    displayName: 'Push to NuGet.org Job'
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: '*/*.nupkg'
+        downloadPath: '${{ parameters.outputPack }}'
+    - task: NuGetCommand@2
+      displayName: 'NuGet push'
+      inputs:
+        command: push
+        packagesToPush: '${{ parameters.outputPack }}/*/*.nupkg'
+        nuGetFeedType: external
+        publishFeedCredentials: '${{ parameters.connectionToExternalNuGetRepo }}'

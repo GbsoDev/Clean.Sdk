@@ -1,0 +1,51 @@
+parameters:
+  - name: jobName
+    type: string
+  - name: dependsOn
+    type: string
+    default: ''
+  - name: projectName
+    type: string
+  - name: buildConfiguration
+    type: string
+    default: 'Release'
+
+jobs:
+- job: '${{parameters.jobName}}'
+  displayName: 'Build and Test ${{ parameters.projectName }}'
+  ${{ if ne(parameters['dependsOn'], '') }}:
+    dependsOn: '${{ parameters.dependsOn }}'
+  variables:
+    mainProjectName: '${{ parameters.projectName }}'
+    testProjectName: '${{ parameters.projectName }}.Test'
+    mainProjectPath: '${{ parameters.projectName }}/${{ parameters.projectName }}.csproj'
+    testProjectPath: '${{ parameters.projectName }}.Test/${{ parameters.projectName }}.Test.csproj'
+  steps:
+  - task: NuGetToolInstaller@1
+    displayName: 'Install the nugget tools'
+  - task: NuGetCommand@2
+    displayName: 'Restore nuggets for $(mainProjectName)'
+    inputs:
+      restoreSolution: $(mainProjectPath)
+  - task: NuGetCommand@2
+    displayName: 'Restore nuggets for $(testProjectName)'
+    inputs:
+      restoreSolution: $(testProjectPaht)
+  - task: DotNetCoreCLI@2
+    displayName: 'Build $(mainProjectName)'
+    inputs:
+      command: 'build'
+      projects: $(mainProjectPath)
+      arguments: '--configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory)'
+  - task: DotNetCoreCLI@2
+    displayName: 'Build $(testProjectName)'
+    inputs:
+      command: 'build'
+      projects: $(testProjectPath)
+      arguments: '--configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory)/test'
+  - task: DotNetCoreCLI@2
+    displayName: 'Run $(testProjectName)'
+    inputs:
+      projects: $(testProjectPath)
+      command: 'test'
+      testRunTitle: 'Run test for $(testProjectName)'
