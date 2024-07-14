@@ -1,7 +1,7 @@
 ﻿using Clean.Sdk.Domain.Helpers;
 using Clean.Sdk.Domain.Resources;
 
-namespace Clean.Sdk.Domain.Test.Helpers
+namespace Clean.Sdk.Domain.Tests.Helpers
 {
 	public class StringEnumConverTest
 	{
