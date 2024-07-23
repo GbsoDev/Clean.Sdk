@@ -1,70 +1,62 @@
-﻿using Clean.Sdk.Domain.Tests.TestModel.Clientes;
+﻿using Clean.Sdk.Domain.Tests.TestEntites.Clients;
 
 namespace Clean.Sdk.Domain.Tests.Builders
 {
-	public sealed class ClienteBuilder
+	public sealed class ClientBuilder
 	{
 		private Guid _id;
-		private string _nombre;
-		private string? _segundoNombre;
-		private string _apellido;
-		private string? _segundoApellido;
-		private short _edad;
+		private string _name;
+		private string? _middleName;
+		private string _surname;
+		private short _age;
 
-		public ClienteBuilder()
+		public ClientBuilder()
 		{
 			_id = Guid.NewGuid();
-			_nombre = "Nombre";
-			_segundoNombre = null;
-			_apellido = "Apellido";
-			_segundoApellido = null;
-			_edad = 30;
+			_name = "Name";
+			_middleName = null;
+			_surname = "Surname";
+			_age = 30;
 		}
 
-		public ClienteBuilder WithId(Guid id)
+		public ClientBuilder WithId(Guid id)
 		{
 			_id = id;
 			return this;
 		}
 
-		public ClienteBuilder WithNombre(string nombre)
+		public ClientBuilder WithName(string name)
 		{
-			_nombre = nombre;
+			_name = name;
 			return this;
 		}
 
-		public ClienteBuilder WithSegundoNombre(string? segundoNombre)
+		public ClientBuilder WithMiddleName(string? middleName)
 		{
-			_segundoNombre = segundoNombre;
+			_middleName = middleName;
 			return this;
 		}
 
-		public ClienteBuilder WithApellido(string apellido)
+		public ClientBuilder WithSurname(string surname)
 		{
-			_apellido = apellido;
+			_surname = surname;
 			return this;
 		}
 
-		public ClienteBuilder WithSegundoApellido(string? segundoApellido)
+		public ClientBuilder WithAge(short age)
 		{
-			_segundoApellido = segundoApellido;
+			_age = age;
 			return this;
 		}
 
-		public ClienteBuilder WithEdad(short edad)
+		public ClientTest BuildToCreate()
 		{
-			_edad = edad;
-			return this;
+			return new ClientTest(_name, _middleName, _surname, _age);
 		}
 
-		public Cliente BuildToCreate()
+		public ClientTest BuildToUpdate()
 		{
-			return new Cliente(_nombre, _segundoNombre, _apellido, _segundoApellido, _edad);
-		}
-
-		public Cliente BuildToUpdate()
-		{
-			return new Cliente(_id, _nombre, _segundoNombre, _apellido, _segundoApellido, _edad);
+			return new ClientTest(_id, _name, _middleName, _surname, _age);
 		}
 	}
 }

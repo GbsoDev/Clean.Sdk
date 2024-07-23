@@ -12,7 +12,7 @@ namespace Clean.Sdk.Application.Handlers
 	public abstract class DeletByIdHandler<TRequest, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest>
 		where TRequest : ICommandDeleteById, IRequest
 		where TEntity : class, IDomainEntity
-		where TServie : IDeleteService<TEntity>
+		where TServie : class, IDeleteService<TEntity>
 	{
 		public DeletByIdHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
 		{

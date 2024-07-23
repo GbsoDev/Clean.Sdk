@@ -6,6 +6,7 @@ namespace Clean.Sdk.Application.Handlers
 
 {
 	public abstract class CommandHandler<TService> : Handler
+		where TService : class
 	{
 		protected virtual TService Service => _service.Value;
 		private readonly Lazy<TService> _service;

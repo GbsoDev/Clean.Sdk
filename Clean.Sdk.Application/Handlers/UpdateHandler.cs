@@ -11,17 +11,29 @@ using System.Threading.Tasks;
 
 namespace Clean.Sdk.Application.Handlers
 {
+	/// <summary>
+	/// Represents an abstract class that handles the update request for a given entity.
+	/// </summary>
 	public abstract class UpdateHandler<TRequest, TResponse, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest, TResponse>
 		where TRequest : IRequest<TResponse>
 		where TEntity : class, IDomainEntity
-		where TServie : IUpdateService<TEntity>
+		where TServie : class, IUpdateService<TEntity>
 	{
-		protected abstract AbstractValidator<TRequest> ValidationRules { get; }
+		/// <summary>
+		/// Gets the validation rules for the request.
+		/// </summary>
+		protected abstract AbstractValidator<TRequest>? ValidationRules { get; }
 
-		public UpdateHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UpdateHandler{TRequest, TResponse, TEntity, TServie}"/> class.
+		/// </summary>
+		protected UpdateHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
 		{
 		}
 
+		/// <summary>
+		/// Handles the update request.
+		/// </summary>
 		public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
 		{
 			Validate(request);
@@ -30,9 +42,12 @@ namespace Clean.Sdk.Application.Handlers
 			return Mapper.Map<TEntity, TResponse>(updated);
 		}
 
+		/// <summary>
+		/// Validates the request before update, if the validator is not null.
+		/// </summary>
 		protected virtual void Validate(TRequest request)
 		{
-			var validation = ValidationRules.Validate(request, options => { options.IncludeRuleSets(ValidationsSet.UPDATE); options.ThrowOnFailures(); });
+			var validation = ValidationRules?.Validate(request, options => { options.IncludeRuleSets(ValidationsSet.UPDATE); options.ThrowOnFailures(); });
 		}
 	}
 }

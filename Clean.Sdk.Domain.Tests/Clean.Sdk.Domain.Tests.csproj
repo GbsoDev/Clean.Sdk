@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="TestModel\ValidationErrorMessages.Designer.cs">
+    <Compile Update="TestEntites\ValidationErrorMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ValidationErrorMessages.resx</DependentUpon>
@@ -36,8 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="TestModel\ValidationErrorMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+    <EmbeddedResource Update="TestEntites\ValidationErrorMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ValidationErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

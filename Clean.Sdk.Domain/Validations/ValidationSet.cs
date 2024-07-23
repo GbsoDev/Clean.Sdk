@@ -10,7 +10,7 @@ namespace Clean.Sdk.Domain.Validations
 		public List<ValidationError> Errors { get; }
 
 		public ValidationSet(string? errorMessage)
-			:this()
+			: this()
 		{
 			ErrorMessage = errorMessage;
 		}

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Clean.Sdk.Domain.Tests.TestModel {
+namespace Clean.Sdk.Domain.Tests.TestEntites {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace Clean.Sdk.Domain.Tests.TestModel {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ValidationErrorMessages {
+    public class ValidationErrorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace Clean.Sdk.Domain.Tests.TestModel {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Clean.Sdk.Domain.Tests.TestModel.ValidationErrorMessages", typeof(ValidationErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Clean.Sdk.Domain.Tests.TestEntites.ValidationErrorMessages", typeof(ValidationErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Clean.Sdk.Domain.Tests.TestModel {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,83 +61,47 @@ namespace Clean.Sdk.Domain.Tests.TestModel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No se adminte el registro de menores de {0} años.
+        ///   Looks up a localized string similar to Error to create entity.
         /// </summary>
-        internal static string EdadMenor {
-            get {
-                return ResourceManager.GetString("EdadMenor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to El {0} es inválido.
-        /// </summary>
-        internal static string ElInvalido {
-            get {
-                return ResourceManager.GetString("ElInvalido", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to El {0} debe tener de {1} a {2} caracteres.
-        /// </summary>
-        internal static string ElRango {
-            get {
-                return ResourceManager.GetString("ElRango", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to El {0} es requerido.
-        /// </summary>
-        internal static string ElRequerdo {
-            get {
-                return ResourceManager.GetString("ElRequerdo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error al crear una nueva entidad.
-        /// </summary>
-        internal static string InvalidEntityToCreate {
+        public static string InvalidEntityToCreate {
             get {
                 return ResourceManager.GetString("InvalidEntityToCreate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error al actualizar una entidad.
+        ///   Looks up a localized string similar to Error to update entity.
         /// </summary>
-        internal static string InvalidEntityToUpdate {
+        public static string InvalidEntityToUpdate {
             get {
                 return ResourceManager.GetString("InvalidEntityToUpdate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to La {0} es inválida.
+        ///   Looks up a localized string similar to Registration of minors under {0} years is not allowed.
         /// </summary>
-        internal static string LaInvalida {
+        public static string MinimumAge {
             get {
-                return ResourceManager.GetString("LaInvalida", resourceCulture);
+                return ResourceManager.GetString("MinimumAge", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to El {0} debe tener de {1} a {2} caracteres.
+        ///   Looks up a localized string similar to {0}: Must be {1} to {2} characters.
         /// </summary>
-        internal static string LaRango {
+        public static string Range {
             get {
-                return ResourceManager.GetString("LaRango", resourceCulture);
+                return ResourceManager.GetString("Range", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to La {0} es requerida.
+        ///   Looks up a localized string similar to {0}: Is Required.
         /// </summary>
-        internal static string LaRequerida {
+        public static string Required {
             get {
-                return ResourceManager.GetString("LaRequerida", resourceCulture);
+                return ResourceManager.GetString("Required", resourceCulture);
             }
         }
     }

@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Clean.Sdk.Application.Handlers
 {
-	public abstract class QueryByIdHandler<TRequest, TResponse, TModel, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
+	public abstract class QueryByIdHandler<TRequest, TResponse, TEntity, TRepository> : QueryHandler<TRepository>, IRequestHandler<TRequest, TResponse>
 		where TRequest : class, IQueryById<TResponse>, IRequest<TResponse>
-		where TModel : class, IDomainEntity
-		where TRepository : class, IRepository<TModel>
+		where TEntity : class, IDomainEntity
+		where TRepository : class, IRepository<TEntity>
 	{
 		protected QueryByIdHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TRepository> repository) : base(logger, mapper, repository)
 		{
@@ -23,8 +23,8 @@ namespace Clean.Sdk.Application.Handlers
 		{
 			var id = request.Id;
 			var entityResult = await Repository.ConsultByIdAsync(id, cancellationToken);
-			if (entityResult == null) throw new NotFoundException(string.Format(Messages.NotFoundByIdException, typeof(TModel).Name, id));
-			return Mapper.Map<TModel, TResponse>(entityResult);
+			if (entityResult == null) throw new NotFoundException(string.Format(Messages.NotFoundByIdException, typeof(TEntity).Name, id));
+			return Mapper.Map<TEntity, TResponse>(entityResult);
 		}
 	}
 }
