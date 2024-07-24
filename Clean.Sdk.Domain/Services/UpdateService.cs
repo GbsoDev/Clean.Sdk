@@ -17,9 +17,9 @@ namespace Clean.Sdk.Domain.Services
 
 		public async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
 		{
-			var resultado = await Repository.UpdateAsync(entity, cancellationToken);
+			var result = await Repository.UpdateAsync(entity, cancellationToken);
 			await Repository.SaveChangesAsync(cancellationToken);
-			return resultado;
+			return result;
 		}
 	}
 }

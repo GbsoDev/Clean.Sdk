@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Application.Handlers;
 using Clean.Sdk.Domain.Services;
-using Clean.Sdk.Domain.Tests.TestEntites.Clients;
+using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;

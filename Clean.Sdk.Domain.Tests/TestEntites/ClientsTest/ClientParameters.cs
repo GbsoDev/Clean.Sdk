@@ -1,4 +1,4 @@
-﻿namespace Clean.Sdk.Domain.Tests.TestEntites.Clients
+﻿namespace Clean.Sdk.Domain.Tests.TestEntites.ClientsTest
 {
 	public static class ClientParameters
 	{

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Clean.Sdk.Domain.Services
 {
+	[Obsolete("in construction", true)]
 	public abstract class CrudService<TEntity, TRepository> : ActionService<TEntity, TRepository>, ICrudService<TEntity>
 		where TEntity : class, IDomainEntity
 		where TRepository : IRepository<TEntity>

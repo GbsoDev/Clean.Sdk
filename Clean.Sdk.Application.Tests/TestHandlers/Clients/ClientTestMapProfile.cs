@@ -1,7 +1,7 @@
 using AutoMapper;
 using Clean.Sdk.Application.Mapper;
 using Clean.Sdk.Application.Tests.TestHandlers.Clients.Commands;
-using Clean.Sdk.Domain.Tests.TestEntites.Clients;
+using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 
 namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 {

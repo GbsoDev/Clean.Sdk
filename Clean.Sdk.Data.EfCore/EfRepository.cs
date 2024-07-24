@@ -1,5 +1,7 @@
 ﻿using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Ports;
+using Clean.Sdk.Domain.Resources;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -38,7 +40,7 @@ namespace Clean.Sdk.Data.EfCore
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			var entityResult = await ConsultByIdAsync(entity.Id, cancellationToken);
-			if (entityResult == null) throw new ApplicationException("You are trying to update a record that does not exist");
+			if (entityResult == null) throw new NotFoundException(Messages.NotFoundExcepton, entity.GetType().Name);
 			Context.Entry(entityResult).CurrentValues.SetValues(entity);
 			return entityResult;
 		}
@@ -48,25 +50,28 @@ namespace Clean.Sdk.Data.EfCore
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
 			if (@object == null) throw new ArgumentNullException(nameof(@object));
 			var entityResult = await ConsultByIdAsync(entity.Id, cancellationToken);
-			if (entityResult == null) throw new ApplicationException("You are trying to update a record that does not exist");
+			if (entityResult == null) throw new NotFoundException("You are trying to update a record that does not exist");
 			var objectResult = @object?.Compile()?.Invoke(entity);
 			if (entityResult != null && objectResult != null)
 				Context.Entry(entity).CurrentValues.SetValues(objectResult);
 			return entityResult!;
 		}
 
-		public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+		public virtual async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			await Task.FromResult(Context.Remove(entity)).ConfigureAwait(false);
+			var entityEntry = Context.Remove(entity);
+			return await Task.FromResult(entityEntry.State == EntityState.Deleted);
 		}
 
-		public virtual async Task DeleteByIdAsync(object id, CancellationToken cancellationToken = default)
+		public virtual async Task<bool> DeleteByIdAsync(object id, CancellationToken cancellationToken = default)
 		{
 			if (id == null) throw new ArgumentNullException(nameof(id));
 			var entity = await ConsultByIdAsync(id, cancellationToken);
-			if (entity == null) throw new ApplicationException("You are trying to delete a record that does not exist");
+
+			if (entity == null) return false;
 			await DeleteAsync(entity!, cancellationToken).ConfigureAwait(false);
+			return true;
 		}
 
 		public async Task SaveChangesAsync(CancellationToken cancellationToken = default)

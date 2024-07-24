@@ -1,7 +1,7 @@
 ﻿using Clean.Sdk.Domain.Entity;
 using Clean.Sdk.Domain.Validations;
 
-namespace Clean.Sdk.Domain.Tests.TestEntites.Clients
+namespace Clean.Sdk.Domain.Tests.TestEntites.ClientsTest
 {
 	public class ClientTest : DomainEntity<Guid>, IAuditableEntity
 	{

@@ -2,6 +2,7 @@
 using Clean.Sdk.Domain.Entity;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Ports;
+using Clean.Sdk.Domain.Resources;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;

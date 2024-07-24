@@ -17,9 +17,9 @@ namespace Clean.Sdk.Domain.Services
 
 		public virtual async Task<TEntity> RegisterAsync(TEntity entity, CancellationToken cancellationToken)
 		{
-			var resultado = await Repository.StoreAsync(entity, cancellationToken);
-			await Repository.SaveChangesAsync(cancellationToken);
-			return resultado;
+			var result = await Repository.StoreAsync(entity, cancellationToken).ConfigureAwait(false);
+			await Repository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+			return result;
 		}
 	}
 }

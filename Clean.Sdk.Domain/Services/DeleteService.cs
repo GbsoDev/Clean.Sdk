@@ -15,15 +15,18 @@ namespace Clean.Sdk.Domain.Services
 		{
 		}
 
-		public virtual async Task DeleteByIdAsync(object id, CancellationToken cancellationToken)
+		public virtual async Task<bool> DeleteByIdAsync(object id, CancellationToken cancellationToken)
 		{
-			await Repository.DeleteByIdAsync(id, cancellationToken);
-			await Repository.SaveChangesAsync(cancellationToken);
+			var deleted = await Repository.DeleteByIdAsync(id, cancellationToken);
+			if (deleted) await Repository.SaveChangesAsync(cancellationToken);
+			return deleted;
 		}
 
-		public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
+		public virtual async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken)
 		{
-			await DeleteByIdAsync(entity.Id, cancellationToken);
+			var deleted = await Repository.DeleteAsync(entity, cancellationToken);
+			if (deleted) await Repository.SaveChangesAsync(cancellationToken);
+			return deleted;
 		}
 	}
 }

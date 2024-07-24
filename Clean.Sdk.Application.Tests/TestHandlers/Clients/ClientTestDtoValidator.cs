@@ -1,6 +1,6 @@
 ﻿using Clean.Sdk.Application.Validations;
 using Clean.Sdk.Domain.Tests.TestEntites;
-using Clean.Sdk.Domain.Tests.TestEntites.Clients;
+using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 using FluentValidation;
 
 namespace Clean.Sdk.Application.Tests.TestHandlers.Clients

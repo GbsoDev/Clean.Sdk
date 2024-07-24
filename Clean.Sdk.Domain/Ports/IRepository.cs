@@ -6,7 +6,7 @@ namespace Clean.Sdk.Domain.Ports
 {
 	public interface IRepository
 	{
-		Task DeleteByIdAsync(object id, CancellationToken cancellationToken = default);
+		Task<bool> DeleteByIdAsync(object id, CancellationToken cancellationToken = default);
 		Task SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
 	public interface IRepository<TEntity> : IRepository
@@ -20,6 +20,6 @@ namespace Clean.Sdk.Domain.Ports
 
 		Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-		Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+		Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
 	}
 }

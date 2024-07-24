@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
+using System;
 
 namespace Clean.Sdk.Domain.Tests.TestEntites.Clients
 {

@@ -4,6 +4,7 @@ using Clean.Sdk.Application.Tests.TestHandlers.Clients.Commands;
 using Clean.Sdk.Domain.Services;
 using Clean.Sdk.Domain.Tests.TestEntites;
 using Clean.Sdk.Domain.Tests.TestEntites.Clients;
+using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;

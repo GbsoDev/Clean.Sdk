@@ -10,6 +10,11 @@ namespace Clean.Sdk.Domain.Exceptions
 		{
 		}
 
+		public NotFoundException(string message, params object[] messageParams)
+			: base(string.Format(message, messageParams))
+		{
+		}
+
 		public NotFoundException(string? message, Exception? innerException)
 			: base(message, innerException)
 		{
