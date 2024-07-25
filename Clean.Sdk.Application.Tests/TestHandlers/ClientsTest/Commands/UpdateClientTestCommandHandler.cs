@@ -6,7 +6,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Clean.Sdk.Application.Tests.TestHandlers.Clients.Commands
+namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Commands
 {
 	public sealed class UpdateClientTestCommandHandler : UpdateHandler<UpdateClientTestCommand, ClientTestDto, ClientTest, IUpdateService<ClientTest>>, IRequestHandler<UpdateClientTestCommand, ClientTestDto>
 	{

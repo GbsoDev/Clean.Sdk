@@ -79,7 +79,7 @@ namespace Clean.Sdk.Domain.Tests.TestEntites {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registration of minors under {0} years is not allowed.
+        ///   Looks up a localized string similar to save of minors under {0} years is not allowed.
         /// </summary>
         public static string MinimumAge {
             get {

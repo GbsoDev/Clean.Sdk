@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Clean.Sdk.Domain.Services
 {
-	public interface IRegisterService<TEntity>
+	public interface ISaveService<TEntity>
 		where TEntity : class, IDomainEntity
 	{
-		Task<TEntity> RegisterAsync(TEntity entity, CancellationToken cancellationToken);
+		Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken);
 	}
 }

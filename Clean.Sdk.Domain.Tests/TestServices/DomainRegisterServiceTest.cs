@@ -5,33 +5,34 @@ using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 using Clean.Sdk.Domain.Tests.TestServices.Clients;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Threading;
 
 namespace Clean.Sdk.Domain.Tests.TestServices
 {
-	public class DomainRegisterServiceTest
+	public class DomainSaveServiceTest
 	{
 		private readonly Mock<IRepository<ClientTest>> _mockRepository;
 		private readonly Mock<ILogger<Service>> _mockLogger;
-		private readonly RegisterClientTestService _service;
+		private readonly SaveClientTestService _service;
 
-		public DomainRegisterServiceTest()
+		public DomainSaveServiceTest()
 		{
 			_mockRepository = new Mock<IRepository<ClientTest>>();
 			_mockLogger = new Mock<ILogger<Service>>();
 
-			_service = new RegisterClientTestService(
+			_service = new SaveClientTestService(
 				_mockLogger.Object,
 				new Lazy<IRepository<ClientTest>>(() => _mockRepository.Object));
 		}
 
 		[Fact]
-		public async Task RegisterAsync_ValidClient_ReturnsStoredClient()
+		public async Task SaveAsync_ValidClient_ReturnsStoredClient()
 		{
 			// Arrange
 			var clientTest = new ClientTestBuilder().BuildToCreate();
 
 			_mockRepository
-				.Setup(r => r.StoreAsync(clientTest, It.IsAny<CancellationToken>()))
+				.Setup(r => r.SaveAsync(clientTest, It.IsAny<CancellationToken>()))
 				.ReturnsAsync(clientTest);
 
 			_mockRepository
@@ -39,7 +40,7 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 				.Returns(Task.CompletedTask);
 
 			// Act
-			var result = await _service.RegisterAsync(clientTest, CancellationToken.None);
+			var result = await _service.SaveAsync(clientTest, CancellationToken.None);
 
 			// Assert
 			Assert.NotNull(result);
@@ -48,18 +49,18 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 			Assert.Equal(clientTest.MiddleName, result.MiddleName);
 			Assert.Equal(clientTest.Surname, result.Surname);
 			Assert.Equal(clientTest.Age, result.Age);
-			_mockRepository.Verify(r => r.StoreAsync(clientTest, It.IsAny<CancellationToken>()), Times.Once);
+			_mockRepository.Verify(r => r.SaveAsync(clientTest, It.IsAny<CancellationToken>()), Times.Once);
 			_mockRepository.Verify(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[Fact]
-		public async Task RegisterAsync_InvalidClient_ThrowsException()
+		public async Task SaveAsync_InvalidClient_ThrowsException()
 		{
 			// Arrange
 			var clientTest = new ClientTestBuilder().BuildToCreate();
 
 			_mockRepository
-				.Setup(r => r.StoreAsync(clientTest, It.IsAny<CancellationToken>()))
+				.Setup(r => r.SaveAsync(clientTest, It.IsAny<CancellationToken>()))
 				.ThrowsAsync(new Exception());
 
 			_mockRepository
@@ -67,13 +68,13 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 				.Returns(Task.CompletedTask);
 
 			// Act & Assert
-			await Assert.ThrowsAsync<Exception>(() => _service.RegisterAsync(clientTest, CancellationToken.None));
-			_mockRepository.Verify(r => r.StoreAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Once);
+			await Assert.ThrowsAsync<Exception>(() => _service.SaveAsync(clientTest, CancellationToken.None));
+			_mockRepository.Verify(r => r.SaveAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Once);
 			_mockRepository.Verify(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[Fact]
-		public async Task RegisterAsync_WithCancellationToken_CancelsOperation()
+		public async Task SaveAsync_WithCancellationToken_CancelsOperation()
 		{
 			// Arrange
 			var clientTest = new ClientTestBuilder().BuildToCreate();
@@ -81,16 +82,25 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 			cancellationTokenSource.Cancel();
 
 			_mockRepository
-				.Setup(r => r.StoreAsync(clientTest, It.IsAny<CancellationToken>()))
-				.ThrowsAsync(new OperationCanceledException());
+				.Setup(r => r.SaveAsync(clientTest, It.IsAny<CancellationToken>()))
+				.ReturnsAsync((ClientTest clentTest, CancellationToken cancellationToken) =>
+				{
+					if (cancellationToken.IsCancellationRequested)
+						throw new OperationCanceledException();
+					return clientTest;
+				});
 
 			_mockRepository
 				.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()))
-				.Returns(Task.CompletedTask);
+				.Callback((CancellationToken cancellationToken) =>
+				{
+					if (cancellationToken.IsCancellationRequested)
+						throw new OperationCanceledException();
+				});
 
 			// Act & Assert
-			await Assert.ThrowsAsync<OperationCanceledException>(() => _service.RegisterAsync(clientTest, cancellationTokenSource.Token));
-			_mockRepository.Verify(r => r.StoreAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Once);
+			await Assert.ThrowsAsync<OperationCanceledException>(() => _service.SaveAsync(clientTest, cancellationTokenSource.Token));
+			_mockRepository.Verify(r => r.SaveAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Once);
 			_mockRepository.Verify(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 		}
 	}

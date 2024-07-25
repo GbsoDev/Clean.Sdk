@@ -14,7 +14,7 @@ namespace Clean.Sdk.Application.Handlers
 	/// <summary>
 	/// Generic abstract class for delete an entity by Id
 	/// </summary>
-	public abstract class DeletByIdHandler<TRequest, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest>
+	public abstract class CommandDeleteByIdHandler<TRequest, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest>
 		where TRequest : ICommandDeleteById, IRequest
 		where TEntity : class, IDomainEntity
 		where TServie : class, IDeleteService<TEntity>
@@ -22,7 +22,7 @@ namespace Clean.Sdk.Application.Handlers
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public DeletByIdHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
+		public CommandDeleteByIdHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
 		{
 		}
 
@@ -31,11 +31,20 @@ namespace Clean.Sdk.Application.Handlers
 		/// </summary>
 		public async Task Handle(TRequest request, CancellationToken cancellationToken)
 		{
-			var deleted = await Service.DeleteByIdAsync(request.Id, cancellationToken);
-			if (!deleted)
+			try
 			{
-				throw new NotFoundException(Messages.NotFoundByIdException, typeof(TEntity).Name, request.Id);
+				var deleted = await Service.DeleteByIdAsync(request.Id, cancellationToken);
+				if (!deleted)
+				{
+					throw new NotFoundException(Messages.NotFoundByIdException, typeof(TEntity).Name, request.Id);
+				}
 			}
+			catch (Exception ex)
+			{
+				var x = ex.GetType();
+				throw;
+			}
+			
 		}
 	}
 }

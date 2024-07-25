@@ -1,4 +1,4 @@
-﻿using Clean.Sdk.Application.Tests.TestHandlers.Clients;
+﻿using Clean.Sdk.Application.Tests.TestHandlers.ClientsTest;
 
 namespace Clean.Sdk.Application.Tests.DataBuilders
 {

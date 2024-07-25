@@ -12,11 +12,11 @@ namespace Clean.Sdk.Domain.Ports
 	public interface IRepository<TEntity> : IRepository
 		where TEntity : class, IDomainEntity
 	{
-		Task<TEntity> StoreAsync(TEntity entity, CancellationToken cancellationToken = default);
+		Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-		Task<TEntity[]> ConsultAllAsync(CancellationToken cancellationToken = default);
+		Task<TEntity[]> GetAllAsync(CancellationToken cancellationToken = default);
 
-		Task<TEntity?> ConsultByIdAsync(object id, CancellationToken cancellationToken = default);
+		Task<TEntity?> GetByIdAsync(object id, CancellationToken cancellationToken = default);
 
 		Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 

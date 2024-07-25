@@ -17,9 +17,8 @@ namespace Clean.Sdk.Data.EfCore
 			foreach (var entityType in modelBuilder.Model.GetEntityTypes()
 				.Where(entityType => EntityHelper.IsIAuditableEntity(entityType.ClrType)))
 			{
-				modelBuilder.Entity(entityType.Name).Property<DateTime>(IEfDbContext.REGISTER_DATE_PROPERTY_NAME)
-					.IsRequired()
-					.HasDefaultValue(DateTime.UtcNow);
+				modelBuilder.Entity(entityType.Name).Property<DateTime>(IEfDbContext.SAVE_DATE_PROPERTY_NAME)
+					.IsRequired();
 
 				modelBuilder.Entity(entityType.Name).Property<DateTime>(IEfDbContext.LAST_UPDATE_PROPERTY_NAME);
 			}

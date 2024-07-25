@@ -23,7 +23,7 @@ namespace Clean.Sdk.Application.Handlers
 		public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
 		{
 			var id = request.Id;
-			var entityResult = await Repository.ConsultByIdAsync(id, cancellationToken);
+			var entityResult = await Repository.GetByIdAsync(id, cancellationToken);
 			if (entityResult == null) throw new NotFoundException(string.Format(Messages.NotFoundByIdException, typeof(TEntity).Name, id));
 			return Mapper.Map<TEntity, TResponse>(entityResult);
 		}

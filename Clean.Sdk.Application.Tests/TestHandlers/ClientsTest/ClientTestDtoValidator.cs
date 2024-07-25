@@ -3,14 +3,14 @@ using Clean.Sdk.Domain.Tests.TestEntites;
 using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 using FluentValidation;
 
-namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
+namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest
 {
 	public class ClientTestDtoValidator<TCommand> : AbstractValidator<TCommand>
 		where TCommand : ClientTestDto
 	{
 		public ClientTestDtoValidator()
 		{
-			RuleSet(ValidationsSet.CREATION, () =>
+			RuleSet(ValidationsSet.SAVE, () =>
 			{
 				RuleFor(clientDto => clientDto.Name)
 					.NotEmpty().WithMessage(clientDto => string.Format(ValidationErrorMessages.Required, nameof(clientDto.Name)))
@@ -36,7 +36,7 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 				RuleFor(clientDto => clientDto.Id)
 					.NotEqual(Guid.Empty).WithMessage(clientDto => string.Format(ValidationErrorMessages.Required, nameof(clientDto.Id)));
 				RuleFor(clientDto => clientDto)
-					.SetValidator(this, ruleSets: ValidationsSet.CREATION);
+					.SetValidator(this, ruleSets: ValidationsSet.SAVE);
 			});
 		}
 	}

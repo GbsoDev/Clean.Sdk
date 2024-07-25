@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Application.Tests.DataBuilders;
-using Clean.Sdk.Application.Tests.TestHandlers.Clients.Commands;
+using Clean.Sdk.Application.Tests.TestHandlers.ClientsTest;
+using Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Commands;
 using Clean.Sdk.Domain.Services;
 using Clean.Sdk.Domain.Tests.TestEntites;
 using Clean.Sdk.Domain.Tests.TestEntites.Clients;
@@ -9,9 +10,9 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
+namespace Clean.Sdk.Application.Tests.Handlers
 {
-	public class RegisterHandlerTests
+	public class SaveHandlerTests
 	{
 		private const string validName = "gerson";
 		private const string validMiddleName = "brain";
@@ -27,34 +28,34 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 		private readonly string ExpectedSurnameRangeValidationMessage = string.Format(ValidationErrorMessages.Range, nameof(ClientTestDto.Surname), ClientParameters.SurnameMinLength, ClientParameters.SurnameMaxLength);
 		private readonly string ExpectedAgeMinimumAgeValidationMessage = string.Format(ValidationErrorMessages.MinimumAge, nameof(ClientTestDto.Age));
 
-		private readonly Mock<IRegisterService<ClientTest>> _mockRegisterService;
-		private readonly Mock<ILogger<RegisterClientTestCommandHandler>> _mockLogger;
+		private readonly Mock<ISaveService<ClientTest>> _mockSaveService;
+		private readonly Mock<ILogger<SaveClientTestCommandHandler>> _mockLogger;
 		private readonly Mock<IMapper> _mockMapper;
-		private readonly RegisterClientTestCommandHandler _handler;
+		private readonly SaveClientTestCommandHandler _handler;
 
-		public RegisterHandlerTests()
+		public SaveHandlerTests()
 		{
-			_mockRegisterService = new Mock<IRegisterService<ClientTest>>();
-			_mockLogger = new Mock<ILogger<RegisterClientTestCommandHandler>>();
+			_mockSaveService = new Mock<ISaveService<ClientTest>>();
+			_mockLogger = new Mock<ILogger<SaveClientTestCommandHandler>>();
 			_mockMapper = new Mock<IMapper>();
 
-			_handler = new RegisterClientTestCommandHandler(
+			_handler = new SaveClientTestCommandHandler(
 				_mockLogger.Object,
 				_mockMapper.Object,
-				new Lazy<IRegisterService<ClientTest>>(() => _mockRegisterService.Object));
+				new Lazy<ISaveService<ClientTest>>(() => _mockSaveService.Object));
 		}
 
 		[Fact]
 		public async Task Handle_ValidRequest_ReturnsMappedResponse()
 		{
 			// Arrange
-			var request = new RegisterClientTestCommandBuilder()
+			var request = new SaveClientTestCommandBuilder()
 				.WithName(validName)
 				.WithMiddleName(validMiddleName)
 				.WithSurname(validSurname)
 				.WithAge(validAge)
 				.Build();
-			
+
 			var clientTestBuilder = new ClientTestBuilder()
 				.WithName(request.Name)
 				.WithMiddleName(request.MiddleName)
@@ -64,25 +65,25 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 			var clientTest = clientTestBuilder
 				.BuildForCreation();
 
-			var registeredClientTest = clientTestBuilder
+			var savedClientTest = clientTestBuilder
 				.WithId(Guid.NewGuid())
 				.Build();
 
 			var resultClientTestDto = new ClientTestDtoBuilder()
-				.WithId(registeredClientTest.Id)
-				.WithName(registeredClientTest.Name)
-				.WithMiddleName(registeredClientTest.MiddleName)
-				.WithSurname(registeredClientTest.Surname)
-				.WithAge(registeredClientTest.Age)
+				.WithId(savedClientTest.Id)
+				.WithName(savedClientTest.Name)
+				.WithMiddleName(savedClientTest.MiddleName)
+				.WithSurname(savedClientTest.Surname)
+				.WithAge(savedClientTest.Age)
 				.Build();
 
-			_mockMapper.Setup(m => m.Map<RegisterClientTestCommand, ClientTest>(request))
+			_mockMapper.Setup(m => m.Map<SaveClientTestCommand, ClientTest>(request))
 				.Returns(clientTest);
 
-			_mockRegisterService.Setup(s => s.RegisterAsync(clientTest, It.IsAny<CancellationToken>()))
-				.ReturnsAsync(registeredClientTest);
+			_mockSaveService.Setup(s => s.SaveAsync(clientTest, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(savedClientTest);
 
-			_mockMapper.Setup(m => m.Map<ClientTest, ClientTestDto>(registeredClientTest))
+			_mockMapper.Setup(m => m.Map<ClientTest, ClientTestDto>(savedClientTest))
 				.Returns(resultClientTestDto);
 
 			// Act
@@ -96,8 +97,8 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 			Assert.Equal(request.Surname, result.Surname);
 			Assert.Equal(request.Age, result.Age);
 
-			_mockMapper.Verify(m => m.Map<RegisterClientTestCommand, ClientTest>(It.IsAny<RegisterClientTestCommand>()), Times.Once);
-			_mockRegisterService.Verify(x => x.RegisterAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Once);
+			_mockMapper.Verify(m => m.Map<SaveClientTestCommand, ClientTest>(It.IsAny<SaveClientTestCommand>()), Times.Once);
+			_mockSaveService.Verify(x => x.SaveAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Once);
 			_mockMapper.Verify(m => m.Map<ClientTest, ClientTestDto>(It.IsAny<ClientTest>()), Times.Once);
 		}
 
@@ -105,7 +106,7 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 		public async void Handle_InvalidRequest_ThrowsValidationException()
 		{
 			// Arrange
-			var request = new RegisterClientTestCommandBuilder()
+			var request = new SaveClientTestCommandBuilder()
 				.WithName(string.Empty) // Invalid Name
 				.WithMiddleName(textWith60Charters) // Invalid MiddleName
 				.WithSurname(string.Empty) // Invalid Surname
@@ -127,9 +128,38 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 				error => Assert.Equal(ExpectedAgeMinimumAgeValidationMessage, error.ErrorMessage)
 			);
 
-			_mockMapper.Verify(m => m.Map<RegisterClientTestCommand, ClientTest>(It.IsAny<RegisterClientTestCommand>()), Times.Never);
-			_mockRegisterService.Verify(x => x.RegisterAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Never);
+			_mockMapper.Verify(m => m.Map<SaveClientTestCommand, ClientTest>(It.IsAny<SaveClientTestCommand>()), Times.Never);
+			_mockSaveService.Verify(x => x.SaveAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Never);
 			_mockMapper.Verify(m => m.Map<ClientTest, ClientTestDto>(It.IsAny<ClientTest>()), Times.Never);
+		}
+
+		[Fact]
+		public async Task Handle_WithCancellationToken_CancelsOperation()
+		{
+			// Arrange
+			var request = new SaveClientTestCommandBuilder()
+				.WithName(validName)
+				.WithMiddleName(validMiddleName)
+				.WithSurname(validSurname)
+				.WithAge(validAge)
+				.Build();
+
+			var cancellationTokenSource = new CancellationTokenSource();
+			cancellationTokenSource.Cancel();
+
+			_mockSaveService
+				.Setup(s => s.SaveAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync((ClientTest clientTest, CancellationToken cancellationToken) =>
+				{
+					if (cancellationToken.IsCancellationRequested)
+						throw new OperationCanceledException();
+					return clientTest;
+				});
+
+			// Act & Assert
+			await Assert.ThrowsAsync<OperationCanceledException>(() => _handler.Handle(request, cancellationTokenSource.Token));
+
+			_mockSaveService.Verify(s => s.SaveAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 	}
 }

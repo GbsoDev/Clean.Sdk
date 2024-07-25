@@ -82,7 +82,12 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 
 			_mockRepository
 				.Setup(r => r.UpdateAsync(clientTest, It.IsAny<CancellationToken>()))
-				.ThrowsAsync(new OperationCanceledException());
+				.ReturnsAsync((ClientTest clentTest, CancellationToken cancellationToken) =>
+				{
+					if (cancellationToken.IsCancellationRequested)
+						throw new OperationCanceledException();
+					return clientTest;
+				});
 
 			_mockRepository
 				.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()))

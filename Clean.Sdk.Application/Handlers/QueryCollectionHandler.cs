@@ -22,7 +22,7 @@ namespace Clean.Sdk.Application.Handlers
 
 		public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
 		{
-			var entityResult = await Repository.ConsultAllAsync(cancellationToken);
+			var entityResult = await Repository.GetAllAsync(cancellationToken);
 			return Mapper.Map<TEntity[], TResponse>(entityResult);
 		}
 	}

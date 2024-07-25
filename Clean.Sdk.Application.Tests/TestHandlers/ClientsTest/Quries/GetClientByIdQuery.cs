@@ -1,6 +1,6 @@
 ﻿using Clean.Sdk.Application.Handlers;
 
-namespace Clean.Sdk.Application.Tests.TestHandlers.Clients.Quries
+namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Quries
 {
 	public class GetClientByIdQuery : QueryById<Guid, ClientTestDto>
 	{

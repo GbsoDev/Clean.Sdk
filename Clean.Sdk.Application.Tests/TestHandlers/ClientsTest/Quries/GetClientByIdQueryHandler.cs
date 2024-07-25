@@ -4,7 +4,7 @@ using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 using Microsoft.Extensions.Logging;
 
-namespace Clean.Sdk.Application.Tests.TestHandlers.Clients.Quries
+namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Quries
 {
 	public sealed class GetClientByIdQueryHandler : QueryByIdHandler<GetClientByIdQuery, ClientTestDto, ClientTest, IRepository<ClientTest>>
 	{

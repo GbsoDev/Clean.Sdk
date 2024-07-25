@@ -6,7 +6,7 @@ namespace Clean.Sdk.Data.EfCore
 {
 	public interface IEfDbContext
 	{
-		public static string REGISTER_DATE_PROPERTY_NAME = "RegisterDate";
+		public static string SAVE_DATE_PROPERTY_NAME = "SaveDate";
 		public static string LAST_UPDATE_PROPERTY_NAME = "LastUpdate";
 
 		DatabaseFacade Database { get; }

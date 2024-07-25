@@ -1,4 +1,4 @@
-﻿namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
+﻿namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest
 {
 	public record ClientTestDto
 	{

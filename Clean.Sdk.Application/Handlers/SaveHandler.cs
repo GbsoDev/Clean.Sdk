@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 namespace Clean.Sdk.Application.Handlers
 {
 	/// <summary>
-	/// Represents an abstract class that handles the registration request for a given entity.
+	/// Represents an abstract class that handles the save request for a given entity.
 	/// </summary>
-	public abstract class RegistrationHandler<TRequest, TResponse, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest, TResponse>
+	public abstract class SaveHandler<TRequest, TResponse, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest, TResponse>
 		where TRequest : IRequest<TResponse>
 		where TEntity : class, IDomainEntity
-		where TServie : class, IRegisterService<TEntity>
+		where TServie : class, ISaveService<TEntity>
 	{
 		protected readonly ILogger<Handler> _logger;
 		protected readonly IMapper _mapper;
@@ -26,22 +26,22 @@ namespace Clean.Sdk.Application.Handlers
 
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RegistrationHandler{TRequest, TResponse, TEntity, TServie}"/> class.
+		/// Initializes a new instance of the <see cref="SaveHandler{TRequest, TResponse, TEntity, TServie}"/> class.
 		/// </summary>
-		protected RegistrationHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
+		protected SaveHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
 		{
 			this._logger = logger;
 			this._mapper = mapper;
 		}
 
 		/// <summary>
-		/// Handles the registration request.
+		/// Handles the save request.
 		/// </summary>
 		public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
 		{
 			Validate(request);
 			var newEntity = Mapper.Map<TRequest, TEntity>(request);
-			var entityResult = await Service.RegisterAsync(newEntity, cancellationToken);
+			var entityResult = await Service.SaveAsync(newEntity, cancellationToken);
 			return Mapper.Map<TEntity, TResponse>(entityResult);
 		}
 
@@ -50,7 +50,7 @@ namespace Clean.Sdk.Application.Handlers
 		/// </summary>
 		protected virtual void Validate(TRequest request)
 		{
-			var validation = ValidationRules?.Validate(request, options => { options.IncludeRuleSets(ValidationsSet.CREATION); options.ThrowOnFailures(); });
+			var validation = ValidationRules?.Validate(request, options => { options.IncludeRuleSets(ValidationsSet.SAVE); options.ThrowOnFailures(); });
 		}
 	}
 }

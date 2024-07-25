@@ -1,4 +1,4 @@
-﻿namespace Clean.Sdk.Application.Tests.TestHandlers.Clients.Commands
+﻿namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Commands
 {
 	public class UpdateClientTestCommandValidator : ClientTestDtoValidator<UpdateClientTestCommand>
 	{

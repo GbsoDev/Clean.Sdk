@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Domain.Tests.TestServices.Clients
 {
-	internal class RegisterClientTestService : RegisterService<ClientTest, IRepository<ClientTest>>
+	internal class SaveClientTestService : SaveService<ClientTest, IRepository<ClientTest>>
 	{
-		public RegisterClientTestService(ILogger<Service> logger, Lazy<IRepository<ClientTest>> repository) : base(logger, repository)
+		public SaveClientTestService(ILogger<Service> logger, Lazy<IRepository<ClientTest>> repository) : base(logger, repository)
 		{
 		}
 	}

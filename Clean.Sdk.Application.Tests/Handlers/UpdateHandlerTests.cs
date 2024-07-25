@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Application.Tests.DataBuilders;
-using Clean.Sdk.Application.Tests.TestHandlers.Clients.Commands;
+using Clean.Sdk.Application.Tests.TestHandlers.ClientsTest;
+using Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Commands;
 using Clean.Sdk.Domain.Services;
 using Clean.Sdk.Domain.Tests.TestEntites;
 using Clean.Sdk.Domain.Tests.TestEntites.Clients;
@@ -9,7 +10,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
+namespace Clean.Sdk.Application.Tests.Handlers
 {
 	public class UpdateHandlerTests
 	{
@@ -117,11 +118,11 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 
 			// Act
 			var exception = await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(request, CancellationToken.None));
-			
+
 			// Assert
 			Assert.NotNull(exception);
 			Assert.Equal(ExpectedValidationExceptionNumber, exception.Errors.Count());
-			Assert.Collection(exception.Errors, 
+			Assert.Collection(exception.Errors,
 				error => Assert.Equal(ExpectedIdRequiredValidationMessage, error.ErrorMessage),
 				error => Assert.Equal(ExpectedNameRequiredValidationMessage, error.ErrorMessage),
 				error => Assert.Equal(ExpectedNameRangeValidationMessage, error.ErrorMessage),
@@ -134,6 +135,36 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.Clients
 			_mockMapper.Verify(m => m.Map<UpdateClientTestCommand, ClientTest>(It.IsAny<UpdateClientTestCommand>()), Times.Never);
 			_mockUpdateService.Verify(x => x.UpdateAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Never);
 			_mockMapper.Verify(m => m.Map<ClientTest, ClientTestDto>(It.IsAny<ClientTest>()), Times.Never);
+		}
+
+		[Fact]
+		public async Task Handle_WithCancellationToken_CancelsOperation()
+		{
+			// Arrange
+			var request = new UpdateClientTestCommandBuilder()
+				.WithId(Guid.NewGuid())
+				.WithName(validName)
+				.WithMiddleName(validMiddleName)
+				.WithSurname(validSurname)
+				.WithAge(validAge)
+				.Build();
+
+			var cancellationTokenSource = new CancellationTokenSource();
+			cancellationTokenSource.Cancel();
+
+			_mockUpdateService
+				.Setup(s => s.UpdateAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync((ClientTest clientTest, CancellationToken cancellationToken) =>
+				{
+					if (cancellationToken.IsCancellationRequested)
+						throw new OperationCanceledException();
+					return clientTest;
+				});
+
+			// Act & Assert
+			await Assert.ThrowsAsync<OperationCanceledException>(() => _handler.Handle(request, cancellationTokenSource.Token));
+
+			_mockUpdateService.Verify(s => s.UpdateAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Clean.Sdk.Application.Tests.TestHandlers.Clients.Commands
+namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Commands
 {
 	public record UpdateClientTestCommand : ClientTestDto, IRequest<ClientTestDto>
 	{
