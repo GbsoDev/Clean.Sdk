@@ -29,7 +29,7 @@ namespace Clean.Sdk.Domain.Validations
 		{
 			if (!IsValid)
 			{
-				throw new ValidationException(this, ErrorMessage);
+				throw new ValidationSetException(this, ErrorMessage);
 			}
 		}
 

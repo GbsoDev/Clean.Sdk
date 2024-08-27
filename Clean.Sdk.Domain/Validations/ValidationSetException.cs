@@ -2,20 +2,20 @@
 
 namespace Clean.Sdk.Domain.Validations
 {
-	public class ValidationException
+	public class ValidationSetException
 		: Exception
 	{
 		private readonly ValidationSet _validationSet;
 
 		public ValidationError[] Errors => _validationSet.Errors.ToArray();
 
-		public ValidationException(ValidationSet validation, string? message)
+		public ValidationSetException(ValidationSet validation, string? message)
 			: base(message)
 		{
 			_validationSet = validation;
 		}
 
-		public ValidationException(ValidationSet validation)
+		public ValidationSetException(ValidationSet validation)
 			: this(validation, validation.ErrorMessage)
 		{
 			_validationSet = validation;

@@ -62,7 +62,7 @@ namespace Clean.Sdk.Domain.Tests.TestEntites
                 .WithAge(5);
 
             // Act
-            var exception = Assert.Throws<ValidationException>(() =>
+            var exception = Assert.Throws<ValidationSetException>(() =>
             {
                 clienteBuilder.BuildToCreate();
             });
@@ -123,7 +123,7 @@ namespace Clean.Sdk.Domain.Tests.TestEntites
                 .WithAge(5);
 
             // Act
-            var exception = Assert.Throws<ValidationException>(() =>
+            var exception = Assert.Throws<ValidationSetException>(() =>
             {
                 clienteBuilder.Build();
             });

@@ -120,7 +120,7 @@ namespace Clean.Sdk.Infrastructure.Extensions
 			}
 		}
 
-		private static void ConfigureScoped(this IServiceCollection services, Type type, string? sectionName = null)
+		private static void		(this IServiceCollection services, Type type, string? sectionName = null)
 		{
 			const string methodName = nameof(ConfigureScoped);
 			var classType = typeof(OptionsProvider);

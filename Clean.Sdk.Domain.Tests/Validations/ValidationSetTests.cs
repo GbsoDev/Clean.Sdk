@@ -51,7 +51,7 @@ namespace Clean.Sdk.Domain.Tests.Validations
 			var validationSet = new ValidationSet(TestErrorMessage);
 			validationSet.AddError(TestError);
 
-			var exception = Assert.Throws<ValidationException>(() => validationSet.ValidateAndThrow());
+			var exception = Assert.Throws<ValidationSetException>(() => validationSet.ValidateAndThrow());
 			Assert.Equal(TestErrorMessage, exception.Message);
 		}
 

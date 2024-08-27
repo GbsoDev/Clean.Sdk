@@ -2,7 +2,7 @@
 
 namespace Clean.Sdk.Domain.Validations
 {
-	public static class ValidationExtensions
+	public static class ValidationSetExtensions
 	{
 		/// <summary>
 		/// Checks if the object is not the default value for its type and adds an error message if it is.

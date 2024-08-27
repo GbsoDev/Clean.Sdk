@@ -19,7 +19,7 @@ namespace Clean.Sdk.Data.EfCore
 		public EfRepository(TContext context, Lazy<IDateTimeProvider> dateTimeProvider)
 		{
 			Context = context;
-			this._dateTimeProvider = dateTimeProvider;
+			_dateTimeProvider = dateTimeProvider;
 		}
 
 		public virtual async Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -64,8 +64,8 @@ namespace Clean.Sdk.Data.EfCore
 		public virtual async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
 		{
 			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			var entityEntry = Context.Remove(entity);
-			return await Task.FromResult(entityEntry.State == EntityState.Deleted);
+			var entityEntry = Context.Set<TEntity>().Remove(entity);
+			return await Task.FromResult(entityEntry?.State == EntityState.Deleted);
 		}
 
 		public virtual async Task<bool> DeleteByIdAsync(object id, CancellationToken cancellationToken = default)
