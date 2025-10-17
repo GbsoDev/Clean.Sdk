@@ -1,11 +1,11 @@
-﻿using Clean.Sdk.Domain.Entity;
+﻿using Clean.Sdk.Domain.Model;
 
 namespace Clean.Sdk.Domain.Services
 {
-	public interface IDeleteService<TEntity>
-		where TEntity : class, IDomainEntity
+	public interface IDeleteService<TModel>
+		where TModel : class, IDomainModel
 	{
-		Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken);
+		Task<bool> DeleteAsync(TModel entity, CancellationToken cancellationToken);
 		Task<bool> DeleteByIdAsync(object id, CancellationToken cancellationToken);
 	}
 }

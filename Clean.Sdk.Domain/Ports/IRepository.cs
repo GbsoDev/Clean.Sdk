@@ -1,4 +1,4 @@
-﻿using Clean.Sdk.Domain.Entity;
+﻿using Clean.Sdk.Domain.Model;
 
 namespace Clean.Sdk.Domain.Ports
 {
@@ -7,17 +7,18 @@ namespace Clean.Sdk.Domain.Ports
 		Task<bool> DeleteByIdAsync(object id, CancellationToken cancellationToken = default);
 		Task SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
-	public interface IRepository<TEntity> : IRepository
-		where TEntity : class, IDomainEntity
+
+	public interface IRepository<TModel> : IRepository
+		where TModel : class, IDomainModel
 	{
-		Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken = default);
+		Task<TModel> SaveAsync(TModel model, CancellationToken cancellationToken = default);
 
-		Task<TEntity[]> GetAllAsync(CancellationToken cancellationToken = default);
+		Task<TModel[]> GetAllAsync(CancellationToken cancellationToken = default);
 
-		Task<TEntity?> GetByIdAsync(object id, CancellationToken cancellationToken = default);
+		Task<TModel?> GetByIdAsync(object id, CancellationToken cancellationToken = default);
 
-		Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
+		Task<TModel> UpdateAsync(TModel model, CancellationToken cancellationToken = default);
 
-		Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+		Task<bool> DeleteAsync(TModel model, CancellationToken cancellationToken = default);
 	}
 }

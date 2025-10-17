@@ -1,12 +1,12 @@
-﻿using Clean.Sdk.Domain.Entity;
+﻿using Clean.Sdk.Domain.Model;
 using Clean.Sdk.Domain.Ports;
 using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Domain.Services
 {
-	public abstract class ActionService<TEntity, TRepository> : Service
-		where TEntity : class, IDomainEntity
-		where TRepository : IRepository<TEntity>
+	public abstract class ActionService<TModel, TRepository> : Service
+		where TModel : class, IDomainModel
+		where TRepository : IRepository<TModel>
 	{
 		protected TRepository Repository => _repository.Value;
 		private readonly Lazy<TRepository> _repository;

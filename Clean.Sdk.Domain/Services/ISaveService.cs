@@ -1,10 +1,10 @@
-﻿using Clean.Sdk.Domain.Entity;
+﻿using Clean.Sdk.Domain.Model;
 
 namespace Clean.Sdk.Domain.Services
 {
-	public interface ISaveService<TEntity>
-		where TEntity : class, IDomainEntity
+	public interface ISaveService<TModel>
+		where TModel : class, IDomainModel
 	{
-		Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken);
+		Task<TModel> SaveAsync(TModel entity, CancellationToken cancellationToken);
 	}
 }

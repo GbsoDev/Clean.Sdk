@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Application.Validations;
-using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Model;
 using Clean.Sdk.Domain.Services;
 using FluentValidation;
 using MediatR;
@@ -11,10 +11,10 @@ namespace Clean.Sdk.Application.Handlers
 	/// <summary>
 	/// Represents an abstract class that handles the save request for a given entity.
 	/// </summary>
-	public abstract class SaveHandler<TRequest, TResponse, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest, TResponse>
+	public abstract class SaveHandler<TRequest, TResponse, TModel, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest, TResponse>
 		where TRequest : IRequest<TResponse>
-		where TEntity : class, IDomainEntity
-		where TServie : class, ISaveService<TEntity>
+		where TModel : class, IDomainModel
+		where TServie : class, ISaveService<TModel>
 	{
 		protected readonly ILogger<Handler> _logger;
 		protected readonly IMapper _mapper;
@@ -37,9 +37,9 @@ namespace Clean.Sdk.Application.Handlers
 		public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
 		{
 			Validate(request);
-			var newEntity = Mapper.Map<TRequest, TEntity>(request);
+			var newEntity = Mapper.Map<TRequest, TModel>(request);
 			var entityResult = await Service.SaveAsync(newEntity, cancellationToken);
-			return Mapper.Map<TEntity, TResponse>(entityResult);
+			return Mapper.Map<TModel, TResponse>(entityResult);
 		}
 
 		/// <summary>

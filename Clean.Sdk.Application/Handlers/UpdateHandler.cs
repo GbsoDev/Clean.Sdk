@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Application.Validations;
-using Clean.Sdk.Domain.Entity;
+using Clean.Sdk.Domain.Model;
 using Clean.Sdk.Domain.Services;
 using FluentValidation;
 using MediatR;
@@ -11,10 +11,10 @@ namespace Clean.Sdk.Application.Handlers
 	/// <summary>
 	/// Represents an abstract class that handles the update request for a given entity.
 	/// </summary>
-	public abstract class UpdateHandler<TRequest, TResponse, TEntity, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest, TResponse>
+	public abstract class UpdateHandler<TRequest, TResponse, TModel, TServie> : CommandHandler<TServie>, IRequestHandler<TRequest, TResponse>
 		where TRequest : IRequest<TResponse>
-		where TEntity : class, IDomainEntity
-		where TServie : class, IUpdateService<TEntity>
+		where TModel : class, IDomainModel
+		where TServie : class, IUpdateService<TModel>
 	{
 		/// <summary>
 		/// Gets the validation rules for the request.
@@ -34,9 +34,9 @@ namespace Clean.Sdk.Application.Handlers
 		public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
 		{
 			Validate(request);
-			var toUpdate = Mapper.Map<TRequest, TEntity>(request);
+			var toUpdate = Mapper.Map<TRequest, TModel>(request);
 			var updated = await Service.UpdateAsync(toUpdate, cancellationToken);
-			return Mapper.Map<TEntity, TResponse>(updated);
+			return Mapper.Map<TModel, TResponse>(updated);
 		}
 
 		/// <summary>

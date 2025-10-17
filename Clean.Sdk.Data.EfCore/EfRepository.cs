@@ -1,77 +1,85 @@
-﻿using Clean.Sdk.Domain.Entity;
+﻿using AutoMapper;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Resources;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
 namespace Clean.Sdk.Data.EfCore
 {
-	public class EfRepository<TEntity, TContext> : IRepository<TEntity>
-		where TEntity : class, IDomainEntity
+	public class EfRepository<TModel,TEntity, TContext> : IRepository<TModel>
+		where TModel : class, Domain.Model.IDomainModel
+		where TEntity : class, Domain.Entity.IDomainEntity, TModel
 		where TContext : IEfDbContext
 	{
 
 		protected TContext Context { get; }
-		private IDateTimeProvider DateTimeProvider => _dateTimeProvider.Value;
+		protected IMapper Mapper { get => _mapper.Value; }
+		private readonly Lazy<IMapper> _mapper;
+		protected IDateTimeProvider DateTimeProvider => _dateTimeProvider.Value;
 		private readonly Lazy<IDateTimeProvider> _dateTimeProvider;
 
-		public EfRepository(TContext context, Lazy<IDateTimeProvider> dateTimeProvider)
+		public EfRepository(TContext context, Lazy<IMapper> mapper, Lazy<IDateTimeProvider> dateTimeProvider)
 		{
 			Context = context;
+			_mapper = mapper;
 			_dateTimeProvider = dateTimeProvider;
 		}
 
-		public virtual async Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken = default)
+
+		public virtual async Task<TModel> SaveAsync(TModel model, CancellationToken cancellationToken = default)
 		{
-			if (entity == null) throw new ArgumentNullException(nameof(entity));
+			if (model == null) throw new ArgumentNullException(nameof(model));
+			TEntity entity = Mapper.Map<TEntity>(model);
 			await Context.Set<TEntity>().AddAsync(entity, cancellationToken);
 			return entity;
 		}
 
-		public virtual Task<TEntity[]> GetAllAsync(CancellationToken cancellationToken = default)
+		public virtual async Task<TModel[]> GetAllAsync(CancellationToken cancellationToken = default)
 		{
-			return Context.Set<TEntity>().ToArrayAsync(cancellationToken);
+			return await Context.Set<TEntity>().ToArrayAsync(cancellationToken);
 		}
 
-		public virtual Task<TEntity?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
+
+
+		public virtual async Task<TModel?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
 		{
-			var keyValues = new object[] { id };
-			return Context.FindAsync<TEntity>(keyValues, cancellationToken).AsTask();
+			return await GetEntityByIdAsync(id, cancellationToken);
 		}
 
-		public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+		public virtual async Task<TModel> UpdateAsync(TModel model, CancellationToken cancellationToken = default)
 		{
-			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			var entityResult = await GetByIdAsync(entity.Id, cancellationToken);
-			if (entityResult == null) throw new NotFoundException(Messages.NotFoundExcepton, entity.GetType().Name);
-			Context.Entry(entityResult).CurrentValues.SetValues(entity);
+			if (model == null) throw new ArgumentNullException(nameof(model));
+			TEntity? entityResult = await GetEntityByIdAsync(model.Id, cancellationToken);
+			if (entityResult == null) throw new NotFoundException(Messages.NotFoundExcepton, model.GetType().Name);
+			Context.Entry(entityResult).CurrentValues.SetValues(model);
 			return entityResult;
 		}
 
-		public virtual async Task<TEntity> UpdateAsync(TEntity entity, Expression<Func<TEntity, object>> @object, CancellationToken cancellationToken = default)
+		public virtual async Task<TModel> UpdateAsync(TModel model, Expression<Func<TModel, object>> @object, CancellationToken cancellationToken = default)
 		{
-			if (entity == null) throw new ArgumentNullException(nameof(entity));
+			if (model == null) throw new ArgumentNullException(nameof(model));
 			if (@object == null) throw new ArgumentNullException(nameof(@object));
-			var entityResult = await GetByIdAsync(entity.Id, cancellationToken);
+			TEntity? entityResult = await GetEntityByIdAsync(model.Id, cancellationToken);
 			if (entityResult == null) throw new NotFoundException("You are trying to update a record that does not exist");
-			var objectResult = @object?.Compile()?.Invoke(entity);
+			object? objectResult = @object?.Compile()?.Invoke(model);
 			if (entityResult != null && objectResult != null)
-				Context.Entry(entity).CurrentValues.SetValues(objectResult);
+				Context.Entry(model).CurrentValues.SetValues(objectResult);
 			return entityResult!;
 		}
 
-		public virtual async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+		public virtual async Task<bool> DeleteAsync(TModel model, CancellationToken cancellationToken = default)
 		{
-			if (entity == null) throw new ArgumentNullException(nameof(entity));
-			var entityEntry = Context.Set<TEntity>().Remove(entity);
+			if (model == null) throw new ArgumentNullException(nameof(model));
+			EntityEntry<TModel> entityEntry = Context.Set<TModel>().Remove(model);
 			return await Task.FromResult(entityEntry?.State == EntityState.Deleted);
 		}
 
 		public virtual async Task<bool> DeleteByIdAsync(object id, CancellationToken cancellationToken = default)
 		{
 			if (id == null) throw new ArgumentNullException(nameof(id));
-			var entity = await GetByIdAsync(id, cancellationToken);
+			TEntity? entity = await GetEntityByIdAsync(id, cancellationToken);
 
 			if (entity == null) return false;
 			await DeleteAsync(entity!, cancellationToken).ConfigureAwait(false);
@@ -81,7 +89,7 @@ namespace Clean.Sdk.Data.EfCore
 		public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			Context.ChangeTracker.DetectChanges();
-			foreach (var entry in Context.ChangeTracker.Entries())
+			foreach (EntityEntry entry in Context.ChangeTracker.Entries())
 			{
 				if (entry.State == EntityState.Added)
 				{
@@ -93,6 +101,12 @@ namespace Clean.Sdk.Data.EfCore
 				}
 			}
 			await Context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+		}
+
+		private async Task<TEntity?> GetEntityByIdAsync(object id, CancellationToken cancellationToken = default)
+		{
+			object[] keyValues = new object[] { id };
+			return await Context.FindAsync<TEntity>(keyValues, cancellationToken);
 		}
 	}
 }

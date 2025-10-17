@@ -1,10 +1,10 @@
-﻿using Clean.Sdk.Domain.Entity;
+﻿using Clean.Sdk.Domain.Model;
 
 namespace Clean.Sdk.Domain.Services
 {
-	public interface IUpdateService<TEntity>
-		where TEntity : class, IDomainEntity
+	public interface IUpdateService<TModel>
+		where TModel : class, IDomainModel
 	{
-		Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
+		Task<TModel> UpdateAsync(TModel entity, CancellationToken cancellationToken);
 	}
 }
