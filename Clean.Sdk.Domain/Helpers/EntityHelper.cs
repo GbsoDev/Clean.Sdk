@@ -1,5 +1,4 @@
 ﻿using Clean.Sdk.Domain.Entity;
-using System;
 
 namespace Clean.Sdk.Domain.Helpers
 {

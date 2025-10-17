@@ -79,7 +79,7 @@ namespace Clean.Sdk.Infrastructure.Extensions
 			foreach (var type in types)
 			{
 				var attribute = type.GetCustomAttribute<OptionAttribute>()!;
-				var constructor = type.GetConstructor(new Type[] { });
+				var constructor = type.GetConstructor(Array.Empty<Type>());
 				if (constructor != null)
 				{
 					if (configuration != null)
@@ -120,7 +120,7 @@ namespace Clean.Sdk.Infrastructure.Extensions
 			}
 		}
 
-		private static void		(this IServiceCollection services, Type type, string? sectionName = null)
+		private static void ConfigureScoped(this IServiceCollection services, Type type, string? sectionName = null)
 		{
 			const string methodName = nameof(ConfigureScoped);
 			var classType = typeof(OptionsProvider);

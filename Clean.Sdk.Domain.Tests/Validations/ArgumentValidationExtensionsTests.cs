@@ -181,7 +181,7 @@ namespace Clean.Sdk.Domain.Tests.Validations
 		[Fact]
 		public void IsNotNull_ShouldReturnTrueIfNotNull()
 		{
-			object obj = new object();
+			object obj = new();
 			bool result = obj.IsNotNull();
 			Assert.True(result);
 		}
@@ -189,7 +189,7 @@ namespace Clean.Sdk.Domain.Tests.Validations
 		[Fact]
 		public void IsNotNull_ShouldReturnFalseIfNull()
 		{
-			object obj = null;
+			object? obj = null;
 			bool result = obj.IsNotNull();
 			Assert.False(result);
 		}

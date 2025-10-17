@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace Clean.Sdk.Application.Handlers
 

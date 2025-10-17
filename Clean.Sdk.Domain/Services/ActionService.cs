@@ -1,7 +1,6 @@
 ﻿using Clean.Sdk.Domain.Entity;
 using Clean.Sdk.Domain.Ports;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace Clean.Sdk.Domain.Services
 {

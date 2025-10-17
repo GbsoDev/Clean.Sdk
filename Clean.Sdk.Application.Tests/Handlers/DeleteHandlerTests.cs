@@ -73,9 +73,7 @@ namespace Clean.Sdk.Application.Tests.Handlers
 				.Setup(s => s.DeleteByIdAsync(It.IsAny<object>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((object id, CancellationToken cancellationToken) =>
 				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException();
-					return true;
+					return cancellationToken.IsCancellationRequested ? throw new OperationCanceledException() : true;
 				});
 
 			// Act & Assert

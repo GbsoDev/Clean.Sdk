@@ -3,7 +3,7 @@ using Clean.Sdk.Domain.Validations;
 
 namespace Clean.Sdk.Domain.Tests.TestEntites.ClientsTest
 {
-	public class ClientTest : DomainEntity<Guid>, IAuditableEntity
+	public class ClientTest : DomainEntity<Guid>
 	{
 		public string Name { get; private set; }
 		public string? MiddleName { get; private set; }

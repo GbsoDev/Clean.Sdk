@@ -1,6 +1,5 @@
 ﻿using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Resources;
-using System.Collections.Generic;
 
 namespace Clean.Sdk.Domain.Options
 {
@@ -14,7 +13,7 @@ namespace Clean.Sdk.Domain.Options
 		public AppSettings()
 		{
 			AuthOptions = new AuthOptions();
-			AllowCors = new CorsOptions[0];
+			AllowCors = Array.Empty<CorsOptions>();
 			DbConnections = new Dictionary<string, DbConnection>();
 		}
 

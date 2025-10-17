@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Clean.Sdk.Domain.Validations
+﻿namespace Clean.Sdk.Domain.Validations
 {
 	public static class ArgumentValidationExtensions
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Clean.Sdk.Domain.Options
+﻿namespace Clean.Sdk.Domain.Options
 {
 	[Option(nameof(AuthOptions))]
 	public class AuthOptions
@@ -16,7 +14,7 @@ namespace Clean.Sdk.Domain.Options
 			Issuer = string.Empty;
 			Audience = string.Empty;
 			SigningKey = string.Empty;
-			Roles = new string[0];
+			Roles = Array.Empty<string>();
 		}
 	}
 }

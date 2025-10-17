@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Domain.Ports;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace Clean.Sdk.Application.Handlers
 {

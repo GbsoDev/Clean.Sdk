@@ -5,8 +5,6 @@ using Clean.Sdk.Domain.Tests.Builders;
 using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Moq;
 using Moq.EntityFrameworkCore;
 

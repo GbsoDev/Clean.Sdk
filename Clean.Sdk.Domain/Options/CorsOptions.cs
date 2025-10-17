@@ -10,7 +10,7 @@
 		{
 			Name = string.Empty;
 			Origin = string.Empty;
-			Methods = new string[0];
+			Methods = Array.Empty<string>();
 		}
 	}
 }

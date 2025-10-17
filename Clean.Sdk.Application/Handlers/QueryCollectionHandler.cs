@@ -3,10 +3,7 @@ using Clean.Sdk.Domain.Entity;
 using Clean.Sdk.Domain.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Clean.Sdk.Application.Handlers
 {

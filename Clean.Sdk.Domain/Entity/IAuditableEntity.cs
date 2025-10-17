@@ -1,6 +1,6 @@
 ﻿namespace Clean.Sdk.Domain.Entity
 {
-	public interface IAuditableEntity
+	public interface IAuditableEntity : IDomainEntity
 	{
 	}
 }

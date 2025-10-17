@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Clean.Sdk.Domain.Validations
+﻿namespace Clean.Sdk.Domain.Validations
 {
 	public class ValidationSet
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Clean.Sdk.Domain.Exceptions
+﻿namespace Clean.Sdk.Domain.Exceptions
 {
 	public class NullOrEmptyException
 		: ValidationException

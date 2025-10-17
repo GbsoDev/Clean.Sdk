@@ -5,9 +5,6 @@ using Clean.Sdk.Domain.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Clean.Sdk.Application.Handlers
 {

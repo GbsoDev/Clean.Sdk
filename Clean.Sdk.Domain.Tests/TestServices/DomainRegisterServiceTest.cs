@@ -5,7 +5,6 @@ using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
 using Clean.Sdk.Domain.Tests.TestServices.Clients;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Threading;
 
 namespace Clean.Sdk.Domain.Tests.TestServices
 {
@@ -85,17 +84,14 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 				.Setup(r => r.SaveAsync(clientTest, It.IsAny<CancellationToken>()))
 				.ReturnsAsync((ClientTest clentTest, CancellationToken cancellationToken) =>
 				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException();
-					return clientTest;
+					return cancellationToken.IsCancellationRequested ? throw new OperationCanceledException() : clientTest;
 				});
 
 			_mockRepository
 				.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()))
 				.Callback((CancellationToken cancellationToken) =>
 				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException();
+					cancellationToken.ThrowIfCancellationRequested();
 				});
 
 			// Act & Assert

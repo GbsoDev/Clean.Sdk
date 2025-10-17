@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Clean.Sdk.Domain.Ports
+﻿namespace Clean.Sdk.Domain.Ports
 {
 	public interface IDateTimeProvider
 	{
@@ -11,4 +9,3 @@ namespace Clean.Sdk.Domain.Ports
 		DateTime Today { get; }
 	}
 }
-	

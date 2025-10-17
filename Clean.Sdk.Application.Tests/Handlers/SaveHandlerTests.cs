@@ -151,9 +151,7 @@ namespace Clean.Sdk.Application.Tests.Handlers
 				.Setup(s => s.SaveAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((ClientTest clientTest, CancellationToken cancellationToken) =>
 				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException();
-					return clientTest;
+					return cancellationToken.IsCancellationRequested ? throw new OperationCanceledException() : clientTest;
 				});
 
 			// Act & Assert

@@ -82,17 +82,14 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 				.Setup(r => r.DeleteByIdAsync(It.IsAny<object>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((object id, CancellationToken cancellationToken) =>
 				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException();
-					return true;
+					return cancellationToken.IsCancellationRequested ? throw new OperationCanceledException() : true;
 				});
 
 			_mockRepository
 				.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()))
 				.Callback((CancellationToken cancellationToken) =>
 				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException();
+					cancellationToken.ThrowIfCancellationRequested();
 				});
 
 			// Act & Assert
@@ -159,17 +156,14 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 				.Setup(r => r.DeleteAsync(It.IsAny<ClientTest>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync((object id, CancellationToken cancellationToken) =>
 				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException();
-					return true;
+					return cancellationToken.IsCancellationRequested ? throw new OperationCanceledException() : true;
 				});
 
 			_mockRepository
 				.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()))
 				.Callback((CancellationToken cancellationToken) =>
 				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException();
+					cancellationToken.ThrowIfCancellationRequested();
 				});
 
 			// Act & Assert

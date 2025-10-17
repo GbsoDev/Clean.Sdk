@@ -1,6 +1,4 @@
 ﻿using Clean.Sdk.Domain.Entity;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Clean.Sdk.Domain.Services
 {

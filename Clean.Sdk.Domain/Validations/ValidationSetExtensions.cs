@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Clean.Sdk.Domain.Validations
+﻿namespace Clean.Sdk.Domain.Validations
 {
 	public static class ValidationSetExtensions
 	{

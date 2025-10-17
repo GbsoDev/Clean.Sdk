@@ -5,9 +5,6 @@ using Clean.Sdk.Domain.Resources;
 using Clean.Sdk.Domain.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Clean.Sdk.Application.Handlers
 {
@@ -41,10 +38,9 @@ namespace Clean.Sdk.Application.Handlers
 			}
 			catch (Exception ex)
 			{
-				var x = ex.GetType();
 				throw;
 			}
-			
+
 		}
 	}
 }
