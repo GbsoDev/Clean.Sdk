@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Clean.Sdk.Data.EfCore.Entities;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Resources;
@@ -8,9 +9,9 @@ using System.Linq.Expressions;
 
 namespace Clean.Sdk.Data.EfCore
 {
-	public class EfRepository<TModel,TEntity, TContext> : IRepository<TModel>
+	public class EfRepository<TModel, TEntity, TContext> : IRepository<TModel>
 		where TModel : class, Domain.Model.IDomainModel
-		where TEntity : class, Domain.Entity.IDomainEntity, TModel
+		where TEntity : class, IDomainEntity, TModel
 		where TContext : IEfDbContext
 	{
 

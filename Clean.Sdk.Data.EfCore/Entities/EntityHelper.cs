@@ -1,6 +1,4 @@
-﻿using Clean.Sdk.Domain.Entity;
-
-namespace Clean.Sdk.Domain.Helpers
+﻿namespace Clean.Sdk.Data.EfCore.Entities
 {
 	public class EntityHelper
 	{

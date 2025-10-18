@@ -1,4 +1,5 @@
-﻿using Clean.Sdk.Data.EfCore;
+﻿using AutoMapper;
+using Clean.Sdk.Data.EfCore;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Tests.Builders;
@@ -14,13 +15,13 @@ namespace Clean.Sdk.Infrastructure.Tests
 	{
 		private readonly Mock<IEfDbContext> _mockContext;
 		private readonly Mock<IDateTimeProvider> _mockDateTimeProvider;
-		private readonly EfRepository<ClientTest, IEfDbContext> _repository;
+		private readonly EfRepository<ClientTest, ClientTestEntity, IEfDbContext> _repository;
 
 		public EfRepositoryTests()
 		{
 			_mockContext = new Mock<IEfDbContext>();
 			_mockDateTimeProvider = new Mock<IDateTimeProvider>();
-			_repository = new EfRepository<ClientTest, IEfDbContext>(_mockContext.Object, new Lazy<IDateTimeProvider>(() => _mockDateTimeProvider.Object));
+			_repository = new EfRepository<ClientTest, ClientTestEntity, IEfDbContext>(_mockContext.Object, new Lazy<IMapper>(() => Mock.Of<IMapper>()), new Lazy<IDateTimeProvider>(() => _mockDateTimeProvider.Object));
 		}
 
 		[Fact]

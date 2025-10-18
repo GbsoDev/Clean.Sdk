@@ -1,229 +1,208 @@
 # Arquitectura del Sistema - GPS Principal
 
-Este documento sirve como **GPS arquitectónico** para navegar el framework Clean SDK y guiar el desarrollo de aplicaciones basadas en arquitectura limpia/hexagonal.
+Este documento es el **GPS arquitectónico** de Clean SDK: un conjunto de paquetes .NET 8 que encapsulan patrones de arquitectura limpia/hexagonal para acelerar la construcción de aplicaciones empresariales.
 
-## 🎯 **Visión General del Sistema**
+## 🎯 Visión general del sistema
 
-### Propósito Principal
+### Propósito principal
 
-**Clean SDK** es un framework .NET diseñado para acelerar el desarrollo de aplicaciones empresariales utilizando principios de **Arquitectura Limpia (Clean Architecture)** y **Arquitectura Hexagonal**. 
+Clean SDK ofrece un **núcleo de building blocks reutilizables** para soluciones basadas en Clean Architecture y CQRS:
 
-El framework proporciona:
-- Abstracciones y componentes base para implementar capas de dominio, aplicación, datos e infraestructura
-- Implementación de patrones CQRS (Command Query Responsibility Segregation) con MediatR
-- **Implementación opcional** de repositorios con Entity Framework Core (Clean.Sdk.Data.EfCore)
-- Sistema de validaciones con FluentValidation
-- Mapeo automático con AutoMapper
-- Inyección de dependencias y bootstrapping simplificado
-- **Flexibilidad** para usar otros ORMs o estrategias de persistencia implementando `IRepository<TEntity>`
+- Define contratos de dominio (`IDomainModel`, `IRepository`, servicios genéricos) y utilidades transversales.
+- Brinda handlers genéricos de comandos y consultas con MediatR + AutoMapper + FluentValidation.
+- Incluye una implementación opcional de persistencia con Entity Framework Core 8.
+- Centraliza bootstrapping e integración mediante extensiones de infraestructura para DI, opciones, autenticación y proveedores de datos.
 
-### Distribución del Ecosistema
+### Distribución del ecosistema
 
-- **Total de paquetes identificados**: 4 paquetes principales + 4 paquetes de tests
-- **Organización**: Por capas de arquitectura hexagonal
-- **Paquetes críticos**: 
-  1. `Clean.Sdk.Domain` - Núcleo del dominio (obligatorio)
-  2. `Clean.Sdk.Application` - Lógica de aplicación con CQRS (obligatorio)
-  3. `Clean.Sdk.Data.EfCore` - Implementación de persistencia con EF Core (**opcional**)
-  4. `Clean.Sdk.Infrastructure` - Configuración e integración (obligatorio)
+- **Paquetes productivos**: 4 (`Clean.Sdk.Domain`, `Clean.Sdk.Application`, `Clean.Sdk.Data.EfCore`, `Clean.Sdk.Infrastructure`).
+- **Paquetes de pruebas**: 4 (`*.Tests`) alineados con cada capa.
+- **Stack objetivo**: `.NET 8` para todas las bibliotecas y suites de test.
+- **Paquetes críticos**:
+  1. `Clean.Sdk.Domain` – núcleo obligatorio y punto de convergencia de dependencias.
+  2. `Clean.Sdk.Application` – capa CQRS que orquesta servicios de dominio y repositorios.
+  3. `Clean.Sdk.Data.EfCore` – adaptador de repositorio sobre EF Core 8 (instalable solo cuando se requiere EF).
+  4. `Clean.Sdk.Infrastructure` – punto de armado: proveedores DI, autenticación, data providers y utilidades.
 
-### Diagrama de Arquitectura de Alto Nivel
+### Diagrama de arquitectura de alto nivel
 
 ```mermaid
 graph TB
-    subgraph "Aplicaciones del Usuario"
-        APP[Web API / Aplicación]
-    end
+  subgraph "Aplicaciones consumidoras"
+    APP[Web API o Workers]
+  end
 
-    subgraph "Clean.Sdk.Infrastructure"
-        INF_EXT[Extensions/Providers]
-        INF_LAZY[LazyServiceProvider]
-        INF_WEB[WebApiProvider]
-        INF_DI[DI Configuration]
-    end
+  subgraph "Clean.Sdk.Infrastructure"
+    INF_DI[Providers DI]
+    INF_EXT[Extensiones WebApi / Options / JWT]
+    INF_LAZY[LazyServiceProvider]
+  end
 
-    subgraph "Clean.Sdk.Application"
-        APP_HANDLERS[Handlers CQRS]
-        APP_CMD[Command Handlers]
-        APP_QRY[Query Handlers]
-        APP_VAL[Validations]
-        APP_MAP[AutoMapper Profiles]
-    end
+  subgraph "Clean.Sdk.Application"
+    APP_CMD[Command Handlers]
+    APP_QRY[Query Handlers]
+    APP_MAP[Mapper Profiles]
+    APP_VAL[Validation Sets]
+  end
 
-    subgraph "Clean.Sdk.Domain"
-        DOM_ENT[Domain Entities]
-        DOM_PORTS[Ports/Interfaces]
-        DOM_SVC[Domain Services]
-        DOM_VAL[Validations]
-        DOM_EXC[Domain Exceptions]
-    end
+  subgraph "Clean.Sdk.Domain"
+    DOM_MODEL[Model - IDomainModel]
+    DOM_PORTS[Ports - IRepository & IDateTimeProvider]
+    DOM_SERV[Services + ServiceAttribute]
+    DOM_VALID[ValidationSet]
+    DOM_EXC[Domain Exceptions]
+  end
 
-    subgraph "Clean.Sdk.Data.EfCore"
-        DATA_REPO[EfRepository]
-        DATA_CTX[EfDbContext]
-        DATA_IFACE[IEfDbContext]
-    end
+  subgraph "Clean.Sdk.Data.EfCore"
+    DATA_REPO[EfRepository Generico]
+    DATA_CTX[EfDbContext]
+    DATA_ENT[Entity Helpers]
+  end
 
-    subgraph "Infraestructura Externa"
-        EXT_DB[(Base de Datos)]
-        EXT_EF[Entity Framework Core 7]
-        EXT_MED[MediatR]
-        EXT_AM[AutoMapper]
-        EXT_FV[FluentValidation]
-    end
+  subgraph "Dependencias externas"
+    EXT_MED[MediatR 12]
+    EXT_AM[AutoMapper 12]
+    EXT_FV[FluentValidation 11]
+    EXT_EF[EF Core 8.0.4]
+    EXT_DB[Bases de datos soportadas]
+  end
 
-    APP --> INF_EXT
-    INF_EXT --> APP_HANDLERS
-    APP_HANDLERS --> APP_CMD
-    APP_HANDLERS --> APP_QRY
-    APP_CMD --> DOM_SVC
-    APP_QRY --> DATA_REPO
-    DOM_SVC --> DOM_PORTS
-    DATA_REPO --> DATA_CTX
-    DATA_CTX --> EXT_DB
-    
-    APP_HANDLERS --> EXT_MED
-    APP_MAP --> EXT_AM
-    APP_VAL --> EXT_FV
-    DATA_REPO --> EXT_EF
-    
-    INF_DI -.->|Configure| APP_HANDLERS
-    INF_DI -.->|Configure| DATA_REPO
-    INF_DI -.->|Configure| DOM_SVC
+  APP --> INF_DI
+  INF_DI --> APP_CMD
+  INF_DI --> APP_QRY
+  INF_EXT --> APP_CMD
+  INF_EXT --> APP_QRY
+  APP_CMD --> DOM_SERV
+  APP_QRY --> DATA_REPO
+  DOM_SERV --> DOM_PORTS
+  DATA_REPO --> DATA_CTX
+  DATA_CTX --> EXT_DB
 
-    classDef infrastructure fill:#e1f5fe
-    classDef application fill:#f3e5f5
-    classDef domain fill:#fff3e0
-    classDef data fill:#e8f5e8
-    classDef external fill:#fce4ec
+  APP_CMD --> EXT_MED
+  APP_MAP --> EXT_AM
+  APP_VAL --> EXT_FV
+  DATA_REPO --> EXT_EF
 
-    class INF_EXT,INF_LAZY,INF_WEB,INF_DI infrastructure
-    class APP_HANDLERS,APP_CMD,APP_QRY,APP_VAL,APP_MAP application
-    class DOM_ENT,DOM_PORTS,DOM_SVC,DOM_VAL,DOM_EXC domain
-    class DATA_REPO,DATA_CTX,DATA_IFACE data
-    class EXT_DB,EXT_EF,EXT_MED,EXT_AM,EXT_FV external
+  classDef infrastructure fill:#d7f0ff
+  classDef application fill:#f5ddff
+  classDef domain fill:#fff3cd
+  classDef data fill:#e5ffec
+  classDef external fill:#ffe0e9
+
+  class INF_DI,INF_EXT,INF_LAZY infrastructure
+  class APP_CMD,APP_QRY,APP_MAP,APP_VAL application
+  class DOM_MODEL,DOM_PORTS,DOM_SERV,DOM_VALID,DOM_EXC domain
+  class DATA_REPO,DATA_CTX,DATA_ENT data
+  class EXT_MED,EXT_AM,EXT_FV,EXT_EF,EXT_DB external
 ```
 
-## 🗂️ **Mapa de Paquetes por Capa Arquitectónica**
+*Supuesto: al no existir referencias explícitas a integraciones SaaS externas dentro de Clean.Sdk, se documenta únicamente la interacción con dependencias NuGet y bases de datos configurables. Actualizar esta sección cuando existan proveedores externos formales en la solución que consuma el SDK.*
 
-### Clean.Sdk.Domain (Capa de Dominio - Núcleo)
+## 🗂️ Mapa de paquetes por capa
 
-- **Función**: Define el núcleo del negocio, entidades de dominio, interfaces (ports) y servicios de dominio
-- **Stack principal**: .NET Standard 2.1
-- **Dependencias**: Microsoft.Extensions.Logging.Abstractions (7.0.1)
-- **Estado**: ✅ Núcleo estable, base para todos los demás paquetes
-- **Estructura**:
-  - `Entity/` - Entidades base del dominio (`DomainEntity<TId>`, `IDomainEntity`)
-  - `Ports/` - Interfaces/contratos (`IRepository`, `IDateTimeProvider`)
-  - `Services/` - Interfaces de servicios de dominio (`ISaveService`, `IDeleteService`, `IUpdateService`)
-  - `Exceptions/` - Excepciones del dominio
-  - `Validations/` - Validaciones y extensiones de validación
-  - `Helpers/` - Utilidades auxiliares
-  - `Options/` - Configuraciones
-  - `Resources/` - Recursos localizables
+### Clean.Sdk.Domain – Núcleo del dominio
 
-### Clean.Sdk.Application (Capa de Aplicación - CQRS)
+- **Función**: Encapsula contratos, servicios y utilidades transversales independientes del framework.
+- **Target**: `net8.0`.
+- **Dependencias NuGet**: `Microsoft.Extensions.Logging.Abstractions` 8.0.0.
+- **Estructura destacada**:
+  - `Model/IDomainModel.cs`: contrato común para modelos con `Id` fuertemente tipado.
+  - `Ports/`: `IRepository<TModel>`, `IDateTimeProvider`, `RepositoryAttribute`.
+  - `Services/`: servicios genéricos (`ISaveService`, `IDeleteService`, `IUpdateService`, `ICrudService`) y clases base (`Service`, `CrudService`). El atributo `[Service]` habilita descubrimiento automático.
+  - `Exceptions/`: jerarquía (`AppExeption`, `ValidationException`, `NotAuthorizeException`, etc.).
+  - `Validations/`: `ValidationSet`, extensiones de argumento y excepciones asociadas.
+  - `Helpers/`: utilidades de reflexión (`AssemblyHelper`, `InterfaceHelper`), hashing y enums.
+  - `Options/`: mapeo de configuración (`AppSettings`, `AuthOptions`, `OptionAttribute`).
 
-- **Función**: Implementa patrones CQRS con handlers genéricos para comandos y queries
-- **Stack principal**: .NET Standard 2.1
-- **Dependencias**: 
-  - MediatR (12.1.1) - Patrón mediator para CQRS
-  - AutoMapper (12.0.1) - Mapeo objeto-objeto
-  - FluentValidation (11.9.0) - Validaciones fluidas
-- **Estado**: ✅ Implementación completa de CQRS
-- **Estructura**:
-  - `Handlers/` - Handlers abstractos genéricos:
-    - `SaveHandler<TRequest, TResponse, TEntity, TService>` - Manejo de operaciones de guardado
-    - `CommandDeleteByIdHandler<TRequest, TEntity, TService>` - Eliminación por ID
-    - `QueryByIdHandler<TRequest, TResponse, TEntity, TRepository>` - Consulta por ID
-    - `QueryCollectionHandler<TRequest, TResponse, TEntity, TRepository>` - Consulta de colecciones
-    - `CommandHandler<TService>` - Base para comandos
-    - `QueryHandler<TRepository>` - Base para queries
-  - `Validations/` - Reglas y extensiones de validación
-  - `Mapper/` - Perfiles de AutoMapper
+### Clean.Sdk.Application – Capa CQRS
 
-### Clean.Sdk.Data.EfCore (Capa de Datos - Persistencia) ⚡ **OPCIONAL**
-
-- **Función**: Implementación **opcional** del patrón Repository específicamente para proyectos que usan Entity Framework Core
-- **Stack principal**: .NET 6.0
-- **Dependencias**:
-  - Entity Framework Core (7.0.11)
-  - Entity Framework Core Relational (7.0.11)
-- **Estado**: ✅ Implementación genérica de repositorio con EF Core (adaptador para EF Core)
-- **Uso**: Solo instalar este paquete si tu proyecto usa Entity Framework Core para persistencia
-- **Alternativas**: Puedes implementar tu propia versión de `IRepository<TEntity>` con otros ORMs (Dapper, NHibernate, etc.) o acceso directo a datos
+- **Función**: Provee handlers genéricos de comandos/consultas/actualizaciones basados en MediatR.
+- **Target**: `net8.0`.
+- **Dependencias**: `MediatR` 12.1.1, `AutoMapper` 12.0.1, `FluentValidation` 11.9.0, `Microsoft.Extensions.DependencyInjection.Abstractions` 8.0.0.
 - **Componentes clave**:
-  - `EfRepository<TEntity, TContext>` - Repositorio genérico con operaciones CRUD sobre EF Core
-  - `IEfDbContext` - Interfaz de contexto de base de datos
-  - `EfDbContext` - Implementación base del contexto
+  - `Handlers/`:
+    - `Handler` → base común.
+    - `CommandHandler<TService>` y `QueryHandler<TRepository>` → manejo de dependencias diferido (`Lazy<T>`).
+    - `SaveHandler`, `UpdateHandler`, `CommandDeleteByIdHandler`, `QueryByIdHandler`, `QueryCollectionHandler` → implementación genérica con mapeo `IMapper` y validaciones.
+    - Interfaz/atributo `AplicacionHandlerAttribute` para convenciones.
+  - `Validations/ValidationsSet.cs`: convención de rule sets (`ValidationsSet.SAVE`, `UPDATE`, etc.).
+  - `Mapper/MapperProfileAttribute.cs`: atributo para descubrimiento automatizado de perfiles AutoMapper.
 
-### Clean.Sdk.Infrastructure (Capa de Infraestructura - Bootstrapping)
+### Clean.Sdk.Data.EfCore – Persistencia opcional
 
-- **Función**: Configuración, integración y registro de servicios en contenedor de DI
-- **Stack principal**: .NET 6.0
-- **Dependencias**:
-  - AutoMapper.Extensions.Microsoft.DependencyInjection (12.0.1)
-  - Microsoft.AspNetCore.Authentication.JwtBearer (6.0.26)
-  - Entity Framework Core para SQL Server (7.0.11)
-  - Entity Framework Core para MySQL (8.0.0)
-  - Entity Framework Core para PostgreSQL (7.0.11)
-  - Entity Framework Core InMemory (7.0.11) - para testing
-  - Microsoft.Extensions.Configuration (7.0.0)
-- **Estado**: ✅ Bootstrapping y configuración multiplataforma
+- **Función**: Adapta `IRepository<TModel>` a Entity Framework Core 8.
+- **Target**: `net8.0`.
+- **Dependencias**: `Microsoft.EntityFrameworkCore` 8.0.4, `Microsoft.EntityFrameworkCore.Relational` 8.0.4, `AutoMapper` 12.0.1.
 - **Estructura**:
-  - `Extensions/` - Providers de configuración:
-    - `ServiceProvider` - Registro automático de servicios de dominio
-    - `MediatRProvider` - Configuración de MediatR
-    - `AutoMapperProvider` - Configuración de AutoMapper
-    - `EfCoreProvider` - Configuración de EF Core
-    - `RepositoryProvider` - Registro de repositorios
-    - `LazyProvider` - Soporte para Lazy<T>
-    - `WebApiProvider` - Configuración de Web API
-    - `OptionsProvider` - Configuración de opciones
-  - `Utilities/` - Utilidades de infraestructura
-  - `LazyServiceProvider.cs` - Proveedor de dependencias lazy
+  - `EfRepository<TEntity, TContext>`: CRUD genérico con soporte para expressiones, carga de relaciones y paginación básica.
+  - `EfDbContext` / `IEfDbContext`: contrato base de contexto (inyectable en consumers).
+  - `Entities/`: helpers de entidades (`IDomainEntity`, `IAuditableEntity`, `EntityHelper`).
+- **Configuraciones**: En `Debug` referencia el proyecto Domain para desarrollo local; en `Prerelease/Release` espera consumir paquetes `Clean.Sdk.Domain` publicados desde un feed NuGet.
 
-### Mapa Visual de Paquetes
+### Clean.Sdk.Infrastructure – Bootstrapping & Integración
+
+- **Función**: Centraliza extensiones para registrar servicios del SDK en la aplicación final.
+- **Target**: `net8.0`.
+- **Dependencias** (selección):
+  - `AutoMapper.Extensions.Microsoft.DependencyInjection` 12.0.1.
+  - `Microsoft.AspNetCore.Authentication.JwtBearer` 8.0.0.
+  - Proveedores EF Core 8.0.4 para SQL Server, InMemory, PostgreSQL y `MySql.EntityFrameworkCore` 8.0.0.
+  - `Microsoft.Extensions.Configuration.*` 8.0.0.
+- **Extensiones principales** (`Extensions/`):
+  - `ServiceProvider`: registra clases con `[Service]` y su interfaz `I{Nombre}`; lanza `AppExeption` cuando la interfaz no existe.
+  - `RepositoryProvider`: registra clases con `[Repository]` con la misma convención `I{Nombre}`.
+  - `MediatRProvider`, `AutoMapperProvider`, `EfCoreProvider`, `OptionsProvider`, `WebApiProvider`, `LazyProvider`.
+- **Utilidades**: `LazyServiceProvider` para inyección diferida, convertidores de enums (`Utilities/`).
+
+### Visualización general de paquetes
 
 ```mermaid
 mindmap
   root((Clean SDK))
     Domain
-      Entity
-        DomainEntity
-        IDomainEntity
+      Model
+        IDomainModel
       Ports
         IRepository
         IDateTimeProvider
+        RepositoryAttribute
       Services
         ISaveService
-        IDeleteService
-        IUpdateService
         ICrudService
-      Exceptions
+        ServiceAttribute
       Validations
+        ValidationSet
+        ValidationError
+      Exceptions
       Helpers
+      Options
     Application
       Handlers
+        CommandHandler
+        QueryHandler
         SaveHandler
-        DeleteHandler
-        QueryHandlers
-        CommandHandlers
+        QueryCollectionHandler
       Validations
+        ValidationsSet
       Mapper
+        MapperProfileAttribute
     Data.EfCore
       EfRepository
       EfDbContext
       IEfDbContext
+      Entities helpers
     Infrastructure
       Extensions
         ServiceProvider
+        RepositoryProvider
         MediatRProvider
         AutoMapperProvider
         EfCoreProvider
-        RepositoryProvider
         WebApiProvider
-      LazyServiceProvider
+        OptionsProvider
+      Utilities
+        LazyServiceProvider
+        Enum converters
     Tests
       Domain.Tests
       Application.Tests
@@ -231,543 +210,190 @@ mindmap
       Infrastructure.Tests
 ```
 
-## ⚙️ **Stack Tecnológico Global**
+## ⚙️ Stack tecnológico global
 
-### Tecnologías Principales Identificadas
+- **Lenguaje**: C# 12 sobre .NET 8.
+- **Frameworks/Libs**: MediatR 12.1.1, AutoMapper 12.0.1, FluentValidation 11.9.0, EF Core 8.0.4, JwtBearer 8.0.0.
+- **Persistencia soportada**: SQL Server, PostgreSQL, MySQL, InMemory (via providers EF Core 8); otras estrategias mediante implementaciones propias de `IRepository`.
+- **Herramientas de build**: `dotnet` (MSBuild), pipelines YAML para CI/CD (`Clean.Sdk-CI.yml`, `Clean.Sdk.*-CD.yml`).
+- **Testing**: xUnit 2.6.3, Moq 4.20.70, `coverlet.collector` 6.0.0, `Microsoft.NET.Test.Sdk` 17.10.0.
+- **Observación**: Las metadata de los `.csproj` (Title/Description) aún reflejan “Clean Data EfCore” y deben alinearse en un ciclo posterior.
 
-- **Lenguajes**: C# (.NET Standard 2.1 / .NET 6.0)
-- **Frameworks**: 
-  - ASP.NET Core 6.0 (para Web APIs)
-  - Entity Framework Core 7.0.11 (ORM)
-- **Bases de datos soportadas**: 
-  - SQL Server
-  - MySQL
-  - PostgreSQL
-  - InMemory (para testing)
-- **Herramientas de build**: 
-  - MSBuild
-  - Azure Pipelines (CI/CD)
-- **Testing**: 
-  - xUnit (2.4.2)
-  - Moq (4.20.70)
-  - coverlet (3.2.0) - cobertura de código
+### Patrones arquitectónicos implementados
 
-### Patrones Arquitectónicos Implementados
+1. **Arquitectura limpia / hexagonal**: dependencias apuntando al dominio, abstracciones de ports/adapters.
+2. **CQRS**: separación explícita de comandos/consultas, handlers genéricos, Mediator pattern (MediatR) en el centro.
+3. **Repository pattern**: `IRepository<TModel>` como puerto; adaptadores concretos via EF Core u otros ORMs.
+4. **Inversión de control**: DI extendido por convenciones, providers para registrar servicios, repositorios, opciones, AutoMapper y MediatR.
+5. **Validaciones declarativas**: FluentValidation + `ValidationsSet` para orquestar pipelines de reglas por escenario.
+6. **Domain-driven building blocks**: excepciones, helpers, servicios y opciones de configuración centradas en el dominio.
 
-1. **Clean Architecture / Arquitectura Hexagonal**: 
-   - Separación clara entre capas
-   - Dependencias apuntan hacia el dominio
-   - Domain es independiente de frameworks externos
-
-2. **CQRS (Command Query Responsibility Segregation)**: 
-   - Separación de comandos (escritura) y queries (lectura)
-   - Implementado con MediatR
-   - Handlers genéricos abstraídos en `Clean.Sdk.Application`
-
-3. **Repository Pattern**: 
-   - Abstracción de acceso a datos definida en Domain (`IRepository<TEntity>`)
-   - `EfRepository<TEntity, TContext>` en Data.EfCore es **una implementación opcional** (adapter para EF Core)
-   - **Puedes crear tu propia implementación** con otros ORMs (Dapper, NHibernate, etc.)
-
-4. **Dependency Injection**: 
-   - Uso de `Microsoft.Extensions.DependencyInjection`
-   - Providers automáticos en Infrastructure
-   - Soporte para Lazy<T> dependencies
-
-5. **Domain-Driven Design (DDD)**: 
-   - Entidades de dominio ricas
-   - Servicios de dominio
-   - Excepciones específicas del dominio
-   - Validaciones en el dominio
-
-6. **Generic Programming**: 
-   - Handlers genéricos y reutilizables
-   - Repositorios genéricos
-   - Reducción de código boilerplate
-
-## 🔗 **Puntos de Integración Críticos**
-
-### Dependencias Entre Paquetes
+## 🔗 Puntos de integración internos
 
 ```
-┌──────────────────────────────────────┐
-│      Clean.Sdk.Infrastructure        │
-│  (Orquesta toda la configuración)    │
-└──────────────────────────────────────┘
-         ↓         ↓         ↓
-    ┌────────┐  ┌──────────┐  ┌─────────────┐
-    │ Domain │  │Application│  │ Data.EfCore │
-    └────────┘  └──────────┘  └─────────────┘
-         ↑          ↑               ↑
-         └──────────┴───────────────┘
-           Todos dependen de Domain
+┌────────────────────────────┐
+│ Clean.Sdk.Infrastructure   │
+│ (registro & providers)     │
+└─────────────┬──────────────┘
+              │
+    ┌─────────▼─────────┐
+    │ Clean.Sdk.Application │────────┐
+    └─────────┬─────────┘        │
+              │                   │
+      ┌───────▼───────┐      ┌────▼────┐
+      │ Clean.Sdk.Domain │◀────│ Clean.Sdk.Data.EfCore │
+      └────────────────┘      └────────┘
 ```
 
-**Orden de dependencias (de menor a mayor nivel):**
+- `Clean.Sdk.Domain` no depende de otros proyectos del SDK.
+- `Clean.Sdk.Application` y `Clean.Sdk.Data.EfCore` dependen de Domain.
+- `Clean.Sdk.Infrastructure` depende de Domain + Application y, en modo Debug, también de Data.EfCore (para escenarios sin paquete publicado).
+- Los proyectos `*.Tests` referencian su contraparte productiva y utilizan `Microsoft.EntityFrameworkCore.InMemory` cuando aplica.
 
-1. **Clean.Sdk.Domain** - No depende de ningún otro paquete del SDK (define `IRepository<TEntity>`)
-2. **Clean.Sdk.Data.EfCore** - Depende de Domain (**opcional** - implementa `IRepository` para EF Core)
-3. **Clean.Sdk.Application** - Depende de Domain (usa `IRepository` abstracción)
-4. **Clean.Sdk.Infrastructure** - Depende de Domain, Application y opcionalmente Data.EfCore
+### Integraciones con librerías externas
 
-**Nota importante**: Clean.Sdk.Data.EfCore es **opcional**. Puedes implementar `IRepository<TEntity>` con:
-- Dapper
-- NHibernate  
-- ADO.NET directo
-- Cualquier otra estrategia de acceso a datos
+| Librería / Servicio | Versión | Consumo | Propósito |
+| --- | --- | --- | --- |
+| MediatR | 12.1.1 | Application/Infrastructure | Mediator pattern para CQRS |
+| AutoMapper | 12.0.1 | Application/Infrastructure | Mapeo DTO ↔ modelo |
+| FluentValidation | 11.9.0 | Application | Reglas declarativas |
+| Microsoft.Extensions.* | 8.0.0 | Todas las capas | Logging, configuración, DI |
+| EF Core | 8.0.4 | Data.EfCore/Infrastructure | Persistencia relacional |
+| JwtBearer | 8.0.0 | Infrastructure | Autenticación JWT opcional |
+| `MySql.EntityFrameworkCore` | 8.0.0 | Infrastructure | Provider MySQL |
+| `Npgsql.EntityFrameworkCore.PostgreSQL` | 8.0.4 | Infrastructure | Provider PostgreSQL |
+| `Microsoft.EntityFrameworkCore.InMemory` | 8.0.4 | Infrastructure/Tests | Tests de repositorios |
 
-### Integraciones con Librerías Externas
+No se detectaron integraciones directas con servicios externos (Auth0, Stripe, etc.) dentro del SDK; las aplicaciones consumidoras deben documentar dichos enlaces.
 
-| Librería            | Versión  | Usado En            | Propósito                        |
-| ------------------- | -------- | ------------------- | -------------------------------- |
-| MediatR             | 12.1.1   | Application         | Patrón mediator para CQRS        |
-| AutoMapper          | 12.0.1   | Application         | Mapeo DTO ↔ Entidad              |
-| FluentValidation    | 11.9.0   | Application         | Validaciones fluidas             |
-| EF Core             | 7.0.11   | Data.EfCore         | ORM para acceso a datos          |
-| EF Core SQL Server  | 7.0.11   | Infrastructure      | Provider para SQL Server         |
-| EF Core MySQL       | 8.0.0    | Infrastructure      | Provider para MySQL              |
-| EF Core PostgreSQL  | 7.0.11   | Infrastructure      | Provider para PostgreSQL         |
-| EF Core InMemory    | 7.0.11   | Infrastructure      | Base de datos en memoria (tests) |
-| JWT Bearer          | 6.0.26   | Infrastructure      | Autenticación con JWT            |
-| Microsoft.Extensions| 7.0.x    | Domain/Infrastructure | Logging, Config, DI             |
-
-### Flujo de Datos Típico
+### Flujo de datos típico
 
 ```mermaid
 sequenceDiagram
-    participant Client as Cliente/API
-    participant MediatR as MediatR
-    participant Handler as Command/Query Handler
-    participant Service as Domain Service
-    participant Repo as Repository (EfRepository)
-    participant DB as Base de Datos
+    participant CLI as Cliente / UI / Worker
+    participant MED as MediatR
+    participant HND as Handler genérico
+    participant SRV as Servicio de dominio (Lazy<T>)
+    participant REP as IRepository<T>
+    participant DB as Persistencia (EF / custom)
 
-    Client->>MediatR: Send(Command/Query)
-    MediatR->>Handler: Handle(request)
-    Handler->>Handler: Validate(request)
-    
-    alt Es Command (Escritura)
-        Handler->>Handler: Map request → Entity
-        Handler->>Service: SaveAsync/UpdateAsync/DeleteAsync
-        Service->>Service: Business Logic
-        Service->>Repo: SaveAsync/UpdateAsync/DeleteAsync
-        Repo->>DB: EF Core Operation
-        DB-->>Repo: Result
-        Repo-->>Service: Entity
-        Service-->>Handler: Entity
-        Handler->>Handler: Map Entity → Response
-        Handler-->>MediatR: Response
-    else Es Query (Lectura)
-        Handler->>Repo: GetByIdAsync/GetAllAsync
-        Repo->>DB: EF Core Query
-        DB-->>Repo: Entity/Entities
-        Repo-->>Handler: Entity/Entities
-        Handler->>Handler: Map Entity → Response
-        Handler-->>MediatR: Response
+    CLI->>MED: Send(command/query)
+    MED->>HND: Handle(request)
+    HND->>HND: Validate (FluentValidation + ValidationSet)
+    alt Comando
+        HND->>HND: Map request → modelo (AutoMapper)
+        HND->>SRV: SaveAsync/UpdateAsync/DeleteAsync
+        SRV->>REP: PersistAsync
+        REP->>DB: Operación EF Core / custom
+        DB-->>REP: Resultado
+        REP-->>SRV: Entidad actualizada
+        SRV-->>HND: Entidad resultante
+        HND->>HND: Map modelo → response
+        HND-->>MED: Response DTO
+    else Query
+        HND->>REP: GetById / GetCollection
+        REP->>DB: Lectura
+        DB-->>REP: Datos
+        REP-->>HND: Modelo(s)
+        HND->>HND: Map modelo(s) → response
+        HND-->>MED: Response DTO
     end
-    
-    MediatR-->>Client: Response/Result
+    MED-->>CLI: Resultado final
 ```
 
-## 🔐 **Patrones de Integración y Seguridad**
+## 🔐 Patrones de integración y seguridad
 
-### Registro de Componentes en DI
+- **Descubrimiento automático**:
+  - `AddDomainServices(assembly)` registra clases con `[Service]` y la interfaz `I{Nombre}`; sin interfaz lanza `AppExeption` con mensaje localizado (`Messages.ServiceHasNoInterface`).
+  - `AddRepositories(assembly)` replica la convención para `[Repository]`.
+  - `AddMediatR`, `AddAutoMapper` y `AddValidators` (mediante scanning) permiten bootstrap sin wiring manual.
+- **Autenticación**: `WebApiProvider` incorpora configuración base para JWT Bearer 8.0.0 (debe completarse en la aplicación host).
+- **Validaciones**: `ValidationsSet` habilita segmentar reglas por operación (`SAVE`, `UPDATE`, `DELETE`). Las validaciones lanzan `ValidationSetException` con detalles.
+- **Errores**: Excepciones custom de dominio facilitan diferenciación de fallos (argumento inválido, no autorizado, no encontrado, nulos, etc.).
 
-El framework utiliza un sistema de registro automático basado en convenciones:
+## 🧪 Realidad de testing
 
-1. **Servicios de Dominio**: 
-   - Se registran automáticamente con `AddDomainServices(assembly)`
-   - Deben tener un atributo `[Service]`
-   - Se busca una interfaz con nombre `I{NombreDelServicio}`
+- **Clean.Sdk.Domain.Tests** (`net8.0`): validaciones, helpers, servicios; recursos `.resx` para mensajes.
+- **Clean.Sdk.Application.Tests**: pruebas unitarias de handlers usando Moq; referencia `Clean.Sdk.Domain.Tests` para builders reutilizables.
+- **Clean.Sdk.Data.EfCore.Tests**: escenario InMemory con EF Core 8 para validar `EfRepository`.
+- **Clean.Sdk.Infrastructure.Tests**: verificación de providers y registros DI.
 
-2. **Handlers de MediatR**:
-   - Se registran automáticamente con `AddMediatR(assembly)`
-   - Escanea el assembly buscando implementaciones de `IRequestHandler<,>`
+| Herramienta | Versión | Uso |
+| --- | --- | --- |
+| xUnit | 2.6.3 | Framework de pruebas |
+| Moq | 4.20.70 | Mocking |
+| coverlet.collector | 6.0.0 | Cobertura | 
+| Microsoft.NET.Test.Sdk | 17.10.0 | Infraestructura de test |
 
-3. **Perfiles de AutoMapper**:
-   - Se registran automáticamente con `AddAutoMapper(assembly)`
-   - Detecta clases que heredan de `Profile`
-
-4. **Repositorios**:
-   - Se registran manualmente o con `AddRepository<TEntity, TRepository>()`
-
-### Validaciones y Manejo de Errores
-
-1. **Validaciones en Application Layer**:
-   - Uso de FluentValidation
-   - `AbstractValidator<TRequest>` en cada handler
-   - Validación automática antes de ejecutar lógica de negocio
-   - `ValidationSet` para organizar reglas
-
-2. **Excepciones del Dominio**:
-   - `DomainException` - Base para excepciones de dominio
-   - `NotFoundException` - Entidad no encontrada
-   - `ValidationSetException` - Errores de validación
-   - `AppException` - Excepciones de aplicación
-
-### Autenticación (Opcional)
-
-El paquete Infrastructure incluye soporte para:
-- **JWT Bearer Authentication** (6.0.26)
-- Configuración a través de `WebApiProvider`
-
-## 🧪 **Realidad de Testing Actual**
-
-### Cobertura por Módulo
-
-- **Clean.Sdk.Domain.Tests**: ✅ Testing de entidades, validaciones y servicios de dominio
-- **Clean.Sdk.Application.Tests**: ✅ Testing de handlers con Moq
-- **Clean.Sdk.Data.EfCore.Tests**: ✅ Testing de repositorios con EF Core InMemory
-- **Clean.Sdk.Infrastructure.Tests**: ✅ Testing de configuración y providers
-
-### Stack de Testing
-
-| Herramienta     | Versión | Propósito                        |
-| --------------- | ------- | -------------------------------- |
-| xUnit           | 2.4.2   | Framework de testing             |
-| Moq             | 4.20.70 | Mocking de dependencias          |
-| coverlet        | 3.2.0   | Cobertura de código              |
-| EF Core InMemory| 7.0.11  | Base de datos en memoria (tests) |
-
-### Comandos de Testing Identificados
-
-```bash
-# Ejecutar todos los tests de la solución
-dotnet test Clean.Skd.sln
-
-# Ejecutar tests de un proyecto específico
-dotnet test Clean.Sdk.Domain.Tests/Clean.Sdk.Domain.Tests.csproj
-dotnet test Clean.Sdk.Application.Tests/Clean.Sdk.Application.Tests.csproj
-dotnet test Clean.Sdk.Data.EfCore.Tests/Clean.Sdk.Data.EfCore.Tests.csproj
-dotnet test Clean.Sdk.Infrastructure.Tests/Clean.Sdk.Infrastructure.Tests.csproj
-
-# Ejecutar tests con cobertura
-dotnet test /p:CollectCoverage=true
-```
-
-### Estrategia de Testing
-
-1. **Tests Unitarios**: Todas las capas tienen tests unitarios
-2. **Mocking**: Uso de Moq para dependencias externas
-3. **InMemory DB**: EF Core InMemory para tests de repositorio
-4. **Builders de Datos**: Uso de DataBuilders en Application.Tests
-
-## ⚠️ **Deuda Técnica y Observaciones**
-
-### Observaciones del Análisis
-
-1. **README Mínimo**: El README.md solo contiene el título "Gbso.Clean", sin documentación de uso
-2. **Typo en Nombre de Archivo**: `Clean.Skd.sln` debería ser `Clean.Sdk.sln`
-3. **Archivo de Pipeline Typo**: `Clean.Sdk.Generci-CD.yml` tiene typo ("Generci" → "Generic")
-4. **Proyectos Legacy**: Existen proyectos `Clean.Application`, `Clean.Domain`, etc. (sin "Sdk" en el nombre) que parecen ser versiones antiguas
-
-### Configuraciones de Build
-
-El framework soporta 3 configuraciones de build:
-- **Debug**: Referencias a proyectos locales
-- **Prerelease**: Referencias a paquetes NuGet pre-release (`*-*`)
-- **Release**: Referencias a paquetes NuGet estables (`*`)
-
-### Versiones de .NET
-
-- **Domain & Application**: .NET Standard 2.1 (máxima compatibilidad)
-- **Data.EfCore & Infrastructure**: .NET 6.0 (características modernas)
-
-## 📦 **Dependencias Externas Críticas**
-
-### Análisis de Riesgo de Dependencias
-
-| Dependencia               | Versión Actual | Última Versión | Riesgo   | Notas                                       |
-| ------------------------- | -------------- | -------------- | -------- | ------------------------------------------- |
-| MediatR                   | 12.1.1         | 12.x           | 🟢 Bajo  | Versión actual                              |
-| AutoMapper                | 12.0.1         | 12.x           | 🟢 Bajo  | Versión actual                              |
-| FluentValidation          | 11.9.0         | 11.x           | 🟢 Bajo  | Versión estable                             |
-| Entity Framework Core     | 7.0.11         | 8.0.x          | 🟡 Medio | EF Core 8 disponible (.NET 8)               |
-| JWT Bearer                | 6.0.26         | 8.0.x          | 🟡 Medio | Actualización a .NET 8 recomendada          |
-| Microsoft.Extensions      | 7.0.x          | 8.0.x          | 🟡 Medio | Versiones de .NET 8 disponibles             |
-| xUnit                     | 2.4.2          | 2.6.x          | 🟢 Bajo  | Actualización menor disponible              |
-| Moq                       | 4.20.70        | 4.20.x         | 🟢 Bajo  | Versión reciente                            |
-
-### Dependencias Críticas para el Framework
-
-**Bibliotecas Core:**
-- **MediatR** - Esencial para el patrón CQRS
-- **Entity Framework Core** - Base para persistencia
-- **AutoMapper** - Mapeo de objetos
-- **FluentValidation** - Sistema de validaciones
-
-**Providers de Base de Datos:**
-- **SQL Server** - Microsoft.EntityFrameworkCore.SqlServer
-- **MySQL** - MySql.EntityFrameworkCore
-- **PostgreSQL** - Npgsql.EntityFrameworkCore.PostgreSQL
-
-## 🔧 **Comandos de Desarrollo Esenciales**
-
-### Setup Inicial
+### Comandos útiles
 
 ```powershell
-# Clonar el repositorio
-git clone https://github.com/GbsoDev/Clean.git
-cd Clean/repositorio
-
-# Restaurar dependencias NuGet
+# Restaurar dependencias
 dotnet restore Clean.Skd.sln
 
-# Build completo de la solución
+# Build completo (Debug por defecto)
 dotnet build Clean.Skd.sln
-```
 
-### Desarrollo Diario
-
-```powershell
-# Build de un proyecto específico
-dotnet build Clean.Sdk.Domain/Clean.Sdk.Domain.csproj
-dotnet build Clean.Sdk.Application/Clean.Sdk.Application.csproj
-
-# Build en configuración específica
-dotnet build Clean.Skd.sln -c Debug
-dotnet build Clean.Skd.sln -c Prerelease
-dotnet build Clean.Skd.sln -c Release
-
-# Ejecutar tests
+# Ejecutar todas las pruebas
 dotnet test Clean.Skd.sln
 
-# Ejecutar tests con cobertura
+# Ejecutar pruebas con cobertura
 dotnet test Clean.Skd.sln /p:CollectCoverage=true
 
-# Limpiar artifacts
-dotnet clean Clean.Skd.sln
-```
-
-### Empaquetado y Publicación
-
-```powershell
-# Empaquetar para NuGet (Debug - desarrollo local)
-dotnet pack Clean.Sdk.Domain/Clean.Sdk.Domain.csproj -c Debug
-
-# Empaquetar para NuGet (Prerelease)
-dotnet pack Clean.Sdk.Domain/Clean.Sdk.Domain.csproj -c Prerelease
-
-# Empaquetar para NuGet (Release)
+# Empaquetar (Release)
 dotnet pack Clean.Sdk.Domain/Clean.Sdk.Domain.csproj -c Release
-
-# Publicar a feed de NuGet
-dotnet nuget push *.nupkg --source <nuget-feed-url> --api-key <api-key>
 ```
 
-### CI/CD con Azure Pipelines
+> Nota: la solución se llama `Clean.Skd.sln` (typo heredado). Considera renombrarla a `Clean.Sdk.sln` para consistencia.
 
-El framework utiliza Azure Pipelines con dos tipos de pipelines:
+## ⚠️ Observaciones y deuda técnica
 
-1. **CI Pipeline** (`Clean.Sdk-CI.yml`):
-   - Se dispara en push/PR a branches: `main`, `release`, `dev`
-   - Ejecuta build y tests de todos los proyectos
-   - Orden de ejecución:
-     1. Domain → Tests
-     2. Data.EfCore → Tests (depende de Domain)
-     3. Application → Tests (depende de Domain)
-     4. Infrastructure → Tests (depende de Application)
+- **Metadatos inconsistentes**: Los `.csproj` de Domain, Application y Data.EfCore mantienen títulos/descripciones heredadas de “Clean Data EfCore”; corregir para reflejar cada capa.
+- **Tipografía de archivos**: `Clean.Skd.sln` y `Clean.Sdk.Generci-CD.yml` contienen errores de nombre. Renombrar implica ajustar pipelines/solutions.
+- **Documentación mínima**: El `README.md` del repo raíz solo incluye el título; conviene expandirlo con guía rápida.
+- **Opcionalidad EF Core**: `Clean.Sdk.Infrastructure` referencia `Clean.Sdk.Data.EfCore` en modo Debug, lo que puede sorprender en escenarios donde se desea excluir EF. Documentar la expectativa (usar configuración Release/Prerelease o empaquetado) o desacoplar en el código.
+- **Falta de guía cross-repo**: Este GPS cubre únicamente Clean.Sdk. Las aplicaciones host (p.ej. `finance-dotnet-webapi`) deben documentar cómo consumen el SDK, orquestan autenticación externa, mensajería y pipelines.
 
-2. **CD Pipelines** (archivos `*-CD.yml`):
-   - Pipelines individuales por paquete
-   - Para publicación a NuGet
+## 📦 Dependencias y riesgo
 
-## 📋 **Guía Rápida para Desarrollo de Aplicaciones**
+| Dependencia | Versión actual | Última versión | Riesgo | Comentario |
+| --- | --- | --- | --- | --- |
+| .NET SDK | 8.0.x | 8.0.x | 🟢 Bajo | Al día |
+| MediatR | 12.1.1 | 12.x | 🟢 Bajo | Última rama estable |
+| AutoMapper | 12.0.1 | 13.x preview | 🟢 Bajo | Versión estable soportada |
+| FluentValidation | 11.9.0 | 11.9.x | 🟢 Bajo | Actual |
+| EF Core | 8.0.4 | 8.0.x | 🟢 Bajo | Último patch LTS |
+| JwtBearer | 8.0.0 | 8.0.x | 🟡 Medio | Revisar patches de seguridad recientes |
+| xUnit | 2.6.3 | 2.6.4 | 🟢 Bajo | Actualizable sin breaking |
+| coverlet.collector | 6.0.0 | 6.0.x | 🟢 Bajo | Último major |
 
-### Cómo Usar el Framework
+No se identificaron dependencias con vulnerabilidades CVE abiertas en las versiones fijadas. Mantener monitoreo continuo.
 
-Para crear una aplicación usando Clean SDK, sigue estos pasos:
+## 🔧 Guía rápida para desarrollo
 
-#### 1. Instalar los Paquetes NuGet
+1. Restaurar y compilar con `dotnet restore` / `dotnet build` sobre `.NET 8`.
+2. Ejecutar pruebas unitarias (`dotnet test`) con cobertura opcional.
+3. Empaquetar capas individuales (`dotnet pack`) según la configuración (`Debug`, `Prerelease`, `Release`).
+4. Publicar a feed NuGet conforme a los pipelines (`Clean.Sdk.*-CD.yml`).
+5. Desde una aplicación externa, instalar los paquetes necesarios (`Clean.Sdk.Domain`, `Clean.Sdk.Application`, `Clean.Sdk.Infrastructure` y opcionalmente `Clean.Sdk.Data.EfCore`) y registrar mediante extensiones de Infrastructure.
 
-```powershell
-# Paquetes obligatorios
-dotnet add package Clean.Sdk.Domain
-dotnet add package Clean.Sdk.Application
-dotnet add package Clean.Sdk.Infrastructure
+## 📋 Archivos y referencias clave
 
-# Paquete OPCIONAL - Solo si usas Entity Framework Core
-dotnet add package Clean.Sdk.Data.EfCore
+- `Clean.Skd.sln`: solución principal (renombrado pendiente).
+- `Clean.Sdk-*-CD.yml`: pipelines de publicación por paquete.
+- `Clean.Sdk-CI.yml`: pipeline de integración continua.
+- `architecture/index.md`: este GPS (actualiza aquí conforme evolucione el stack).
+- `LICENSE`: licencia MIT.
 
-# Si usas otro ORM (ej: Dapper), NO instales Clean.Sdk.Data.EfCore
-# En su lugar, implementa tu propio IRepository<TEntity>
-```
+## 📌 Próximos pasos sugeridos
 
-#### 2. Definir Entidades de Dominio
-
-```csharp
-using Clean.Sdk.Domain.Entity;
-
-public class Product : DomainEntity<int>
-{
-    public string Name { get; set; }
-    public decimal Price { get; set; }
-}
-```
-
-#### 3. Crear Servicios de Dominio
-
-```csharp
-using Clean.Sdk.Domain.Services;
-
-public interface IProductService : ISaveService<Product>, IDeleteService<Product>
-{
-    // Métodos adicionales específicos del negocio
-}
-
-[Service]
-public class ProductService : IProductService
-{
-    private readonly IRepository<Product> _repository;
-    
-    public ProductService(IRepository<Product> repository)
-    {
-        _repository = repository;
-    }
-    
-    // Implementación...
-}
-```
-
-#### 4. Crear Comandos y Queries
-
-```csharp
-using MediatR;
-
-// Comando para crear producto
-public class CreateProductCommand : IRequest<ProductResponse>
-{
-    public string Name { get; set; }
-    public decimal Price { get; set; }
-}
-
-// Query para obtener producto por ID
-public class GetProductByIdQuery : QueryById<int, ProductResponse>
-{
-    public GetProductByIdQuery(int id) : base(id) { }
-}
-```
-
-#### 5. Crear Handlers
-
-```csharp
-using Clean.Sdk.Application.Handlers;
-
-public class CreateProductHandler : SaveHandler<CreateProductCommand, ProductResponse, Product, IProductService>
-{
-    public CreateProductHandler(
-        ILogger<Handler> logger, 
-        IMapper mapper, 
-        Lazy<IProductService> service) 
-        : base(logger, mapper, service)
-    {
-    }
-    
-    protected override AbstractValidator<CreateProductCommand>? ValidationRules => new CreateProductValidator();
-}
-```
-
-#### 6. Configurar en Startup/Program.cs
-
-**Opción A: Usando Entity Framework Core (con Clean.Sdk.Data.EfCore)**
-
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-
-// Configurar servicios del framework con EF Core
-builder.Services
-    .AddMediatR(typeof(CreateProductHandler).Assembly)
-    .AddAutoMapper(typeof(CreateProductHandler).Assembly)
-    .AddDomainServices(typeof(ProductService).Assembly)
-    .AddDbContext<MyDbContext>()
-    .AddScoped<IRepository<Product>, EfRepository<Product, MyDbContext>>();
-
-var app = builder.Build();
-// ...
-```
-
-**Opción B: Usando otro ORM (ej: Dapper, sin Clean.Sdk.Data.EfCore)**
-
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-
-// Configurar servicios del framework con implementación personalizada
-builder.Services
-    .AddMediatR(typeof(CreateProductHandler).Assembly)
-    .AddAutoMapper(typeof(CreateProductHandler).Assembly)
-    .AddDomainServices(typeof(ProductService).Assembly)
-    // Registrar tu propia implementación de IRepository
-    .AddScoped<IRepository<Product>, DapperProductRepository>();
-
-var app = builder.Build();
-// ...
-```
-
-## 📋 **Archivos de Referencia Rápida**
-
-### Estructura de la Solución
-
-```
-repositorio/
-├── Clean.Sdk.Domain/              # Núcleo del dominio
-├── Clean.Sdk.Application/         # Handlers CQRS
-├── Clean.Sdk.Data.EfCore/         # Repositorios EF Core
-├── Clean.Sdk.Infrastructure/      # Configuración y DI
-├── Clean.Sdk.Domain.Tests/        # Tests de dominio
-├── Clean.Sdk.Application.Tests/   # Tests de aplicación
-├── Clean.Sdk.Data.EfCore.Tests/   # Tests de datos
-├── Clean.Sdk.Infrastructure.Tests/# Tests de infraestructura
-├── Clean.Skd.sln                  # Solución principal
-└── Clean.Sdk-CI.yml               # Pipeline de CI
-```
-
-### Documentación Existente Encontrada
-
-- **README.md**: Documentación mínima (solo título)
-- **LICENSE**: Archivo de licencia del proyecto
-
-### Configuraciones Importantes
-
-- **Clean.Skd.sln**: Solución principal con todos los proyectos
-- **\*.csproj**: Archivos de proyecto con dependencias y configuración
-- **Clean.Sdk-CI.yml**: Configuración de integración continua
-- **Clean.Sdk-\*-CD.yml**: Configuración de despliegue continuo por paquete
-
-## 🎯 **Próximos Pasos de Documentación**
-
-Este GPS inicial debe complementarse con documentación detallada:
-
-- [ ] **README.md completo** - Guía de inicio rápido, ejemplos de uso, instalación
-- [ ] **Guías de uso por capa** - Documentación detallada de Domain, Application, Data, Infrastructure
-- [ ] **Ejemplos de implementación** - Aplicaciones de ejemplo completas
-- [ ] **Guía de contribución** - Estándares de código, proceso de PR
-- [ ] **Documentación de APIs** - XML comments en código público
-- [ ] **Tutoriales paso a paso** - Creación de una aplicación desde cero
-- [ ] **Guía de migración** - Migrar de proyectos legacy a Clean SDK
-- [ ] **Documentación de testing** - Estrategias y mejores prácticas
-- [ ] **Guía de troubleshooting** - Problemas comunes y soluciones
-- [ ] **Changelog y versioning** - Historial de cambios entre versiones
+- [ ] Ajustar metadata de `.csproj` (Title, Description) a cada capa.
+- [ ] Documentar flujo completo de registro DI en una guía dedicada.
+- [ ] Generar ejemplos de implementación (quickstart) en el README general.
+- [ ] Analizar la posibilidad de desacoplar `Clean.Sdk.Infrastructure` de `Clean.Sdk.Data.EfCore` para escenarios sin EF en Debug.
+- [ ] Revisar pipelines para renombrar `Clean.Skd.sln` → `Clean.Sdk.sln` de forma coordinada.
+- [ ] Incorporar métricas de cobertura y badges en CI/CD.
 
 ---
 
-## 📌 **Resumen Ejecutivo**
-
-**Clean SDK** es un framework .NET modular y bien estructurado que implementa arquitectura limpia con los siguientes pilares:
-
-1. ✅ **Separación clara de capas** - Domain → Application → Data → Infrastructure
-2. ✅ **Patrones probados** - CQRS, Repository, DI, DDD
-3. ✅ **Testing comprehensivo** - Tests unitarios en todas las capas
-4. ✅ **Multiplataforma** - Soporte para SQL Server, MySQL, PostgreSQL (via EF Core)
-5. ✅ **Extensible** - Handlers y repositorios genéricos reutilizables
-6. ✅ **Flexible** - Data.EfCore es opcional, puedes usar cualquier estrategia de persistencia
-7. ✅ **CI/CD automatizado** - Azure Pipelines configurado
-8. ⚠️ **Documentación mejorable** - README mínimo, falta documentación de uso
-
-**Audiencia objetivo**: Desarrolladores .NET que buscan acelerar el desarrollo de aplicaciones empresariales siguiendo clean architecture.
-
-**Flexibilidad de persistencia**: El framework define la abstracción `IRepository<TEntity>` en Domain. Clean.Sdk.Data.EfCore es solo **una implementación opcional** para Entity Framework Core. Puedes implementar tu propia versión con Dapper, NHibernate, ADO.NET, o cualquier otra tecnología.
-
----
-
-*Documento generado por Arquitecto Ceiba - Método Ceiba v2.0*
-*Fecha: 16 de Octubre de 2025*
+*Documento actualizado por Arquitecto Ceiba – 18 de octubre de 2025.*

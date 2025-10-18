@@ -1,4 +1,4 @@
-﻿using Clean.Sdk.Domain.Helpers;
+﻿using Clean.Sdk.Data.EfCore.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clean.Sdk.Data.EfCore

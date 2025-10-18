@@ -1,4 +1,4 @@
-﻿namespace Clean.Sdk.Domain.Entity
+﻿namespace Clean.Sdk.Data.EfCore.Entities
 {
 	public interface IAuditableEntity : IDomainEntity
 	{
