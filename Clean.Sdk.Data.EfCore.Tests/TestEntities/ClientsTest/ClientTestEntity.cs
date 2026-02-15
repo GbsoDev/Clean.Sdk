@@ -1,5 +1,9 @@
-﻿namespace Clean.Sdk.Domain.Tests.TestEntites.ClientsTest
-{
+﻿using Clean.Sdk.Data.EfCore.Entities;
+using Clean.Sdk.Domain.Model;
+using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
+
+namespace Clean.Sdk.Data.EfCore.Tests.TestEntities.ClientsTest;
+
 	public class ClientTestEntity : ClientTest, IDomainEntity
 	{
 		public ClientTestEntity(string name, string? middleName, string surname, short age)
@@ -12,6 +16,5 @@
 		{
 		}
 
-		object IDomainEntity.Id => Id;
+		object IDomainModel.Id => Id;
 	}
-}

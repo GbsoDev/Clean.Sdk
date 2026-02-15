@@ -1,6 +1,6 @@
 ﻿using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Services;
-using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
+using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Domain.Tests.TestServices.Clients

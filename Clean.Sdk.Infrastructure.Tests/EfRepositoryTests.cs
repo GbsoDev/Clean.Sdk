@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Data.EfCore;
+using Clean.Sdk.Data.EfCore.Tests.TestEntities.ClientsTest;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Tests.Builders;
-using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
+using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Moq;

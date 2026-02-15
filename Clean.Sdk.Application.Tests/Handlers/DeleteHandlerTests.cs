@@ -4,7 +4,7 @@ using Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Commands;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Resources;
 using Clean.Sdk.Domain.Services;
-using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
+using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using Microsoft.Extensions.Logging;
 using Moq;
 

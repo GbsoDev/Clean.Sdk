@@ -1,6 +1,6 @@
-﻿using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
+﻿using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 
-namespace Clean.Sdk.Domain.Tests.TestEntites.Clients
+namespace Clean.Sdk.Domain.Tests.TestModel.Clients
 {
 	public class ClientTestBuilder
 	{

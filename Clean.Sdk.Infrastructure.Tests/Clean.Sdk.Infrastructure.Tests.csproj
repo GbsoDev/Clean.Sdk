@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Clean.Sdk.Data.EfCore.Tests\Clean.Sdk.Data.EfCore.Tests.csproj" />
     <ProjectReference Include="..\Clean.Sdk.Data.EfCore\Clean.Sdk.Data.EfCore.csproj" />
     <ProjectReference Include="..\Clean.Sdk.Domain.Tests\Clean.Sdk.Domain.Tests.csproj" />
   </ItemGroup>

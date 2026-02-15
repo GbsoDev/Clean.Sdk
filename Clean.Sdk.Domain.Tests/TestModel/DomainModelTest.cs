@@ -1,10 +1,10 @@
 ﻿using Clean.Sdk.Domain.Tests.Builders;
-using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
+using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using Clean.Sdk.Domain.Validations;
 
-namespace Clean.Sdk.Domain.Tests.TestEntites
+namespace Clean.Sdk.Domain.Tests.TestModel
 {
-	public class DomainEntityTest
+	public class DomainModelTest
 	{
 		private const string validName = "gerson";
 		private const string validMiddleName = "brain";

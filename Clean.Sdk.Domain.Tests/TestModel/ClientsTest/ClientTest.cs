@@ -1,7 +1,8 @@
 ﻿using Clean.Sdk.Domain.Model;
+using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using Clean.Sdk.Domain.Validations;
 
-namespace Clean.Sdk.Domain.Tests.TestEntites.ClientsTest
+namespace Clean.Sdk.Domain.Tests.TestModel.ClientsTest
 {
 	public class ClientTest : IDomainModel
 	{

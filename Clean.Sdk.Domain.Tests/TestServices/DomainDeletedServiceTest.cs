@@ -1,7 +1,7 @@
 ﻿using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Services;
 using Clean.Sdk.Domain.Tests.Builders;
-using Clean.Sdk.Domain.Tests.TestEntites.ClientsTest;
+using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using Clean.Sdk.Domain.Tests.TestServices.Clients;
 using Microsoft.Extensions.Logging;
 using Moq;
