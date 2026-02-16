@@ -8,7 +8,7 @@ resources:
         branches:
           include:
             - main
-            - release
+            - staging
 
 pool:
   name: self-hosted
@@ -18,9 +18,12 @@ variables:
   ${{ if eq(variables['Build.SourceBranchName'], 'main') }}: 
     buildConfiguration: 'Release'
     versionSuffix: ''
-  ${{ if eq(variables['Build.SourceBranchName'], 'release') }}: 
-    buildConfiguration: 'Prerelease'
-    versionSuffix: '-release'
+  ${{ if eq(variables['Build.SourceBranchName'], 'staging') }}: 
+    buildConfiguration: 'Beta'
+    versionSuffix: '-beta'
+  ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}: 
+    buildConfiguration: 'Debug'
+    versionSuffix: '-dev'
 
 stages:
 - stage: GetReleaseVersionValues

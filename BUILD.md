@@ -84,7 +84,17 @@ The scripts implement strict error handling:
 
 These scripts are compatible with Azure DevOps pipelines:
 
-**Windows Agent:**
+**Cross-Platform (Recommended - used in CI pipeline):**
+
+```yaml
+- bash: |
+    chmod +x build.sh
+    ./build.sh --config $(buildConfiguration)
+  displayName: 'Build all projects'
+  failOnStderr: false
+```
+
+**Windows Agent (Alternative):**
 
 ```yaml
 - task: PowerShell@2
