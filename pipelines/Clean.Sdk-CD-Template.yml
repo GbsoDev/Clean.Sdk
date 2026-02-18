@@ -11,12 +11,6 @@ parameters:
   - name: buildConfiguration
     type: string
     default: 'Release'
-  - name: packVersion
-    type: object
-    default: ''
-  - name: versionSuffix
-    type: string
-    default: ''
 
 jobs:
 - job: '${{ parameters.jobName }}'
@@ -25,10 +19,8 @@ jobs:
     dependsOn: ${{ parameters.dependsOn }}
       
   variables:
-    packVersion: ${{ parameters.packVersion }}
     projectPath: '${{ parameters.projectName }}/${{ parameters.projectName }}.csproj'
     outputPack: '$(Build.ArtifactStagingDirectory)/${{ parameters.projectName }}'
-    nugetVersion: '$(packVersion)${{ parameters.versionSuffix }}'
   steps:
   - checkout: self
 
@@ -45,7 +37,7 @@ jobs:
     inputs:
       command: 'build'
       projects: '$(projectPath)'
-      arguments: '--configuration ${{ parameters.buildConfiguration }} /p:VersionSuffix=${{ parameters.versionSuffix }}'
+      arguments: '--configuration ${{ parameters.buildConfiguration }}'
 
   - task: DotNetCoreCLI@2
     displayName: 'Pack NuGet for ${{ parameters.projectName }}'
@@ -54,8 +46,7 @@ jobs:
       packagesToPack: '$(projectPath)'
       configuration: ${{ parameters.buildConfiguration }}
       nobuild: true
-      versioningScheme: byEnvVar
-      versionEnvVar: 'nugetVersion'
+      versioningScheme: 'off'
       packDirectory: '$(outputPack)'
 
   - task: PowerShell@2
