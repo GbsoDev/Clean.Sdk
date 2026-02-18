@@ -140,7 +140,7 @@ namespace Clean.Sdk.Domain.Tests.Validations
 		public void AddIsNotNullValidation_ShouldAddErrorWhenNull()
 		{
 			var validationSet = new ValidationSet();
-			validationSet.AddIsNotNullValidation<string>(string.Empty, ErrorMessage);
+			validationSet.AddIsNotNullValidation<string?>(null, ErrorMessage);
 			Assert.Single(validationSet.Errors);
 			Assert.Equal(ErrorMessage, validationSet.Errors[0].Message);
 		}
