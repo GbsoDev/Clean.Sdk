@@ -73,7 +73,8 @@ namespace Clean.Sdk.Data.EfCore
 		public virtual async Task<bool> DeleteAsync(TModel model, CancellationToken cancellationToken = default)
 		{
 			if (model == null) throw new ArgumentNullException(nameof(model));
-			EntityEntry<TModel> entityEntry = Context.Set<TModel>().Remove(model);
+			TEntity entity = Mapper.Map<TEntity>(model);
+            EntityEntry<TEntity> entityEntry = Context.Set<TEntity>().Remove(entity);
 			return await Task.FromResult(entityEntry?.State == EntityState.Deleted);
 		}
 
@@ -83,8 +84,7 @@ namespace Clean.Sdk.Data.EfCore
 			TEntity? entity = await GetEntityByIdAsync(id, cancellationToken);
 
 			if (entity == null) return false;
-			await DeleteAsync(entity!, cancellationToken).ConfigureAwait(false);
-			return true;
+            return await DeleteAsync(entity!, cancellationToken).ConfigureAwait(false);
 		}
 
 		public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
