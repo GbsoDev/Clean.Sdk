@@ -56,9 +56,9 @@
   </ItemGroup>
 
   <Choose>
-    <When Condition="'$(Configuration)' == 'Debug'">
+    <When Condition="'$(Configuration)' == 'Release'">
       <ItemGroup>
-        <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
+	      <PackageReference Include="Clean.Sdk.Domain" Version="*" />
       </ItemGroup>
     </When>
     <When Condition="'$(Configuration)' == 'Beta'">
@@ -68,8 +68,8 @@
     </When>
     <Otherwise>
       <ItemGroup>
-	    <PackageReference Include="Clean.Sdk.Domain" Version="*" />
-	  </ItemGroup>
+        <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
+	    </ItemGroup>
     </Otherwise>
   </Choose>
 

@@ -63,12 +63,11 @@
   </ItemGroup>
 
   <Choose>
-    <When Condition="'$(Configuration)' == 'Debug'">
+    <When Condition="'$(Configuration)' == 'Release'">
       <ItemGroup>
-        <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
-        <ProjectReference Include="..\Clean.Sdk.Application\Clean.Sdk.Application.csproj" />
-        <ProjectReference Include="..\Clean.Sdk.Data.EfCore\Clean.Sdk.Data.EfCore.csproj" />
-        <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
+        <PackageReference Include="Clean.Sdk.Application" Version="*" />
+        <PackageReference Include="Clean.Sdk.Data.EfCore" Version="*" />
+        <PackageReference Include="Clean.Sdk.Domain" Version="*" />
       </ItemGroup>
     </When>
     <When Condition="'$(Configuration)' == 'Beta'">
@@ -80,9 +79,10 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="Clean.Sdk.Application" Version="*" />
-        <PackageReference Include="Clean.Sdk.Data.EfCore" Version="*" />
-        <PackageReference Include="Clean.Sdk.Domain" Version="*" />
+        <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
+        <ProjectReference Include="..\Clean.Sdk.Application\Clean.Sdk.Application.csproj" />
+        <ProjectReference Include="..\Clean.Sdk.Data.EfCore\Clean.Sdk.Data.EfCore.csproj" />
+        <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
       </ItemGroup>
     </Otherwise>
   </Choose>
