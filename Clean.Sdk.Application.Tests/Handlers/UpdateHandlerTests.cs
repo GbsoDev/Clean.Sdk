@@ -7,7 +7,7 @@ using Clean.Sdk.Domain.Tests.TestModel;
 using Clean.Sdk.Domain.Tests.TestModel.Clients;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using FluentValidation;
-using Microsoft.Extensions.Logging;
+using Clean.Sdk.Domain.Ports;
 using Moq;
 
 namespace Clean.Sdk.Application.Tests.Handlers
@@ -30,18 +30,18 @@ namespace Clean.Sdk.Application.Tests.Handlers
 		private readonly string ExpectedAgeMinimumAgeValidationMessage = string.Format(ValidationErrorMessages.MinimumAge, nameof(ClientTestDto.Age));
 
 		private readonly Mock<IUpdateService<ClientTest>> _mockUpdateService;
-		private readonly Mock<ILogger<UpdateClientTestCommandHandler>> _mockLogger;
+		private readonly Mock<ILoggerService> _mockLogger;
 		private readonly Mock<IMapper> _mockMapper;
 		private readonly UpdateClientTestCommandHandler _handler;
 
 		public UpdateHandlerTests()
 		{
 			_mockUpdateService = new Mock<IUpdateService<ClientTest>>();
-			_mockLogger = new Mock<ILogger<UpdateClientTestCommandHandler>>();
+			_mockLogger = new Mock<ILoggerService>();
 			_mockMapper = new Mock<IMapper>();
 
 			_handler = new UpdateClientTestCommandHandler(
-				_mockLogger.Object,
+				new Lazy<ILoggerService>(() => _mockLogger.Object),
 				_mockMapper.Object,
 				new Lazy<IUpdateService<ClientTest>>(() => _mockUpdateService.Object));
 		}
