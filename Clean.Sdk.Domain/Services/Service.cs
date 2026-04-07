@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+using Clean.Sdk.Domain.Ports;
 
 namespace Clean.Sdk.Domain.Services
 {
 	public abstract class Service
 	{
-		protected readonly ILogger<Service> Logger;
+		protected readonly ILoggerService Logger;
 
-		protected Service(ILogger<Service> logger)
+		protected Service(ILoggerService logger)
 		{
 			Logger = logger;
 		}
