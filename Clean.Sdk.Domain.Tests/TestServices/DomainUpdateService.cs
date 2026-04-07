@@ -3,7 +3,6 @@ using Clean.Sdk.Domain.Services;
 using Clean.Sdk.Domain.Tests.Builders;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using Clean.Sdk.Domain.Tests.TestServices.ClientsTest;
-using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Clean.Sdk.Domain.Tests.TestServices
@@ -11,13 +10,13 @@ namespace Clean.Sdk.Domain.Tests.TestServices
 	public class DomainUpdateService
 	{
 		private readonly Mock<IRepository<ClientTest>> _mockRepository;
-		private readonly Mock<ILogger<Service>> _mockLogger;
+		private readonly Mock<ILoggerService> _mockLogger;
 		private readonly UpdateClientTestService _service;
 
 		public DomainUpdateService()
 		{
 			_mockRepository = new Mock<IRepository<ClientTest>>();
-			_mockLogger = new Mock<ILogger<Service>>();
+			_mockLogger = new Mock<ILoggerService>();
 
 			_service = new UpdateClientTestService(
 				_mockLogger.Object,

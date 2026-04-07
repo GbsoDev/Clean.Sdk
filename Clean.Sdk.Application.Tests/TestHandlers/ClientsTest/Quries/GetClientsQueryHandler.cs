@@ -2,13 +2,12 @@
 using Clean.Sdk.Application.Handlers;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
-using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Quries
 {
 	public sealed class GetClientsQueryHandler : QueryCollectionHandler<GetClientsQuery, ClientTestDto[], ClientTest, IRepository<ClientTest>>
 	{
-		public GetClientsQueryHandler(ILogger<Handler> logger, IMapper mapper, Lazy<IRepository<ClientTest>> repository) : base(logger, mapper, repository)
+		public GetClientsQueryHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<IRepository<ClientTest>> repository) : base(logger, mapper, repository)
 		{
 		}
 	}

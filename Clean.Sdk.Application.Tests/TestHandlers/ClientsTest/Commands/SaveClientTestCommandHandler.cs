@@ -3,7 +3,7 @@ using Clean.Sdk.Application.Handlers;
 using Clean.Sdk.Domain.Services;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using FluentValidation;
-using Microsoft.Extensions.Logging;
+using Clean.Sdk.Domain.Ports;
 
 namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Commands
 {
@@ -11,7 +11,7 @@ namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Commands
 	{
 		protected override AbstractValidator<SaveClientTestCommand> ValidationRules => new SaveClientTestCommandValidator();
 
-		public SaveClientTestCommandHandler(ILogger<Handler> logger, IMapper mapper, Lazy<ISaveService<ClientTest>> service) : base(logger, mapper, service)
+		public SaveClientTestCommandHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<ISaveService<ClientTest>> service) : base(logger, mapper, service)
 		{
 		}
 	}

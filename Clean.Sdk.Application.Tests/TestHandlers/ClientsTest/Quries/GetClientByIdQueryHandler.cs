@@ -2,13 +2,12 @@
 using Clean.Sdk.Application.Handlers;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
-using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Quries
 {
 	public sealed class GetClientByIdQueryHandler : QueryByIdHandler<GetClientByIdQuery, ClientTestDto, ClientTest, IRepository<ClientTest>>
 	{
-		public GetClientByIdQueryHandler(ILogger<Handler> logger, IMapper mapper, Lazy<IRepository<ClientTest>> repository) : base(logger, mapper, repository)
+		public GetClientByIdQueryHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<IRepository<ClientTest>> repository) : base(logger, mapper, repository)
 		{
 		}
 	}

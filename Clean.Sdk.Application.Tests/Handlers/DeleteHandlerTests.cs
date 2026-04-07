@@ -5,7 +5,7 @@ using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Resources;
 using Clean.Sdk.Domain.Services;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
-using Microsoft.Extensions.Logging;
+using Clean.Sdk.Domain.Ports;
 using Moq;
 
 namespace Clean.Sdk.Application.Tests.Handlers
@@ -13,18 +13,18 @@ namespace Clean.Sdk.Application.Tests.Handlers
 	public class DeleteHandlerTests
 	{
 		private readonly Mock<IDeleteService<ClientTest>> _mockDeleteService;
-		private readonly Mock<ILogger<Handler>> _mockLogger;
+		private readonly Mock<ILoggerService> _mockLogger;
 		private readonly Mock<IMapper> _mockMapper;
 		private readonly DeleteClientTestByIdCommandHandler<IDeleteService<ClientTest>> _handler;
 
 		public DeleteHandlerTests()
 		{
 			_mockDeleteService = new Mock<IDeleteService<ClientTest>>();
-			_mockLogger = new Mock<ILogger<Handler>>();
+			_mockLogger = new Mock<ILoggerService>();
 			_mockMapper = new Mock<IMapper>();
 
 			_handler = new DeleteClientTestByIdCommandHandler<IDeleteService<ClientTest>>(
-				_mockLogger.Object,
+				new Lazy<ILoggerService>(() => _mockLogger.Object),
 				_mockMapper.Object,
 				new Lazy<IDeleteService<ClientTest>>(() => _mockDeleteService.Object));
 		}
