@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Application.Validations;
 using Clean.Sdk.Domain.Model;
+using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Services;
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Application.Handlers
 {
@@ -24,7 +24,7 @@ namespace Clean.Sdk.Application.Handlers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UpdateHandler{TRequest, TResponse, TEntity, TServie}"/> class.
 		/// </summary>
-		protected UpdateHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
+		protected UpdateHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
 		{
 		}
 

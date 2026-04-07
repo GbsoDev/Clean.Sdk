@@ -2,7 +2,6 @@
 using Clean.Sdk.Domain.Model;
 using Clean.Sdk.Domain.Ports;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using System.Collections;
 
 namespace Clean.Sdk.Application.Handlers
@@ -13,7 +12,7 @@ namespace Clean.Sdk.Application.Handlers
 		where TModel : class, IDomainModel
 		where TRepository : class, IRepository<TModel>
 	{
-		public QueryCollectionHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TRepository> repository) : base(logger, mapper, repository)
+		public QueryCollectionHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<TRepository> repository) : base(logger, mapper, repository)
 		{
 		}
 

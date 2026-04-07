@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
+using Clean.Sdk.Domain.Ports;
 
 namespace Clean.Sdk.Application.Handlers
-
 {
 	public abstract class CommandHandler<TService> : Handler
 		where TService : class
@@ -10,7 +9,7 @@ namespace Clean.Sdk.Application.Handlers
 		protected virtual TService Service => _service.Value;
 		private readonly Lazy<TService> _service;
 
-		protected CommandHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TService> service) : base(logger, mapper)
+		protected CommandHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<TService> service) : base(logger, mapper)
 		{
 			_service = service;
 		}
