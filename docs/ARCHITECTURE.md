@@ -97,7 +97,6 @@ CrudService<TModel, TRepo>              [Obsolete — do not use]
 - Handler-level validation orchestration
 
 **Known Limitations:**
-- All handlers use `ILogger<Handler>` (single logging category)
 - Generic type parameter `TServie` contains typo (should be `TService`)
 
 ### `Clean.Sdk.Data.EfCore`
@@ -144,7 +143,7 @@ Key extension methods by provider class:
 5. Repository abstraction persists through EF Core implementation.
 6. Response maps to DTO and returns to caller.
 
-> **Note:** Handlers use `ILogger<Handler>` which logs all handlers under a single category. This is a known limitation for production diagnostics.
+> **Note:** Handlers now utilize a decoupled `ILoggerService` port via `Lazy<T>` injection, improving architectural purity and testability.
 
 ## 4) Cross-Cutting Viewpoint
 
