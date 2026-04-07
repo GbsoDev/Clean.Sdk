@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Application.Validations;
 using Clean.Sdk.Domain.Model;
+using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Services;
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Application.Handlers
 {
@@ -16,7 +16,7 @@ namespace Clean.Sdk.Application.Handlers
 		where TModel : class, IDomainModel
 		where TServie : class, ISaveService<TModel>
 	{
-		protected readonly ILogger<Handler> _logger;
+		protected readonly Lazy<ILoggerService> _logger;
 		protected readonly IMapper _mapper;
 
 		protected abstract AbstractValidator<TRequest>? ValidationRules { get; }
@@ -25,7 +25,7 @@ namespace Clean.Sdk.Application.Handlers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SaveHandler{TRequest, TResponse, TEntity, TServie}"/> class.
 		/// </summary>
-		protected SaveHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
+		protected SaveHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
 		{
 			this._logger = logger;
 			this._mapper = mapper;

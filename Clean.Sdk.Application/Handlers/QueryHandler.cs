@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Domain.Ports;
-using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Application.Handlers
 {
@@ -10,7 +9,7 @@ namespace Clean.Sdk.Application.Handlers
 		protected TRepository Repository => _repository.Value;
 		private readonly Lazy<TRepository> _repository;
 
-		public QueryHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TRepository> repository) : base(logger, mapper)
+		public QueryHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<TRepository> repository) : base(logger, mapper)
 		{
 			_repository = repository;
 		}

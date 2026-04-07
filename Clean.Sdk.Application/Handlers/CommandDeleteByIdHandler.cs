@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Model;
+using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Resources;
 using Clean.Sdk.Domain.Services;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Application.Handlers
 {
@@ -19,7 +19,7 @@ namespace Clean.Sdk.Application.Handlers
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public CommandDeleteByIdHandler(ILogger<Handler> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
+		public CommandDeleteByIdHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<TServie> service) : base(logger, mapper, service)
 		{
 		}
 
@@ -36,7 +36,7 @@ namespace Clean.Sdk.Application.Handlers
 					throw new NotFoundException(Messages.NotFoundByIdException, typeof(TModel).Name, request.Id);
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				throw;
 			}
