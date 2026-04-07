@@ -1,6 +1,5 @@
 ﻿using Clean.Sdk.Domain.Model;
 using Clean.Sdk.Domain.Ports;
-using Microsoft.Extensions.Logging;
 
 namespace Clean.Sdk.Domain.Services
 {
@@ -11,7 +10,7 @@ namespace Clean.Sdk.Domain.Services
 		protected TRepository Repository => _repository.Value;
 		private readonly Lazy<TRepository> _repository;
 
-		protected ActionService(ILogger<Service> logger, Lazy<TRepository> repository) : base(logger)
+		protected ActionService(ILoggerService logger, Lazy<TRepository> repository) : base(logger)
 		{
 			_repository = repository;
 		}

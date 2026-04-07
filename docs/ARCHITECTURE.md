@@ -71,6 +71,7 @@ Current project dependency behavior in solution and project files:
 - Validation primitives (`ValidationSet`, argument validation helpers)
 - Exception hierarchy and options contracts
 - Repository contracts (`IRepository<TModel>`)
+- Logging abstraction (`ILoggerService`)
 
 #### Service Base Class Hierarchy
 
