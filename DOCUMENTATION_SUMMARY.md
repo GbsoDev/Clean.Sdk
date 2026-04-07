@@ -24,9 +24,9 @@ The recommended and actively maintained documentation set is in `docs/`:
 
 - Runtime: `.NET 8`
 - Projects: `8` (`4` production + `4` test)
-- C# files (excluding `bin/obj`): `115`
-- Estimated C# lines: `4,207`
-- Tests: `112/112` passing (evidence date: `2026-02-18`)
+- C# files (excluding `bin/obj`): `161`
+- Estimated C# lines: `5,277`
+- Tests: `112/112` passing (evidence date: `2026-04-07`)
 - Main architecture: Clean Architecture + CQRS + Repository Pattern
 
 ---

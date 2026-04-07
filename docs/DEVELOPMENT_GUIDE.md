@@ -148,7 +148,7 @@ public record CreateCustomerCommand(string Name, string Email) : IRequest<Custom
 ### 2) Implement Handler
 
 ```csharp
-[AplicacionHandler]
+[AplicacionHandler]  // Note: attribute name uses Spanish spelling; planned normalization
 public class CreateCustomerHandler
     : SaveHandler<CreateCustomerCommand, CustomerDto, Customer, ICustomerService>
 {
@@ -163,6 +163,8 @@ public class CreateCustomerHandler
     protected override AbstractValidator<CreateCustomerCommand>? ValidationRules => new CreateCustomerCommandValidator();
 }
 ```
+
+> **Note on Logger:** The base `Handler` class uses `ILogger<Handler>` which means all handlers log under the same category. This is a known limitation; consider using a custom logger factory for handler-specific logging in production scenarios.
 
 ### 3) Add Validator
 
@@ -220,7 +222,7 @@ In the consumer application, register layers through extension methods:
 services
     .AddDomainServices(assembly)
     .AddRepositories(assembly)
-    .AddMediatR(assembly)                           // registers all [AplicacionHandler] handlers
+    .AddMediatR(assembly)                           // registers all [AplicacionHandler] handlers by scanning assembly
     .AddAutoMapperProfiles(assembly);               // registers all [MapperProfile] profiles
 
 // Register EF Core context (two type params: interface + implementation)
@@ -252,6 +254,11 @@ Map tests to architectural responsibility:
 Test naming recommendation:
 
 `MethodName_WhenCondition_ShouldExpectedResult`
+
+### Known Limitations
+
+- Tests are primarily mock-based; integration tests with real databases are limited
+- Consider adding integration tests for critical repository operations
 
 ---
 

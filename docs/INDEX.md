@@ -47,12 +47,12 @@ This index is the canonical navigation map for repository documentation.
 3. `CONVENTIONS.md`
 4. `BUILD.md` (repository root)
 
-## Current Snapshot (Evidence Date: 2026-02-18)
+## Current Snapshot (Evidence Date: 2026-04-07)
 
 - Runtime: `.NET 8.0`
 - Projects: `8` (`4` production + `4` test)
-- C# files (excluding `bin/obj`): `115`
-- C# lines (estimated): `4,207`
+- C# files (excluding `bin/obj`): `161`
+- C# lines (estimated): `5,277`
 - Test status: `112/112` passing
 - Build profiles: `Debug`, `Beta`, `Release`
 

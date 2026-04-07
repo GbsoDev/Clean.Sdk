@@ -6,7 +6,7 @@
 
 The project is technically solid, test-stable in current execution, and suitable as a shared engineering foundation. The primary improvement opportunities are consistency normalization, operational observability guidance, and stronger CI quality gates.
 
-Evidence date: **2026-02-18**.
+Evidence date: **2026-04-07**.
 
 ## Analysis Method
 
@@ -25,8 +25,8 @@ This analysis is based on:
 - Total projects: `8`
   - Production: `4`
   - Test: `4`
-- C# files (excluding `bin/obj`): `115`
-- C# lines (estimated): `4,207`
+- C# files (excluding `bin/obj`): `161`
+- C# lines (estimated): `5,277`
 - Documentation files in `docs/`: `9`
 - Pipeline YAML files: `3`
 - Test execution: `112/112` passing
@@ -50,7 +50,21 @@ This analysis is based on:
 
 ### Risks and Weaknesses
 
-- Typo-prone identifiers remain in public/internal contracts (`AppExeption`, `TServie`, `AplicacionHandler`).
+#### Naming Inconsistencies (Scheduled for Normalization)
+
+The following identifiers contain typos or inconsistencies:
+
+| Identifier | Should Be | Location |
+|------------|-----------|----------|
+| `AppExeption` | `AppException` | `Domain/Exceptions/AppExeption.cs` |
+| `TServie` | `TService` | `Application/Handlers/SaveHandler.cs`, `UpdateHandler.cs`, `CommandDeleteByIdHandler.cs` |
+| `AplicacionHandlerAttribute` | `ApplicationHandlerAttribute` | `Application/Handlers/AplicacionHandlerAttribute.cs` |
+| `GeyTypesByAttribute` | `GetTypesByAttribute` | `Domain/Helpers/AssemblyHelper.cs` |
+| `SecctionName` | `SectionName` | `Infrastructure/Extensions/OptionsProvider.cs` |
+| `dbConecction` | `dbConnection` | `Infrastructure/Extensions/EfCoreProvider.cs` |
+
+#### Structural Issues
+
 - `CrudService<TModel, TRepository>` is currently marked `[Obsolete("in construction", true)]` and cannot be used; composed service bases (`SaveService`, `UpdateService`, `DeleteService`) are the correct pattern.
 - `ICrudService<TModel>` is `internal` and should not appear in public-facing documentation or examples.
 - Attribute-based registration can hide missing or mismatched contracts until runtime.
@@ -108,16 +122,23 @@ Maintainability is high when contributors follow current conventions. The archit
 
 ### Horizon 1: Immediate (1-2 sprints)
 
-- Define and enforce naming normalization strategy for typo-prone identifiers.
+- Normalize typo-prone identifiers (breaking change, requires major version bump):
+  - `AppExeption` → `AppException`
+  - `TServie` → `TService`
+  - `AplicacionHandlerAttribute` → `ApplicationHandlerAttribute`
+  - `GeyTypesByAttribute` → `GetTypesByAttribute`
+  - `SecctionName` → `SectionName`
+  - `dbConecction` → `dbConnection`
 - Complete `CrudService` implementation or remove it; document the composed service-base pattern (`SaveService`/`UpdateService`/`DeleteService`) as the canonical approach.
 - Add CI policy section for minimum quality gates (test pass, analyzers, formatting).
 - Add architecture decision records (ADR) for key design choices.
 
 ### Horizon 2: Near-Term (quarter)
 
-- Increase integration-oriented tests for EF Core repository behavior.
+- Increase integration-oriented tests for EF Core repository behavior (currently mock-based).
 - Centralize package/build metadata shared across production projects where feasible.
 - Publish operational guidance for diagnostics and failure triage.
+- Address `ILogger<Handler>` limitation (all handlers log under same category).
 
 ### Horizon 3: Mid-Term
 

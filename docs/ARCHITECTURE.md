@@ -12,7 +12,7 @@ Scope includes:
 - Cross-cutting mechanisms (validation, DI registration, packaging)
 - Architectural constraints, risks, and decisions
 
-Evidence date: **2026-02-18**.
+Evidence date: **2026-04-07**.
 
 ## System Context
 
@@ -95,11 +95,19 @@ CrudService<TModel, TRepo>              [Obsolete — do not use]
 - Mapping boundary (AutoMapper)
 - Handler-level validation orchestration
 
+**Known Limitations:**
+- All handlers use `ILogger<Handler>` (single logging category)
+- Generic type parameter `TServie` contains typo (should be `TService`)
+
 ### `Clean.Sdk.Data.EfCore`
 
 - EF Core repository implementation
 - DbContext abstraction and persistence execution
 - Entity state and persistence timestamp behavior
+
+**Known Limitations:**
+- `UpdateAsync` does not call `SaveChangesAsync` implicitly (caller must save explicitly)
+- `DeleteByIdAsync` performs entity lookup before deletion (may be inefficient for bulk operations)
 
 ### `Clean.Sdk.Infrastructure`
 
@@ -107,6 +115,11 @@ CrudService<TModel, TRepo>              [Obsolete — do not use]
 - Provider extensions for services, repositories, options, handlers, mappers
 - Web/serialization/security integration helpers
 - Lazy service provider facilities
+
+**Known Issues:**
+- Method name `GeyTypesByAttribute` contains typo (should be `GetTypesByAttribute`)
+- Parameter name `dbConecction` contains typo (should be `dbConnection`)
+- Parameter name `SecctionName` contains typo (should be `SectionName`)
 
 Key extension methods by provider class:
 
@@ -124,11 +137,13 @@ Key extension methods by provider class:
 ## 3) Behavioral Viewpoint (Typical Write Flow)
 
 1. API/controller sends command via MediatR.
-2. Application handler executes validation rules.
-3. Request maps to domain model.
-4. Domain service executes business logic.
+2. Application handler executes validation rules (FluentValidation with RuleSets).
+3. Request maps to domain model (AutoMapper).
+4. Domain service executes business logic (ValidationSet for invariants).
 5. Repository abstraction persists through EF Core implementation.
 6. Response maps to DTO and returns to caller.
+
+> **Note:** Handlers use `ILogger<Handler>` which logs all handlers under a single category. This is a known limitation for production diagnostics.
 
 ## 4) Cross-Cutting Viewpoint
 
@@ -195,11 +210,26 @@ Scripted build order:
 
 ## Architecture Debt Backlog (Recommended)
 
-Short-term:
+### Short-term (1-2 sprints)
 
-- Normalize typo-prone public identifiers in next major-compatible revision (`AppExeption`, `TServie`, `AplicacionHandler`).
+- Normalize typo-prone public identifiers in next major-compatible revision:
+  - `AppExeption` → `AppException` (`Domain/Exceptions/AppExeption.cs`)
+  - `TServie` → `TService` (`Application/Handlers/SaveHandler.cs`, `UpdateHandler.cs`, `CommandDeleteByIdHandler.cs`)
+  - `AplicacionHandlerAttribute` → `ApplicationHandlerAttribute` (`Application/Handlers/AplicacionHandlerAttribute.cs`)
+  - `GeyTypesByAttribute` → `GetTypesByAttribute` (`Domain/Helpers/AssemblyHelper.cs`)
+  - `SecctionName` → `SectionName` (`Infrastructure/Extensions/OptionsProvider.cs`)
+  - `dbConecction` → `dbConnection` (`Infrastructure/Extensions/EfCoreProvider.cs`)
 - Complete or remove `CrudService`; until resolved, all service implementations must compose `SaveService`, `UpdateService`, and/or `DeleteService` individually.
 - Add explicit architecture decision records for critical trade-offs.
+
+### Mid-term (quarter)
+
+- Expand integration-style data tests to reduce mock-only confidence risk.
+- Formalize observability guidance (logs/events/diagnostics) in operational docs.
+
+### Long-term
+
+- Add architecture conformance checks in CI (dependency rules and naming analyzers).
 
 Mid-term:
 

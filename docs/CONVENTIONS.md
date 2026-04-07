@@ -8,12 +8,27 @@ These conventions keep `Clean.Sdk` consistent and predictable across teams and f
 
 ## Naming Conventions
 
-## General
+### General
 
 - Use `PascalCase` for classes, records, interfaces (with `I` prefix), methods, and public properties.
 - Use `camelCase` for parameters and local variables.
 - Use `_camelCase` for private fields.
 - Use async suffix `Async` for asynchronous methods.
+
+### Known Naming Inconsistencies
+
+The following identifiers contain typos or inconsistencies and are scheduled for normalization in a future major version:
+
+| Current | Should Be | Location |
+|---------|-----------|----------|
+| `AppExeption` | `AppException` | `Domain/Exceptions/AppExeption.cs` |
+| `TServie` | `TService` | `Application/Handlers/*.cs` |
+| `AplicacionHandlerAttribute` | `ApplicationHandlerAttribute` | `Application/Handlers/AplicacionHandlerAttribute.cs` |
+| `GeyTypesByAttribute` | `GetTypesByAttribute` | `Domain/Helpers/AssemblyHelper.cs` |
+| `SecctionName` | `SectionName` | `Infrastructure/Extensions/OptionsProvider.cs` |
+| `dbConecction` | `dbConnection` | `Infrastructure/Extensions/EfCoreProvider.cs` |
+
+> **Important:** Do not introduce new naming inconsistencies. Use the correct spelling in new code.
 
 ## Layer-Specific
 
@@ -44,13 +59,17 @@ These conventions keep `Clean.Sdk` consistent and predictable across teams and f
 
 Use marker attributes for automatic registration:
 
-- `[Service]` for domain services
-- `[Repository]` for repositories
-- `[AplicacionHandler]` for application handlers
-- `[MapperProfile]` for AutoMapper profiles
-- `[Option]` for configuration option classes
+| Attribute | Purpose | Scanned By |
+|-----------|---------|------------|
+| `[Service]` | Domain services | `AddDomainServices(assembly)` |
+| `[Repository]` | Repositories | `AddRepositories(assembly)` |
+| `[AplicacionHandler]` | Application handlers | `AddMediatR(assembly)` |
+| `[MapperProfile]` | AutoMapper profiles | `AddAutoMapperProfiles(assembly)` |
+| `[Option]` | Configuration option classes | `ConfigureAppSettingOptions<T>(...)` |
 
 Every marked implementation must expose the expected interface contract.
+
+> **Note:** The attribute name `AplicacionHandler` uses Spanish spelling. Normalization to `ApplicationHandler` is planned for a future major version.
 
 ---
 

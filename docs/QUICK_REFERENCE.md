@@ -2,7 +2,7 @@
 
 A compact operational guide for daily development with `Clean.Sdk`.
 
-Evidence date: **2026-02-18**.
+Evidence date: **2026-04-07**.
 
 ---
 
@@ -58,13 +58,15 @@ Build order used by scripts:
 
 ## Registration Attributes
 
-| Attribute | Scanned by |
-|---|---|
-| `[Service]` | `AddDomainServices(assembly)` |
-| `[Repository]` | `AddRepositories(assembly)` |
-| `[AplicacionHandler]` | marker only — use `AddMediatR(assembly)` |
-| `[MapperProfile]` | `AddAutoMapperProfiles(assembly)` |
-| `[Option]` | `ConfigureAppSettingOptions<T>(...)` |
+| Attribute | Scanned by | Notes |
+|---|---|---|
+| `[Service]` | `AddDomainServices(assembly)` | Domain services |
+| `[Repository]` | `AddRepositories(assembly)` | Repository implementations |
+| `[AplicacionHandler]` | `AddMediatR(assembly)` | Marker only; name normalization planned |
+| `[MapperProfile]` | `AddAutoMapperProfiles(assembly)` | AutoMapper profiles |
+| `[Option]` | `ConfigureAppSettingOptions<T>(...)` | Configuration option classes |
+
+> **Note:** `AplicacionHandler` uses Spanish spelling. Normalization to `ApplicationHandler` is planned for a future major version.
 
 ---
 
@@ -113,7 +115,7 @@ validations.ValidateAndThrow();
 ## Handler Skeleton
 
 ```csharp
-[AplicacionHandler]
+[AplicacionHandler]  // Note: attribute name normalization planned
 public class CreateEntityHandler : SaveHandler<CreateEntityCommand, EntityDto, Entity, IEntityService>
 {
     public CreateEntityHandler(ILogger<Handler> logger, IMapper mapper, Lazy<IEntityService> service)
@@ -125,11 +127,13 @@ public class CreateEntityHandler : SaveHandler<CreateEntityCommand, EntityDto, E
 }
 ```
 
+> **Note:** All handlers use `ILogger<Handler>` which logs under a single category. For production scenarios, consider implementing custom logging for handler-specific diagnostics.
+
 ---
 
 ## Domain Service Skeleton
 
-Use specialized base classes per operation. `CrudService` is **obsolete**.
+Use specialized base classes per operation. `CrudService` is **obsolete** (`[Obsolete("in construction", true)]`).
 
 ```csharp
 // Single-operation service (save only)
@@ -153,17 +157,27 @@ public class EntityService
 }
 ```
 
+### Important Notes
+
+- `UpdateAsync` and `DeleteAsync` methods require explicit `SaveChangesAsync` call by the consumer
+- `DeleteService` exposes both `DeleteByIdAsync` (lookup by PK) and `DeleteAsync` (pre-loaded entity)
+
 ---
 
 ## Exception Shortlist
 
-- `NotFoundException`
-- `NullException`
-- `NullOrEmptyException`
-- `InvalidArgumentException`
-- `ValidationException`
-- `ValidationSetException`
-- `NotAuthorizeException`
+| Exception | Purpose |
+|-----------|---------|
+| `NotFoundException` | Resource not found |
+| `NullException` | Null argument detected |
+| `NullOrEmptyException` | Null or empty string detected |
+| `InvalidArgumentException` | Invalid argument value |
+| `ValidationException` | Single validation failure |
+| `ValidationSetException` | Multiple validation failures (aggregated) |
+| `NotAuthorizeException` | Authorization failure |
+| `AppExeption` | Base application exception (note: typo, normalization planned) |
+
+> **Note:** `AppExeption` contains a typo (should be `AppException`). Normalization is planned for a future major version.
 
 ---
 

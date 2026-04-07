@@ -4,7 +4,7 @@
 
 This document uses **measured values** from the repository and test execution performed on the evidence date.
 
-Evidence date: **2026-02-18**.
+Evidence date: **2026-04-07**.
 
 ## Current Measured Repository Metrics
 
@@ -13,8 +13,8 @@ Evidence date: **2026-02-18**.
 | Total projects | 8 |
 | Production projects | 4 |
 | Test projects | 4 |
-| C# files (excluding `bin/obj`) | 115 |
-| C# lines (estimated) | 4,207 |
+| C# files (excluding `bin/obj`) | 161 |
+| C# lines (estimated) | 5,277 |
 | Docs files in `docs/` | 9 |
 | Pipeline YAML files | 3 |
 | Build configurations | Debug, Beta, Release |

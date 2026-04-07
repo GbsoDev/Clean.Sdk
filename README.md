@@ -30,9 +30,9 @@
 │  ├─ Production:                4 projects       │
 │  └─ Testing:                   4 projects       │
 ├─────────────────────────────────────────────────┤
-│  C# Files:                     115 files        │
+│  C# Files:                     161 files        │
 │  Build Status:                 ✅ Successful    │
-│  Tests (Evidence 2026-02-18):  112/112 (100%)  │
+│  Tests (Evidence 2026-04-07):  112/112 (100%)  │
 │  Target Framework:             .NET 8.0        │
 │  Version:                      1.0.12 / beta   │
 └─────────────────────────────────────────────────┘
@@ -149,7 +149,7 @@ dotnet test Clean.Sdk.Domain.Tests
 - Total tests: `112`
 - Passing: `112` (`100%`)
 - Failing: `0`
-- Notes: values correspond to the latest local evidence run on `2026-02-18`
+- Notes: values correspond to the latest local evidence run on `2026-04-07`
 
 ## Technology Stack
 
