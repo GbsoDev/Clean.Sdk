@@ -3,7 +3,7 @@ using Clean.Sdk.Application.Handlers;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 
-namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Quries
+namespace Clean.Sdk.Application.Tests.TestHandlers.ClientsTest.Queries
 {
 	public sealed class GetClientByIdQueryHandler : QueryByIdHandler<GetClientByIdQuery, ClientTestDto, ClientTest, IRepository<ClientTest>>
 	{
