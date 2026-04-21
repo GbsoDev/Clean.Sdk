@@ -1,0 +1,78 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Clean.Sdk ER Abstractions" id="C8fg6fyxWuJ9yogjBWAY">
+    <mxGraphModel dx="1422" dy="798" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- IDomainModel -->
+        <mxCell id="model_id" value="&lt;b&gt;IDomainModel&lt;/b&gt;&lt;br/&gt;(Domain Layer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="120" y="80" width="160" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- IDomainEntity -->
+        <mxCell id="entity_id" value="&lt;b&gt;IDomainEntity&lt;/b&gt;&lt;br/&gt;(Data Layer)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="120" y="240" width="160" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- IAuditableEntity -->
+        <mxCell id="auditable_id" value="&lt;b&gt;IAuditableEntity&lt;/b&gt;&lt;br/&gt;(Shadow Properties)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="120" y="400" width="160" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- EfRepository -->
+        <mxCell id="repo_id" value="&lt;b&gt;EfRepository&amp;lt;TModel, TEntity&amp;gt;&lt;/b&gt;&lt;br/&gt;(Generic implementation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="400" y="160" width="220" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- EfDbContext -->
+        <mxCell id="context_id" value="&lt;b&gt;EfDbContext&lt;/b&gt;&lt;br/&gt;(Manages Entities)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="400" y="320" width="220" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Relationships -->
+        
+        <!-- Model to Entity Mapping -->
+        <mxCell id="rel1" value="Maps to" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="model_id" target="entity_id">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Entity to Auditable Inheritance -->
+        <mxCell id="rel2" value="Inherits" style="endArrow=block;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endFill=0;" edge="1" parent="1" source="auditable_id" target="entity_id">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Repo uses Model -->
+        <mxCell id="rel3" value="Uses" style="endArrow=classic;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="repo_id" target="model_id">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Repo uses Entity -->
+        <mxCell id="rel4" value="Uses" style="endArrow=classic;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="repo_id" target="entity_id">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- DbContext manages Entity -->
+        <mxCell id="rel5" value="Tracks" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="context_id" target="auditable_id">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="360" />
+              <mxPoint x="340" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Repo uses DbContext -->
+        <mxCell id="rel6" value="Encapsulates" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="repo_id" target="context_id">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="note1" value="&lt;div&gt;&lt;b&gt;Entity Relationship Model&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Core Abstractions of Clean.Sdk&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="400" y="40" width="250" height="40" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

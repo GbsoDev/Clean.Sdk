@@ -208,37 +208,11 @@ Scripted build order:
 - Local-feed packaging in build targets simplifies delivery but requires strict environment consistency.
 - Historical naming inconsistencies in some identifiers increase cognitive load.
 
-## Architecture Debt Backlog (Recommended)
+## Architecture Evolution and Roadmap
 
-### Short-term (1-2 sprints)
+For the detailed list of planned improvements, architectural debt resolution, and the project roadmap, please refer to:
 
-- Normalize typo-prone public identifiers in next major-compatible revision:
-  - `AppExeption` → `AppException` (`Domain/Exceptions/AppExeption.cs`)
-  - `TServie` → `TService` (`Application/Handlers/SaveHandler.cs`, `UpdateHandler.cs`, `CommandDeleteByIdHandler.cs`)
-  - `AplicacionHandlerAttribute` → `ApplicationHandlerAttribute` (`Application/Handlers/AplicacionHandlerAttribute.cs`)
-  - `GeyTypesByAttribute` → `GetTypesByAttribute` (`Domain/Helpers/AssemblyHelper.cs`)
-  - `SecctionName` → `SectionName` (`Infrastructure/Extensions/OptionsProvider.cs`)
-  - `dbConecction` → `dbConnection` (`Infrastructure/Extensions/EfCoreProvider.cs`)
-- Complete or remove `CrudService`; until resolved, all service implementations must compose `SaveService`, `UpdateService`, and/or `DeleteService` individually.
-- Add explicit architecture decision records for critical trade-offs.
-
-### Mid-term (quarter)
-
-- Expand integration-style data tests to reduce mock-only confidence risk.
-- Formalize observability guidance (logs/events/diagnostics) in operational docs.
-
-### Long-term
-
-- Add architecture conformance checks in CI (dependency rules and naming analyzers).
-
-Mid-term:
-
-- Expand integration-style data tests to reduce mock-only confidence risk.
-- Formalize observability guidance (logs/events/diagnostics) in operational docs.
-
-Long-term:
-
-- Add architecture conformance checks in CI (dependency rules and naming analyzers).
+- [ROADMAP.md](ROADMAP.md)
 
 ## Conformance Statement
 

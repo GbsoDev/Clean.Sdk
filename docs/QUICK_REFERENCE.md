@@ -118,7 +118,7 @@ validations.ValidateAndThrow();
 [AplicacionHandler]  // Note: attribute name normalization planned
 public class CreateEntityHandler : SaveHandler<CreateEntityCommand, EntityDto, Entity, IEntityService>
 {
-    public CreateEntityHandler(ILogger<Handler> logger, IMapper mapper, Lazy<IEntityService> service)
+    public CreateEntityHandler(Lazy<ILoggerService> logger, IMapper mapper, Lazy<IEntityService> service)
         : base(logger, mapper, service)
     {
     }
@@ -127,7 +127,7 @@ public class CreateEntityHandler : SaveHandler<CreateEntityCommand, EntityDto, E
 }
 ```
 
-> **Note:** All handlers use `ILogger<Handler>` which logs under a single category. For production scenarios, consider implementing custom logging for handler-specific diagnostics.
+> **Note:** Handlers utilize a decoupled `ILoggerService` port via `Lazy<T>` injection.
 
 ---
 
@@ -141,7 +141,7 @@ Use specialized base classes per operation. `CrudService` is **obsolete** (`[Obs
 public class EntitySaveService
     : SaveService<Entity, IEntityRepository>, IEntitySaveService
 {
-    public EntitySaveService(ILogger<Service> logger, Lazy<IEntityRepository> repository)
+    public EntitySaveService(ILoggerService logger, Lazy<IEntityRepository> repository)
         : base(logger, repository) { }
 }
 
@@ -150,7 +150,7 @@ public class EntitySaveService
 public class EntityService
     : ActionService<Entity, IEntityRepository>, IEntityService
 {
-    public EntityService(ILogger<Service> logger, Lazy<IEntityRepository> repository)
+    public EntityService(ILoggerService logger, Lazy<IEntityRepository> repository)
         : base(logger, repository) { }
 
     // implement ISaveService<T>, IUpdateService<T>, IDeleteService<T> as needed
