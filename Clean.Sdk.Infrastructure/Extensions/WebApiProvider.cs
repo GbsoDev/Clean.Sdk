@@ -7,8 +7,17 @@ using System.Text;
 
 namespace Clean.Sdk.Infrastructure.Extensions
 {
+	/// <summary>
+	/// Provider for Web API related configurations.
+	/// </summary>
 	public static class WebApiProvider
 	{
+		/// <summary>
+		/// Adds JWT authentication to the service collection using the provided application settings.
+		/// </summary>
+		/// <param name="services">The service collection.</param>
+		/// <param name="appSettings">The application settings containing authentication options.</param>
+		/// <returns>The updated service collection.</returns>
 		public static IServiceCollection AddWebApiAutenticacionToken(this IServiceCollection services, AppSettings appSettings)
 		{
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
@@ -26,6 +35,12 @@ namespace Clean.Sdk.Infrastructure.Extensions
 			return services;
 		}
 
+		/// <summary>
+		/// Adds CORS policies to the service collection based on the application settings.
+		/// </summary>
+		/// <param name="services">The service collection.</param>
+		/// <param name="appSettings">The application settings containing CORS policies.</param>
+		/// <returns>The updated service collection.</returns>
 		public static IServiceCollection AddWebApiCorsPolicies(this IServiceCollection services, AppSettings appSettings)
 		{
 			return services.AddCors(options =>
@@ -48,6 +63,12 @@ namespace Clean.Sdk.Infrastructure.Extensions
 			});
 		}
 
+		/// <summary>
+		/// Configures the application to use CORS policies after the build process.
+		/// </summary>
+		/// <param name="app">The application builder.</param>
+		/// <param name="appSettings">The application settings containing CORS policies.</param>
+		/// <returns>The updated application builder.</returns>
 		public static IApplicationBuilder AddPosBuildWebApiCorsPolicies(this IApplicationBuilder app, AppSettings appSettings)
 		{
 			app.UseCors(builder =>

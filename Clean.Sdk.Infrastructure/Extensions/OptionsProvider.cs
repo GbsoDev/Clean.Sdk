@@ -7,16 +7,28 @@ using System.Reflection;
 
 namespace Clean.Sdk.Infrastructure.Extensions
 {
+	/// <summary>
+	/// Provider for application settings and options configurations.
+	/// </summary>
 	public static class OptionsProvider
 	{
 		/// <summary>
-		/// Ruta de archivos de configuración: appsettings.json
+		/// Configuration file path: appsettings.json
 		/// </summary>
 		public static string? ConfigurationFilePath { get; set; }
 		private const string DEVELOPMENT_SUFIX = "Development";
 		private static string ConfigurationDevelopmentFilePath => $"{Path.GetFileNameWithoutExtension(ConfigurationFilePath)}.{DEVELOPMENT_SUFIX}{Path.GetExtension(ConfigurationFilePath)}";
 		private static Action<BinderOptions> BinderOptions => options => options.BindNonPublicProperties = true;
 
+		/// <summary>
+		/// Configures application settings options from various sources including JSON files and environment variables.
+		/// </summary>
+		/// <typeparam name="T">The type of the application settings.</typeparam>
+		/// <param name="services">The service collection.</param>
+		/// <param name="configuration">The configuration instance.</param>
+		/// <param name="appSettings">The resulting application settings object.</param>
+		/// <param name="singleton">Indicates whether to register options as a singleton or scoped.</param>
+		/// <returns>The updated service collection.</returns>
 		public static IServiceCollection ConfigureAppSettingOptions<T>(this IServiceCollection services, ref IConfiguration configuration, out T appSettings, bool singleton = true)
 			where T : AppSettings, new()
 		{
@@ -50,16 +62,36 @@ namespace Clean.Sdk.Infrastructure.Extensions
 			return services;
 		}
 
+		/// <summary>
+		/// Configures scoped options by scanning the specified assembly for <see cref="OptionAttribute"/>.
+		/// </summary>
+		/// <param name="services">The service collection.</param>
+		/// <param name="assembly">The assembly to scan.</param>
+		/// <returns>The updated service collection.</returns>
 		public static IServiceCollection ConfigureScopedOptions(this IServiceCollection services, Assembly assembly)
 		{
 			return services.ConfigureOptions(null, assembly);
 		}
 
+		/// <summary>
+		/// Configures singleton options by scanning the specified assembly for <see cref="OptionAttribute"/>.
+		/// </summary>
+		/// <param name="services">The service collection.</param>
+		/// <param name="configuration">The configuration instance.</param>
+		/// <param name="assembly">The assembly to scan.</param>
+		/// <returns>The updated service collection.</returns>
 		public static IServiceCollection ConfigureSingletonOptions(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
 		{
 			return services.ConfigureOptions(configuration, assembly);
 		}
 
+		/// <summary>
+		/// Configures a specific options type as a singleton.
+		/// </summary>
+		/// <typeparam name="TOptions">The type of options to configure.</typeparam>
+		/// <param name="services">The service collection.</param>
+		/// <param name="configuration">The configuration instance.</param>
+		/// <param name="secctionName">The name of the configuration section.</param>
 		public static void ConfigureSingleton<TOptions>(IServiceCollection services, IConfiguration configuration, string? secctionName = null)
 			where TOptions : class, new()
 		{
@@ -67,6 +99,12 @@ namespace Clean.Sdk.Infrastructure.Extensions
 			services.Configure<TOptions>(option => configurationSection.Bind(option, BinderOptions));
 		}
 
+		/// <summary>
+		/// Configures a specific options type as scoped.
+		/// </summary>
+		/// <typeparam name="TOptions">The type of options to configure.</typeparam>
+		/// <param name="services">The service collection.</param>
+		/// <param name="secctionName">The name of the configuration section.</param>
 		public static void ConfigureScoped<TOptions>(IServiceCollection services, string secctionName)
 			where TOptions : class, new()
 		{
@@ -154,10 +192,21 @@ namespace Clean.Sdk.Infrastructure.Extensions
 		}
 	}
 
+	/// <summary>
+	/// Custom implementation of <see cref="IOptions{TOptions}"/> for scoped options binding.
+	/// </summary>
+	/// <typeparam name="TOptions">The type of the options.</typeparam>
 	public class CustomOption<TOptions> : IOptions<TOptions> where TOptions : class
 	{
+		/// <summary>
+		/// Gets the configured options value.
+		/// </summary>
 		public TOptions Value { private set; get; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CustomOption{TOptions}"/> class.
+		/// </summary>
+		/// <param name="value">The options value.</param>
 		public CustomOption(TOptions value)
 		{
 			Value = value;

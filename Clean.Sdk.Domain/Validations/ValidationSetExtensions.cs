@@ -1,5 +1,8 @@
-﻿namespace Clean.Sdk.Domain.Validations
+namespace Clean.Sdk.Domain.Validations
 {
+	/// <summary>
+	/// Provides extension methods for <see cref="ValidationSet"/> to perform various validations.
+	/// </summary>
 	public static class ValidationSetExtensions
 	{
 		/// <summary>
@@ -17,12 +20,12 @@
 		}
 
 		/// <summary>
-		/// Checks if the stringValue is greater than the specified start stringValue and adds an error message if it is not.
+		/// Checks if the value is strictly greater than the specified start value and adds an error message if it is not.
 		/// </summary>
-		/// <typeparam name="T">The type of the stringValue being validated, which must be a struct and implement IComparable.</typeparam>
+		/// <typeparam name="T">The type of the value being validated, which must be a struct and implement IComparable.</typeparam>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The stringValue to validate.</param>
-		/// <param name="start">The start stringValue to compare against.</param>
+		/// <param name="value">The value to validate.</param>
+		/// <param name="start">The start value to compare against.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>
@@ -32,12 +35,12 @@
 		}
 
 		/// <summary>
-		/// Checks if the stringValue is greater than or equal to the specified start stringValue and adds an error message if it is not.
+		/// Checks if the value is greater than or equal to the specified start value and adds an error message if it is not.
 		/// </summary>
-		/// <typeparam name="T">The type of the stringValue being validated, which must be a struct and implement IComparable.</typeparam>
+		/// <typeparam name="T">The type of the value being validated, which must be a struct and implement IComparable.</typeparam>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The stringValue to validate.</param>
-		/// <param name="start">The start stringValue to compare against.</param>
+		/// <param name="value">The value to validate.</param>
+		/// <param name="start">The start value to compare against.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>
@@ -47,12 +50,12 @@
 		}
 
 		/// <summary>
-		/// Checks if the stringValue is less than the specified end stringValue and adds an error message if it is not.
+		/// Checks if the value is strictly less than the specified end value and adds an error message if it is not.
 		/// </summary>
-		/// <typeparam name="T">The type of the stringValue being validated, which must be a struct and implement IComparable.</typeparam>
+		/// <typeparam name="T">The type of the value being validated, which must be a struct and implement IComparable.</typeparam>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The stringValue to validate.</param>
-		/// <param name="end">The end stringValue to compare against.</param>
+		/// <param name="value">The value to validate.</param>
+		/// <param name="end">The end value to compare against.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>
@@ -62,12 +65,12 @@
 		}
 
 		/// <summary>
-		/// Checks if the stringValue is less than or equal to the specified end stringValue and adds an error message if it is not.
+		/// Checks if the value is less than or equal to the specified end value and adds an error message if it is not.
 		/// </summary>
-		/// <typeparam name="T">The type of the stringValue being validated, which must be a struct and implement IComparable.</typeparam>
+		/// <typeparam name="T">The type of the value being validated, which must be a struct and implement IComparable.</typeparam>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The stringValue to validate.</param>
-		/// <param name="end">The end stringValue to compare against.</param>
+		/// <param name="value">The value to validate.</param>
+		/// <param name="end">The end value to compare against.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>
@@ -77,13 +80,13 @@
 		}
 
 		/// <summary>
-		/// Checks if the stringValue is between the specified limits (inclusive) and adds an error message if it is not.
+		/// Checks if the value is between the specified limits (inclusive) and adds an error message if it is not.
 		/// </summary>
-		/// <typeparam name="T">The type of the stringValue being validated, which must be a struct and implement IComparable.</typeparam>
+		/// <typeparam name="T">The type of the value being validated, which must be a struct and implement IComparable.</typeparam>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The stringValue to validate.</param>
-		/// <param name="start">The start stringValue of the range.</param>
-		/// <param name="end">The end stringValue of the range.</param>
+		/// <param name="value">The value to validate.</param>
+		/// <param name="start">The start value of the range.</param>
+		/// <param name="end">The end value of the range.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>
@@ -96,7 +99,7 @@
 		/// Checks if the length of the string is between the specified limits (inclusive) and adds an error message if it is not.
 		/// </summary>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The string stringValue to validate.</param>
+		/// <param name="value">The string value to validate.</param>
 		/// <param name="start">The minimum length of the string.</param>
 		/// <param name="end">The maximum length of the string.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
@@ -125,7 +128,7 @@
 		/// Checks if the string is not empty and adds an error message if it is.
 		/// </summary>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The string stringValue to validate.</param>
+		/// <param name="value">The string value to validate.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>
@@ -138,7 +141,7 @@
 		/// Checks if the string is not empty or composed only of white spaces and adds an error message if it is.
 		/// </summary>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The string stringValue to validate.</param>
+		/// <param name="value">The string value to validate.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>
@@ -148,11 +151,11 @@
 		}
 
 		/// <summary>
-		/// Checks if the enum stringValue is defined in the enum type and adds an error message if it is not.
+		/// Checks if the enum value is defined in the enum type and adds an error message if it is not.
 		/// </summary>
 		/// <typeparam name="Tenum">The enum type being validated.</typeparam>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="value">The enum stringValue to validate.</param>
+		/// <param name="value">The enum value to validate.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>
@@ -166,7 +169,7 @@
 		/// </summary>
 		/// <typeparam name="Tenum">The enum type to parse the string into.</typeparam>
 		/// <param name="validationSet">The ValidationSet instance to add the validation to.</param>
-		/// <param name="stringValue">The string stringValue to validate.</param>
+		/// <param name="stringValue">The string value to validate.</param>
 		/// <param name="messageResource">The resource string for the error message.</param>
 		/// <param name="messageParams">The parameters to format the message.</param>
 		/// <returns>The updated ValidationSet instance.</returns>

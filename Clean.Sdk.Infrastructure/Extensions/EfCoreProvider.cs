@@ -7,8 +7,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Clean.Sdk.Infrastructure.Extensions
 {
+	/// <summary>
+	/// Provider for Entity Framework Core configurations and operations.
+	/// </summary>
 	public static class EfCoreProvider
 	{
+		/// <summary>
+		/// Migrates the database for the specified context type.
+		/// </summary>
+		/// <typeparam name="TDbContext">The type of the database context.</typeparam>
+		/// <param name="service">The service provider.</param>
+		/// <param name="dbConnection">The database connection configuration.</param>
+		/// <returns>The service provider.</returns>
+		/// <exception cref="AppExeption">Thrown when an error occurs during migration.</exception>
 		public static IServiceProvider MigrateDataBase<TDbContext>(this IServiceProvider service, DbConnection dbConnection)
 			where TDbContext : IEfDbContext
 		{
@@ -37,6 +48,14 @@ namespace Clean.Sdk.Infrastructure.Extensions
 			return service;
 		}
 
+		/// <summary>
+		/// Adds Entity Framework Core context to the service collection.
+		/// </summary>
+		/// <typeparam name="TContext">The interface type of the context.</typeparam>
+		/// <typeparam name="TImplementarion">The implementation type of the context.</typeparam>
+		/// <param name="services">The service collection.</param>
+		/// <param name="dbConecction">The database connection configuration.</param>
+		/// <returns>The service collection.</returns>
 		public static IServiceCollection AddEfCoreContext<TContext, TImplementarion>(this IServiceCollection services, DbConnection dbConecction)
 			where TContext : class
 			where TImplementarion : EfDbContext<TImplementarion>, TContext
