@@ -1,4 +1,4 @@
-﻿namespace Clean.Sdk.Data.EfCore.Entities
+﻿namespace Clean.Sdk.Data.Entities
 {
 	/// <summary>
 	/// Helper class for working with entities.

@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-  <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Clean Data EfCore</Title>
     <Authors>Gerson Sánchez</Authors>
     <Company>GBSO Dev</Company>
     <Description>Data EfCore abstraction</Description>
-	<Version Condition="'$(Configuration)' == 'Beta'">1.0.13-beta</Version>
-	<Version Condition="'$(Configuration)' != 'Beta'">1.0.12</Version>
+    <Version Condition="'$(Configuration)' == 'Beta'">26.5.2-beta</Version>
+    <Version Condition="'$(Configuration)' != 'Beta'">1.0.13</Version>
     <Configurations>Debug;Beta;Release</Configurations>
   </PropertyGroup>
 
@@ -57,17 +57,17 @@
   <Choose>
     <When Condition="'$(Configuration)' == 'Release'">
       <ItemGroup>
-	      <PackageReference Include="Clean.Sdk.Domain" Version="*" />
+	      <PackageReference Include="Clean.Sdk.Data" Version="*" />
       </ItemGroup>
     </When>
     <When Condition="'$(Configuration)' == 'Beta'">
 	  <ItemGroup>
-	    <PackageReference Include="Clean.Sdk.Domain" Version="*-*" />
+	    <PackageReference Include="Clean.Sdk.Data" Version="*-*" />
 	  </ItemGroup>
     </When>
     <Otherwise>
       <ItemGroup>
-        <ProjectReference Include="..\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj" />
+        <ProjectReference Include="..\Clean.Sdk.Data\Clean.Sdk.Data.csproj" />
 	    </ItemGroup>
     </Otherwise>
   </Choose>

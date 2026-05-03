@@ -1,4 +1,4 @@
-﻿using Clean.Sdk.Data.EfCore.Entities;
+﻿using Clean.Sdk.Data.Entities;
 using Clean.Sdk.Domain.Model;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 

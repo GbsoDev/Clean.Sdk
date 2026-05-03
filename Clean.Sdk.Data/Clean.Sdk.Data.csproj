@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-  <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Title>Clean Data EfCore</Title>
+    <Title>Clean Data</Title>
     <Authors>Gerson Sánchez</Authors>
     <Company>GBSO Dev</Company>
-    <Description>Data EfCore abstraction</Description>
-	<Version Condition="'$(Configuration)' == 'Beta'">26.5.2-beta</Version>
-	<Version Condition="'$(Configuration)' != 'Beta'">1.0.13</Version>
+    <Description>Data abstraction</Description>
+    <Version Condition="'$(Configuration)' == 'Beta'">26.5.2-beta</Version>
+	  <Version Condition="'$(Configuration)' != 'Beta'">1.0.13</Version>
     <Configurations>Debug;Beta;Release</Configurations>
   </PropertyGroup>
 
@@ -47,13 +47,6 @@
     <Exec Command="dotnet nuget push &quot;$(GeneratedPackage)&quot; --source $(LocalNuGetFeed)" />
     <Message Importance="high" Text="Paquete &quot;$(PackageId)&quot; Version &quot;$(PackageVersion)&quot; publicado exitosamente en LocalFeed" />
   </Target>
-
-  <ItemGroup>
-  <PackageReference Include="AutoMapper" Version="12.0.1" />
-  <PackageReference Include="FluentValidation" Version="11.9.0" />
-  <PackageReference Include="MediatR" Version="12.1.1" />
-  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
-  </ItemGroup>
 
   <Choose>
     <When Condition="'$(Configuration)' == 'Release'">

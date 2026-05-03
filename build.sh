@@ -29,6 +29,7 @@ fi
 PROJECTS=(
     "Clean.Sdk.Domain"
     "Clean.Sdk.Application"
+    "Clean.Sdk.Data"
     "Clean.Sdk.Data.EfCore"
     "Clean.Sdk.Infrastructure"
 )

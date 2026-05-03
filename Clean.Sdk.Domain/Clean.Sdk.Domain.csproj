@@ -8,8 +8,8 @@
     <Authors>Gerson Sánchez</Authors>
     <Company>GBSO Dev</Company>
     <Description>Data EfCore abstraction</Description>
-	<Version Condition="'$(Configuration)' == 'Beta'">1.0.13-beta</Version>
-	<Version Condition="'$(Configuration)' != 'Beta'">1.0.12</Version>
+    <Version Condition="'$(Configuration)' == 'Beta'">26.5.2-beta</Version>
+    <Version Condition="'$(Configuration)' != 'Beta'">1.0.13</Version>
     <Configurations>Debug;Beta;Release</Configurations>
   </PropertyGroup>
 

@@ -52,6 +52,45 @@ dotnet build
 dotnet test
 ```
 
+### Clean Build
+
+To perform a clean build (recommended when switching configurations or resolving package conflicts):
+
+#### Linux/macOS
+
+```bash
+# Clean local NuGet packages (optional)
+rm -rf ~/.nuget/local-packages/*
+
+# Deep clean bin/obj folders
+find . -type d \( -name bin -o -name obj \) -exec rm -rf {} +
+
+# Standard dotnet clean
+dotnet clean ./Clean.Sdk.sln
+
+# Build using the provided script
+chmod +x build.sh
+./build.sh --config Release
+```
+
+#### Windows (PowerShell)
+
+```powershell
+# Clean local NuGet packages (optional)
+Remove-Item -Path "$HOME\.nuget\local-packages\*" -Force
+dotnet nuget remove source LocalFeed
+
+# Deep clean bin/obj folders
+Remove-Item -Path .\*\bin -Recurse -Force
+Remove-Item -Path .\*\obj -Recurse -Force
+
+# Standard dotnet clean
+dotnet clean .\Clean.Sdk.sln
+
+# Build using the provided script
+.\build.ps1 -c Release
+```
+
 ### Formal Build Scripts
 
 The SDK includes scripts to build projects in the correct dependency order:
@@ -76,6 +115,16 @@ builder.Services
 builder.Services.AddEfCoreContext<IMyDbContext, MyDbContext>(dbConnection);
 builder.Services.ConfigureAppSettingOptions<AppSettings>(ref configuration, out var appSettings);
 ```
+
+## Development Notes
+
+### NuGet Feed Conflict
+In the development environment, NuGet may prioritize the global package cache (`~/.nuget/packages`) over the `LocalFeed` if they contain the same version number. This can cause synchronization issues where changes are not reflected in consuming projects.
+
+**To resolve this conflict:**
+- **Increment the project version:** Update the `<Version>` tag in the `.csproj` file to force NuGet to treat it as a new package.
+- **Clear the NuGet global cache:** Run `dotnet nuget locals all --clear`.
+- **Manual deletion:** Delete the specific package folder from `%USERPROFILE%\.nuget\packages\`.
 
 ## Contributing
 

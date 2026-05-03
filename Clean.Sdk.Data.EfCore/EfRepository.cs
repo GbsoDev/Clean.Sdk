@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clean.Sdk.Data.EfCore.Entities;
+using Clean.Sdk.Data.Entities;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Resources;

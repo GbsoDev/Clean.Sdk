@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Application", "Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Data.EfCore", "Clean.Sdk.Data.EfCore\Clean.Sdk.Data.EfCore.csproj", "{DDABFDA6-F20F-403D-9D0D-E1D23FF4431B}"
 	ProjectSection(ProjectDependencies) = postProject
-		{7F7515B2-62D2-41EC-9867-E6159B22670D} = {7F7515B2-62D2-41EC-9867-E6159B22670D}
+		{156E7F1B-D384-99B3-BDAD-C916E4461E6D} = {156E7F1B-D384-99B3-BDAD-C916E4461E6D}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Infrastructure", "Clean.Sdk.Infrastructure\Clean.Sdk.Infrastructure.csproj", "{536B243D-8BA0-4662-90FF-E4C411935CB0}"
@@ -30,6 +30,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Application.Tests", "Clean.Sdk.Application.Tests\Clean.Sdk.Application.Tests.csproj", "{07CB49D3-0419-45EE-AE61-C2EA0FD3B8A8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clean.Sdk.Infrastructure.Tests", "Clean.Sdk.Infrastructure.Tests\Clean.Sdk.Infrastructure.Tests.csproj", "{B9FAFA2B-04FA-47A3-B4FB-3096F0D25DB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clean.Sdk.Data", "Clean.Sdk.Data\Clean.Sdk.Data.csproj", "{156E7F1B-D384-99B3-BDAD-C916E4461E6D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7F7515B2-62D2-41EC-9867-E6159B22670D} = {7F7515B2-62D2-41EC-9867-E6159B22670D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +91,12 @@ Global
 		{B9FAFA2B-04FA-47A3-B4FB-3096F0D25DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9FAFA2B-04FA-47A3-B4FB-3096F0D25DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9FAFA2B-04FA-47A3-B4FB-3096F0D25DB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{156E7F1B-D384-99B3-BDAD-C916E4461E6D}.Beta|Any CPU.ActiveCfg = Beta|Any CPU
+		{156E7F1B-D384-99B3-BDAD-C916E4461E6D}.Beta|Any CPU.Build.0 = Beta|Any CPU
+		{156E7F1B-D384-99B3-BDAD-C916E4461E6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{156E7F1B-D384-99B3-BDAD-C916E4461E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{156E7F1B-D384-99B3-BDAD-C916E4461E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{156E7F1B-D384-99B3-BDAD-C916E4461E6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
