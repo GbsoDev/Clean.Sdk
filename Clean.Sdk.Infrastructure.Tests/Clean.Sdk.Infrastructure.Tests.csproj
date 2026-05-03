@@ -7,7 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <Configurations>Debug;Beta;Release;DebugWithCore</Configurations>
+    <Configurations>Debug;Beta;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
