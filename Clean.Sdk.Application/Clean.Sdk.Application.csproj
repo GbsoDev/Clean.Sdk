@@ -10,7 +10,7 @@
     <Description>Data EfCore abstraction</Description>
 	<Version Condition="'$(Configuration)' == 'Beta'">26.5.2-beta</Version>
 	<Version Condition="'$(Configuration)' != 'Beta'">1.0.13</Version>
-    <Configurations>Debug;Beta;Release</Configurations>
+    <Configurations>Debug;Beta;Release;DebugWithCore</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
