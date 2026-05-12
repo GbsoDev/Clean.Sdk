@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Clean.Sdk.Domain.Exceptions;
 using Clean.Sdk.Domain.Ports;
 using Clean.Sdk.Domain.Tests.Builders;
 using Clean.Sdk.Domain.Tests.TestModel.ClientsTest;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Moq.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ namespace Clean.Sdk.Data.EfCore.Tests
 
         public EfRepositoryTests()
         {
-            var mapperConfiguration = new MapperConfiguration(configure => configure.AddProfile<ClientTestEntityMappingProfile>());
+            var mapperConfiguration = new MapperConfiguration(configure => configure.AddProfile<ClientTestEntityMappingProfile>(), NullLoggerFactory.Instance);
             _mapper = mapperConfiguration.CreateMapper();
             _mockContext = new Mock<IEfDbContext>();
             _mockDateTimeProvider = new Mock<IDateTimeProvider>();

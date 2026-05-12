@@ -2,7 +2,11 @@
 
 ## Status
 
-Proposed
+Accepted
+
+## Accepted Date
+
+2026-05-12
 
 ## Date
 
@@ -18,16 +22,26 @@ Proposed
 
 ## Decision
 
-In a future session, apply these changes to Clean.Sdk:
+Apply these changes to Clean.Sdk:
 
 1. **Clean.Sdk.Application.csproj**: Upgrade `AutoMapper` from 12.0.1 → 16.1.1
 2. **Clean.Sdk.Data.EfCore.csproj**: Upgrade `AutoMapper` from 12.0.1 → 16.1.1
 3. **Clean.Sdk.Infrastructure.csproj**: 
    - Remove `AutoMapper.Extensions.Microsoft.DependencyInjection` 12.0.1 (deprecated)
    - Add `AutoMapper` 16.1.1 (replaces the removed extension)
-   - Consider bumping `Microsoft.Extensions.*` to 10.0.0 to avoid NU1605 in consumers
+   - Bump `Microsoft.Extensions.*` to 10.0.0 to avoid NU1605 in consumers
 4. Rebuild all Clean.Sdk projects and republish to local NuGet feed
 5. Remove any NU1608 suppressions from consuming projects
+
+## Implementation Notes
+
+During implementation, three additional changes were required beyond the original decision:
+
+1. **Clean.Sdk.Application.csproj**: `Microsoft.Extensions.DependencyInjection.Abstractions` had to be bumped from 8.0.0 to 10.0.0 because AutoMapper 16.1.1 transitively requires `>= 10.0.0` via `Microsoft.Extensions.Logging.Abstractions`. Without this bump, NU1605 downgrade errors occur.
+
+2. **Clean.Sdk.Application.Tests.csproj**: Same `Microsoft.Extensions.DependencyInjection.Abstractions` bump for consistency, avoiding transitive NU1605 in test projects.
+
+3. **AutoMapperProvider.cs**: The `AddAutoMapper(Type[])` overload was removed in AutoMapper 16.1.1. The code was refactored to use `AddAutoMapper(Action<IMapperConfigurationExpression>)` with `cfg.AddProfile(profileType)` for each profile type discovered via `MapperProfileAttribute` scanning. The public API signature `AddAutoMapperProfiles(IServiceCollection, Assembly)` is preserved.
 
 ## Alternatives Considered
 
@@ -46,5 +60,5 @@ In a future session, apply these changes to Clean.Sdk:
 - Bumping version number is necessary to propagate the changes.
 
 ### Neutral
-- AutoMapper 16.1.1 is backward-compatible and `AddAutoMapper` API is unchanged.
+- `AddAutoMapper(Type[])` overload was removed in 16.1.1; code was refactored to use `AddAutoMapper(Action<IMapperConfigurationExpression>)` with `cfg.AddProfile()`. Public API `AddAutoMapperProfiles(IServiceCollection, Assembly)` is preserved.
 - Microsoft.Extensions.* 10.0.x is within the `>= 8.0.0` constraints already specified by Clean.Sdk.

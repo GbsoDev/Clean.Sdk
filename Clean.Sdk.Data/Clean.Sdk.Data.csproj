@@ -9,7 +9,7 @@
     <Company>GBSO Dev</Company>
     <Description>Data abstraction</Description>
     <Version Condition="'$(Configuration)' == 'Beta'">26.5.2-beta</Version>
-	  <Version Condition="'$(Configuration)' != 'Beta'">1.0.13</Version>
+	<Version Condition="'$(Configuration)' != 'Beta'">1.0.14</Version>
     <Configurations>Debug;Beta;Release</Configurations>
   </PropertyGroup>
 

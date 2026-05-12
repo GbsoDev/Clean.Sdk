@@ -14,12 +14,19 @@ namespace Clean.Sdk.Infrastructure.Extensions
 		/// Adds AutoMapper profiles from the specified assembly to the service collection.
 		/// </summary>
 		/// <param name="services">The service collection.</param>
-		/// <param name="assembly">The assembly to scan for <see cref="MapperProfileAttribute"/>.</param>
+		/// <param name="assembly">The assembly to scan for AutoMapper profiles.</param>
 		/// <returns>The updated service collection.</returns>
 		public static IServiceCollection AddAutoMapperProfiles(this IServiceCollection services, Assembly assembly)
 		{
-			var types = AssemblyHelper.GeyTypesByAttribute(assembly, typeof(MapperProfileAttribute));
-			services.AddAutoMapper(types.ToArray());
+			var profileTypes = assembly.GetTypes()
+				.Where(t => t.IsClass && t.GetCustomAttributes(typeof(MapperProfileAttribute), false).Length > 0);
+
+			services.AddAutoMapper(cfg => {
+				foreach (var profileType in profileTypes)
+				{
+					cfg.AddProfile(profileType);
+				}
+			});
 			return services;
 		}
 	}

@@ -9,7 +9,7 @@
     <Company>GBSO Dev</Company>
     <Description>Data EfCore abstraction</Description>
     <Version Condition="'$(Configuration)' == 'Beta'">26.5.2-beta</Version>
-    <Version Condition="'$(Configuration)' != 'Beta'">1.0.13</Version>
+    <Version Condition="'$(Configuration)' != 'Beta'">1.0.14</Version>
     <Configurations>Debug;Beta;Release</Configurations>
   </PropertyGroup>
 
@@ -49,7 +49,7 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.4" />
   </ItemGroup>
