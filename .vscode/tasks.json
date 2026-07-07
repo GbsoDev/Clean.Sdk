@@ -1,0 +1,79 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Sdk (Debug)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Clean.Sdk.sln",
+                "/p:GenerateFullPaths=true",
+                "/p:Configuration=Debug",
+                "/p:Platform=Any CPU",
+                "/consoleloggerparameters:NoSummary",
+            ],
+            "dependsOn": "Clean Sdk (Debug)",
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "close": true
+            }
+        },
+        {
+            "label": "Build Sdk (Beta)",
+            "command": "${workspaceFolder}/build.sh",
+            "type": "process",
+            "args": [
+                "-c",
+                "Beta"
+            ],
+            "dependsOn": "Clean Sdk (Beta)",
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "close": true
+            }
+        },
+        {
+            "label": "Clean Sdk (Debug)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/Clean.Sdk.sln",
+                "/p:GenerateFullPaths=true",
+                "/p:Configuration=Debug",
+                "/p:Platform=Any CPU",
+                "/consoleloggerparameters:NoSummary",
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "close": true
+            }
+        },
+        {
+            "label": "Clean Sdk (Beta)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/Clean.Sdk.sln",
+                "/p:GenerateFullPaths=true",
+                "/p:Configuration=Beta",
+                "/p:Platform=Any CPU",
+                "/consoleloggerparameters:NoSummary",
+            ],
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "close": true
+            }
+        }
+    ]
+}
