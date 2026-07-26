@@ -11,12 +11,6 @@ parameters:
   - name: buildConfiguration
     type: string
     default: 'Release'
-  - name: packVersion
-    type: object
-    default: ''
-  - name: versionSuffix
-    type: string
-    default: ''
 
 jobs:
 - job: '${{ parameters.jobName }}'
@@ -25,12 +19,11 @@ jobs:
     dependsOn: ${{ parameters.dependsOn }}
       
   variables:
-    packVersion: ${{ parameters.packVersion }}
     projectPath: '${{ parameters.projectName }}/${{ parameters.projectName }}.csproj'
     outputPack: '$(Build.ArtifactStagingDirectory)/${{ parameters.projectName }}'
-    nugetVersion: '$(packVersion)${{ parameters.versionSuffix }}'
   steps:
   - checkout: self
+
   - task: NuGetToolInstaller@1
     displayName: 'Install NuGet Tool'
 
@@ -44,7 +37,7 @@ jobs:
     inputs:
       command: 'build'
       projects: '$(projectPath)'
-      arguments: '--configuration ${{ parameters.buildConfiguration }} /p:VersionSuffix=${{ parameters.versionSuffix }}'
+      arguments: '--configuration ${{ parameters.buildConfiguration }}'
 
   - task: DotNetCoreCLI@2
     displayName: 'Pack NuGet for ${{ parameters.projectName }}'
@@ -53,9 +46,15 @@ jobs:
       packagesToPack: '$(projectPath)'
       configuration: ${{ parameters.buildConfiguration }}
       nobuild: true
-      versioningScheme: byEnvVar
-      versionEnvVar: 'nugetVersion'
+      versioningScheme: 'off'
       packDirectory: '$(outputPack)'
+
+  - task: PowerShell@2
+    displayName: 'List Packages'
+    inputs:
+      targetType: 'inline'
+      script: |
+        ls $(outputPack)
 
   - task: NuGetAuthenticate@0
     displayName: 'NuGet Authenticate'
@@ -65,7 +64,7 @@ jobs:
     inputs:
       command: push
       feedsToUse: 'select'
-      packagesToPush: '"$(outputPack)/*/*.nupkg"'
+      packagesToPush: '"$(outputPack)/*.nupkg"'
       nuGetFeedType: 'internal'
       publishVstsFeed: 'Gbso.Clean.Sdk/NuGets'
       versioningScheme: 'off'

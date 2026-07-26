@@ -1,0 +1,61 @@
+trigger: none
+pr: none
+resources:
+  pipelines:
+    - pipeline: ciPipeline
+      source: Clean.Sdk-CI
+      trigger:
+        branches:
+          include:
+            - main
+            - staging
+
+pool:
+  name: self-hosted
+
+variables:
+  prefixProject: 'Clean.Sdk'
+  ${{ if eq(variables['Build.SourceBranchName'], 'main') }}: 
+    buildConfiguration: 'Release'
+    versionSuffix: ''
+  ${{ if eq(variables['Build.SourceBranchName'], 'staging') }}: 
+    buildConfiguration: 'Beta'
+    versionSuffix: '-beta'
+  ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}: 
+    buildConfiguration: 'Debug'
+    versionSuffix: '-dev'
+
+stages:
+- stage: BuildAndPublishPackages
+  displayName: 'Build and Publish NuGet Packages'
+  jobs:
+
+  - template: Clean.Sdk-CD-Template.yml
+    parameters:
+      jobName: 'BuildAndPackDomain'
+      projectName: '${{ variables.prefixProject }}.Domain'
+      buildConfiguration: $(buildConfiguration)
+
+  - template: Clean.Sdk-CD-Template.yml
+    parameters:
+      jobName: 'BuildAndPackEfCore'
+      projectName: '${{ variables.prefixProject }}.Data.EfCore'
+      buildConfiguration: $(buildConfiguration)
+      dependsOn: 
+        - 'BuildAndPackDomain'
+
+  - template: Clean.Sdk-CD-Template.yml
+    parameters:
+      jobName: 'BuildAndPackApplication'
+      projectName: '${{ variables.prefixProject }}.Application'
+      buildConfiguration: $(buildConfiguration)
+      dependsOn: 
+        - 'BuildAndPackDomain'
+
+  - template: Clean.Sdk-CD-Template.yml
+    parameters:
+      jobName: 'BuildAndPackInfrastructure'
+      projectName: '${{ variables.prefixProject }}.Infrastructure'
+      buildConfiguration: $(buildConfiguration)
+      dependsOn: 
+        - 'BuildAndPackApplication'

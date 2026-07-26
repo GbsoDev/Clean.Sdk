@@ -1,0 +1,55 @@
+trigger: 
+  branches:
+    include:
+      - main
+      - staging
+      - develop
+  paths:
+    include:
+    - 'Clean.Sdk.*/*' 
+pr:
+  branches:
+    include:
+      - main
+      - staging
+      - develop
+  paths:
+    include:
+    - 'Clean.Sdk.*/*'
+
+pool:
+  name: self-hosted
+variables:
+  prefixProject: 'Clean.Sdk'
+  ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+    buildConfiguration: 'Release'
+  ${{ if eq(variables['Build.SourceBranchName'], 'staging') }}:
+    buildConfiguration: 'Beta'
+  ${{ if eq(variables['Build.SourceBranchName'], 'develop') }}:
+    buildConfiguration: 'Beta'
+
+stages:
+- stage: BuildAndTest
+  displayName: 'Build and Test Solution'
+  jobs:
+  - job: BuildAndTestJob
+    displayName: 'Build and Test Clean.Sdk Solution'
+    steps:
+    - checkout: self
+      displayName: 'Checkout Repository'
+    
+    - task: PowerShell@2
+      displayName: 'Build Solution using build.ps1'
+      inputs:
+        targetType: 'inline'
+        script: |
+          ./build.ps1 -config '$(buildConfiguration)'
+        failOnStderr: false
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Run All Tests'
+      inputs:
+        command: 'test'
+        projects: 'Clean.Skd.sln'
+        arguments: '--configuration $(buildConfiguration)'
+        testRunTitle: 'Clean.Sdk - All Tests - $(buildConfiguration)'
