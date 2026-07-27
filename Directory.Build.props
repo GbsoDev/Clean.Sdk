@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnableReferenceTrimmer Condition="'$(EnableReferenceTrimmer)' == ''">false</EnableReferenceTrimmer>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReferenceTrimmer">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

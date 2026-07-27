@@ -1,0 +1,36 @@
+<Project>
+  <PropertyGroup>
+    <CleanSdkInternalVersion Condition="'$(Configuration)' == 'Beta'">*-*</CleanSdkInternalVersion>
+    <CleanSdkInternalVersion Condition="'$(Configuration)' != 'Beta'">*</CleanSdkInternalVersion>
+  </PropertyGroup>
+
+  <!-- Release, Beta: inyecta VersionOverride con version flotante -->
+  <ItemGroup Condition="'$(Configuration)' != 'Debug'">
+    <PackageReference Update="Clean.Sdk.Domain" VersionOverride="$(CleanSdkInternalVersion)" />
+    <PackageReference Update="Clean.Sdk.Data" VersionOverride="$(CleanSdkInternalVersion)" />
+    <PackageReference Update="Clean.Sdk.Data.EfCore" VersionOverride="$(CleanSdkInternalVersion)" />
+  </ItemGroup>
+
+  <!-- Ensure LocalFeed is enabled for non-Debug builds -->
+  <Target Name="EnableLocalFeed" BeforeTargets="Build" AfterTargets="RegisterLocalFeed" Condition="'$(Configuration)' != 'Debug'">
+    <Exec Command="dotnet nuget enable source LocalFeed" ContinueOnError="true" IgnoreExitCode="true" />
+  </Target>
+
+  <!-- Debug: remueve PackageReference internos y agrega ProjectReference solo para los declarados -->
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)src\Clean.Sdk.Domain\Clean.Sdk.Domain.csproj"
+                      Condition="@(PackageReference->AnyHaveMetadataValue('Identity', 'Clean.Sdk.Domain'))" />
+    <PackageReference Remove="Clean.Sdk.Domain"
+                      Condition="@(PackageReference->AnyHaveMetadataValue('Identity', 'Clean.Sdk.Domain'))" />
+
+    <ProjectReference Include="$(MSBuildThisFileDirectory)src\Clean.Sdk.Data\Clean.Sdk.Data.csproj"
+                      Condition="@(PackageReference->AnyHaveMetadataValue('Identity', 'Clean.Sdk.Data'))" />
+    <PackageReference Remove="Clean.Sdk.Data"
+                      Condition="@(PackageReference->AnyHaveMetadataValue('Identity', 'Clean.Sdk.Data'))" />
+
+    <ProjectReference Include="$(MSBuildThisFileDirectory)src\Clean.Sdk.Data.EfCore\Clean.Sdk.Data.EfCore.csproj"
+                      Condition="@(PackageReference->AnyHaveMetadataValue('Identity', 'Clean.Sdk.Data.EfCore'))" />
+    <PackageReference Remove="Clean.Sdk.Data.EfCore"
+                      Condition="@(PackageReference->AnyHaveMetadataValue('Identity', 'Clean.Sdk.Data.EfCore'))" />
+  </ItemGroup>
+</Project>
