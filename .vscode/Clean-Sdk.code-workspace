@@ -1,0 +1,53 @@
+{
+    "folders": [
+        {
+            "name": "Root Path",
+            "path": ".."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            ".github/**": true,
+            ".claude/**": true,
+            "**/.git/**": true,
+            "**/.vs": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true,
+            "**/node_modules/**": true,
+            "**/target/**": true,
+            "**/dist": true,
+            "**/build": true,
+            "**/target": true,
+            "**/.next": true,
+            "**/coverage": true,
+            "**/.gradle": true,
+            "**/.venv": true,
+            "**/bin": true,
+            "**/obj": true
+        },
+        "search.exclude": {
+            ".github/**": true,
+            ".claude/**": true,
+            ".vscode/**": true,
+            "**/.vs": true,
+            "**/.git/**": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true,
+            "**/node_modules/**": true,
+            "**/target/**": true,
+            "**/dist": true,
+            "**/build": true,
+            "**/target": true,
+            "**/.next": true,
+            "**/coverage": true,
+            "**/.gradle": true,
+            "**/.venv": true,
+            "**/bin": true,
+            "**/obj": true
+        },
+    }
+}
