@@ -10,7 +10,6 @@ $ErrorActionPreference = "Stop"
 
 $projects = @(
     "Clean.Sdk.Domain",
-    "Clean.Sdk.Application",
     "Clean.Sdk.Data",
     "Clean.Sdk.Data.EfCore",
     "Clean.Sdk.Infrastructure"
@@ -21,21 +20,21 @@ Write-Host ""
 
 foreach ($project in $projects) {
     Write-Host "Building $project..." -ForegroundColor Yellow
-    
-    $projectPath = Join-Path $PSScriptRoot "$project\$project.csproj"
-    
+
+    $projectPath = Join-Path $PSScriptRoot "src\$project\$project.csproj"
+
     if (-not (Test-Path $projectPath)) {
         Write-Host "ERROR: Project file not found: $projectPath" -ForegroundColor Red
         exit 1
     }
-    
+
     dotnet build $projectPath --configuration $config
-    
+
     if ($LASTEXITCODE -ne 0) {
         Write-Host "ERROR: Build failed for $project" -ForegroundColor Red
         exit $LASTEXITCODE
     }
-    
+
     Write-Host "Successfully built $project" -ForegroundColor Green
     Write-Host ""
 }
