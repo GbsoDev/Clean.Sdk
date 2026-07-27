@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Title>Clean Data EfCore</Title>
+    <Authors>Gerson Sánchez</Authors>
+    <Company>GBSO Dev</Company>
+    <Description>Data EfCore abstraction</Description>
+    <Version Condition="'$(Configuration)' == 'Beta'">1.0.0-beta</Version>
+    <Version Condition="'$(Configuration)' != 'Beta'">1.0.0</Version>
+    <Configurations>Debug;Beta;Release</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <LocalNuGetFeed Condition="'$(OS)' == 'Windows_NT'">$(USERPROFILE)\.nuget\local-packages</LocalNuGetFeed>
+    <LocalNuGetFeed Condition="'$(OS)' != 'Windows_NT'">$(HOME)/.nuget/local-packages</LocalNuGetFeed>
+  </PropertyGroup>
+
+  <Target Name="CheckLocalFeed" BeforeTargets="Build" Condition="'$(Configuration)' != 'Debug'">
+    <Exec Condition="'$(OS)' == 'Windows_NT'" Command="dotnet nuget list source | findstr /i &quot;LocalFeed&quot;" ContinueOnError="true" ConsoleToMSBuild="true">
+      <Output TaskParameter="ExitCode" PropertyName="SourceExistsCode" />
+    </Exec>
+
+    <Exec Condition="'$(OS)' != 'Windows_NT'" Command="dotnet nuget list source | grep -i &quot;LocalFeed&quot; &gt; /dev/null" ContinueOnError="true" ConsoleToMSBuild="true">
+      <Output TaskParameter="ExitCode" PropertyName="SourceExistsCode" />
+    </Exec>
+  </Target>
+
+  <Target Name="RegisterLocalFeedPath" BeforeTargets="Build" Condition="'$(Configuration)' != 'Debug' and !Exists('$(LocalNuGetFeed)')">
+    <Message Importance="high" Text="la ruta de LocalFeed - &quot;$(LocalNuGetFeed)&quot; no existe. Creando..." />
+    <MakeDir Directories="$(LocalNuGetFeed)" />
+  </Target>
+
+  <Target Name="RegisterLocalFeed" BeforeTargets="Build" Condition="'$(Configuration)' != 'Debug' and '$(SourceExistsCode)' != '0'">
+    <Message Importance="high" Text="La fuente &quot;LocalFeed&quot; no existe. Registrando..." />
+    <Exec Command="dotnet nuget add source $(LocalNuGetFeed) --name LocalFeed" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="PublishToLocalFeed" AfterTargets="Pack" Condition="'$(Configuration)' != 'Debug'">
+    <PropertyGroup>
+      <GeneratedPackage>$(OutputPath)../$(PackageId).$(PackageVersion).nupkg</GeneratedPackage>
+    </PropertyGroup>
+    <Message Importance="high" Text="Publicando paquete: &quot;$(GeneratedPackage)&quot; en &quot;$(LocalNuGetFeed)&quot;" />
+    <Exec Command="dotnet nuget push &quot;$(GeneratedPackage)&quot; --source $(LocalNuGetFeed)" />
+    <Message Importance="high" Text="Paquete &quot;$(PackageId)&quot; Version &quot;$(PackageVersion)&quot; publicado exitosamente en LocalFeed" />
+  </Target>
+
+  <ItemGroup>
+  </ItemGroup>
+
+</Project>
