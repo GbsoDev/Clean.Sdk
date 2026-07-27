@@ -61,3 +61,28 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# Scripts - Enforce LF line endings for cross-platform compatibility
+###############################################################################
+# Shell scripts must use LF (Unix) line endings
+*.sh text eol=lf
+
+# PowerShell scripts use LF for cross-platform compatibility
+# (PowerShell Core works on Linux/macOS)
+*.ps1 text eol=lf
+*.psm1 text eol=lf
+*.psd1 text eol=lf
+
+###############################################################################
+# Configuration and documentation files
+###############################################################################
+# YAML files (Azure DevOps pipelines, etc.)
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Markdown files
+*.md text eol=lf
+
+# JSON files
+*.json text eol=lf
